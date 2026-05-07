@@ -82,7 +82,11 @@ function CoffeeSection() {
       </div>
 
       <div className="max-w-2xl mx-auto px-5 sm:px-8 w-full">
-        <Card43 />
+        <img
+          src="/images/urban-43-promo.png"
+          alt="Urban Bourbon #43 — Out Now"
+          className="w-full h-auto block"
+        />
       </div>
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-10 pb-20 flex flex-col sm:flex-row items-start justify-between gap-6">
@@ -102,9 +106,9 @@ function CoffeeSection() {
 }
 
 /* ─── The Drop ───────────────────────────────────────────── */
-function Card43() {
+function Card43({ wide = false }) {
   return (
-    <div className="relative aspect-square overflow-hidden bg-[#0d0d0d] border border-[#222]">
+    <div className={`relative ${wide ? 'aspect-[4/3]' : 'aspect-square'} overflow-hidden bg-[#0d0d0d] border border-[#222]`}>
       {/* Product image */}
       <img
         src="/images/hero-product.jpg"
