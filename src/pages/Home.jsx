@@ -11,7 +11,7 @@ function HeroSection() {
   }, [])
 
   return (
-    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
+    <section className="relative w-full h-screen overflow-hidden bg-black">
       <video
         ref={videoRef}
         src="/images/ub-reel.mp4"
@@ -20,50 +20,57 @@ function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover opacity-60"
       />
-      {/* gradient vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0d0d0d_100%)]" />
+
+      {/* Left-side legibility gradient — covers ~60% width */}
+      <div className="absolute inset-0" style={{
+        background: 'linear-gradient(to right, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.80) 40%, rgba(13,13,13,0.2) 65%, transparent 100%)'
+      }} />
+      {/* Bottom fade into next section */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
 
-      <div className="relative z-10 text-center px-6 max-w-3xl mx-auto flex flex-col items-center gap-5">
-        {videoPaused && (
-          <button
-            onClick={() => { videoRef.current?.play(); setVideoPaused(false) }}
-            className="mb-2 text-[#39FF14]/70 hover:text-[#39FF14] transition-colors"
-            aria-label="Play video"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12 drop-shadow-[0_0_16px_rgba(57,255,20,0.6)]">
-              <path d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" />
-            </svg>
-          </button>
-        )}
+      {/* Left-aligned content */}
+      <div className="relative z-10 h-full flex items-center">
+        <div className="max-w-7xl mx-auto w-full px-8 sm:px-12 lg:px-16 flex flex-col items-start gap-5 max-w-[55%]">
+          {videoPaused && (
+            <button
+              onClick={() => { videoRef.current?.play(); setVideoPaused(false) }}
+              className="text-[#39FF14]/70 hover:text-[#39FF14] transition-colors"
+              aria-label="Play video"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 drop-shadow-[0_0_16px_rgba(57,255,20,0.6)]">
+                <path d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" />
+              </svg>
+            </button>
+          )}
 
-        <h1 className="fade-up font-['Barlow_Condensed'] font-black text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase">
-          MAY WE FILL
-          <br />YOUR CUP
-        </h1>
+          <h1 className="fade-up font-['Barlow_Condensed'] font-black text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase">
+            MAY WE FILL
+            <br />YOUR CUP
+          </h1>
 
-        <p className="fade-up fade-up-d1 font-['Barlow_Condensed'] font-bold text-[#39FF14] text-lg sm:text-xl tracking-[0.25em] uppercase">
-          #43 — OUT NOW
-        </p>
+          <p className="fade-up fade-up-d1 font-['Barlow_Condensed'] font-bold text-[#39FF14] text-lg sm:text-xl tracking-[0.25em] uppercase">
+            #43 — OUT NOW
+          </p>
 
-        <div className="fade-up fade-up-d2 flex flex-col sm:flex-row gap-3 mt-2">
-          <Link
-            to="/coffee"
-            className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-10 py-3.5 rounded-sm hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
-          >
-            SHOP
-          </Link>
-          <Link
-            to="/our-story"
-            className="border border-white/30 text-white font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-10 py-3.5 rounded-sm hover:border-[#39FF14] hover:text-[#39FF14] transition-all duration-200 hover:scale-[1.03]"
-          >
-            OUR STORY
-          </Link>
+          <div className="fade-up fade-up-d2 flex flex-col sm:flex-row gap-3">
+            <Link
+              to="/coffee"
+              className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-10 py-3.5 rounded-sm hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
+            >
+              SHOP
+            </Link>
+            <Link
+              to="/our-story"
+              className="border border-white/30 text-white font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-10 py-3.5 rounded-sm hover:border-[#39FF14] hover:text-[#39FF14] transition-all duration-200 hover:scale-[1.03]"
+            >
+              OUR STORY
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* scroll cue */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-40">
+      {/* Scroll cue */}
+      <div className="absolute bottom-8 left-8 sm:left-12 lg:left-16 flex flex-col items-start gap-1 opacity-40">
         <span className="font-['Barlow_Condensed'] text-white text-xs tracking-[0.3em] uppercase">Scroll</span>
         <div className="w-px h-8 bg-white animate-pulse" />
       </div>
@@ -108,35 +115,39 @@ function CoffeeSection() {
 /* ─── The Drop ───────────────────────────────────────────── */
 function Card43({ wide = false }) {
   return (
-    <div className={`relative ${wide ? 'aspect-[4/3]' : 'aspect-square'} overflow-hidden bg-[#0d0d0d] border border-[#222]`}>
-      {/* Product image */}
-      <img
-        src="/images/hero-product.jpg"
-        alt="#43 coffee"
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ opacity: 0.85 }}
-      />
-      {/* Gradient overlay */}
-      <div className="absolute inset-0" style={{
-        background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)'
+    <div className={`relative ${wide ? 'aspect-[4/3]' : 'aspect-square'} overflow-hidden bg-[#0d0d0d] border border-[#222] flex flex-col justify-between p-8`}>
+      {/* Subtle radial glow */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse at 30% 60%, rgba(57,255,20,0.06) 0%, transparent 70%)'
       }} />
-      {/* Logo corner */}
-      <img
-        src="/images/logo.png"
-        alt="Urban Bourbon"
-        className="absolute top-5 right-5 z-10 w-[70px] h-auto"
-      />
-      {/* Bottom content */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-7">
-        <span className="inline-block bg-[#39FF14] text-black font-['Bebas_Neue'] text-xs tracking-[3px] px-2.5 py-1 mb-3">
+
+      {/* Top: OUT NOW tag + logo */}
+      <div className="relative z-10 flex items-start justify-between">
+        <span className="inline-block bg-[#39FF14] text-black font-['Bebas_Neue'] text-xs tracking-[3px] px-2.5 py-1">
           OUT NOW
         </span>
-        <h3 className="font-['Bebas_Neue'] text-white leading-[0.9] tracking-[2px]"
-          style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
-          <span className="text-[#39FF14]">URBAN</span> #43
-        </h3>
-        <p className="text-white/70 text-xs tracking-[2px] uppercase mt-2 font-['Barlow_Condensed']">
-          Ethiopian · Bright &amp; Fruity · Small Batch
+        <img src="/images/logo.png" alt="Urban Bourbon" className="w-[60px] h-auto opacity-70" />
+      </div>
+
+      {/* Centre: large number */}
+      <div className="relative z-10 flex-1 flex items-center">
+        <p className="font-['Bebas_Neue'] text-[#39FF14] leading-none tracking-tight"
+          style={{ fontSize: 'clamp(5rem, 14vw, 9rem)', textShadow: '0 0 60px rgba(57,255,20,0.3)' }}>
+          #43
+        </p>
+      </div>
+
+      {/* Bottom: blend details */}
+      <div className="relative z-10 flex flex-col gap-2">
+        <p className="font-['Bebas_Neue'] text-white tracking-[3px]"
+          style={{ fontSize: 'clamp(1.2rem, 3vw, 1.8rem)' }}>
+          URBAN BOURBON
+        </p>
+        <div className="w-8 h-px bg-[#39FF14] mb-1" />
+        <p className="font-['Barlow_Condensed'] text-white/50 text-xs tracking-[2px] uppercase leading-relaxed">
+          Ethiopian Origin<br />
+          Bright &amp; Fruity<br />
+          Small Batch · 250g
         </p>
       </div>
     </div>
