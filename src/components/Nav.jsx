@@ -27,8 +27,8 @@ export default function Nav() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-        <Link to="/" onClick={() => setOpen(false)}>
-          <img src="/images/logo.png" alt="Urban Bourbon" className="h-9 w-auto" />
+        <Link to="/" onClick={() => setOpen(false)} className="flex items-center h-full py-3">
+          <img src="/images/logo.png" alt="Urban Bourbon" className="h-full w-auto block object-contain" />
         </Link>
 
         <ul className="hidden md:flex items-center gap-8">
