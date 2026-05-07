@@ -133,10 +133,10 @@ function Card43() {
         </span>
         <h3 className="font-['Bebas_Neue'] text-white leading-[0.9] tracking-[2px]"
           style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
-          #43<br /><span className="text-[#39FF14]">COFFEE</span>
+          <span className="text-[#39FF14]">URBAN</span> #43
         </h3>
         <p className="text-white/70 text-xs tracking-[2px] uppercase mt-2 font-['Barlow_Condensed']">
-          Fair Trade · Ethiopian · Whole Bean
+          Ethiopian · Bright &amp; Fruity · Small Batch
         </p>
       </div>
     </div>
@@ -178,7 +178,7 @@ function Card12() {
           COMING SOON
         </span>
         <p className="mt-4 text-white/40 font-['Barlow_Condensed'] text-[0.65rem] tracking-[3px] uppercase leading-relaxed">
-          125g · Small Batch
+          Ethiopian Yirgacheffe<br />Bright · Floral · Fruity<br />125g · Small Batch
         </p>
       </div>
     </div>
@@ -214,7 +214,7 @@ function CardBrand() {
           <span className="text-[#39FF14]">NO NONSENSE.</span>
         </h3>
         <p className="text-white/60 font-['Barlow_Condensed'] text-[0.75rem] leading-relaxed tracking-[1px] uppercase">
-          Built for people who take their coffee seriously.
+          Small batch craft coffee. Roasted in Wales.
         </p>
         <img src="/images/logo.png" alt="Urban Bourbon" className="w-16 h-auto mt-3" />
       </div>
@@ -228,7 +228,7 @@ function CardSocial() {
       style={{ background: '#39FF14' }}>
       {/* Top tag */}
       <div className="absolute top-5 left-5 z-20 bg-black px-3 py-1">
-        <span className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[3px]">CRAFT COFFEE</span>
+        <span className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[3px]">LUXURY COFFEE</span>
       </div>
       {/* Bear centred */}
       <img
@@ -243,7 +243,7 @@ function CardSocial() {
           URBAN BOURBON
         </span>
         <span className="text-white/60 font-['Barlow_Condensed'] text-[0.6rem] tracking-[3px] uppercase text-right leading-relaxed">
-          Roasted<br />in Wales
+          Roasted in Wales<br />@urbanbourboncoffee
         </span>
       </div>
     </div>
