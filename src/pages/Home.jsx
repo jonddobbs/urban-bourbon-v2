@@ -81,12 +81,8 @@ function CoffeeSection() {
         </h2>
       </div>
 
-      <div className="w-full overflow-hidden">
-        <img
-          src="/images/hero-product.jpg"
-          alt="#43 — three bags and whisky glass"
-          className="w-full max-h-[70vh] object-cover object-center"
-        />
+      <div className="max-w-2xl mx-auto px-5 sm:px-8 w-full">
+        <Card43 />
       </div>
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-10 pb-20 flex flex-col sm:flex-row items-start justify-between gap-6">
