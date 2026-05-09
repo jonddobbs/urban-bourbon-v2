@@ -15,6 +15,7 @@ function HeroSection() {
       <video
         ref={videoRef}
         src="/images/ub-reel.mp4"
+        autoPlay
         muted
         loop
         playsInline
