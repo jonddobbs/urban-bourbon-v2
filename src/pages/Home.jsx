@@ -11,7 +11,7 @@ function HeroSection() {
   }, [])
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-black">
+    <section id="jack-asleep" className="relative w-full h-screen overflow-hidden bg-black">
       <video
         ref={videoRef}
         src="/images/ub-reel.mp4"
@@ -168,7 +168,7 @@ const BLENDS = [
 function BlendCard({ blend }) {
   const { available, bigLabel, name, origin, notes, weight, bg, bgPos, bag } = blend
   return (
-    <div className="relative aspect-square overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a]">
+    <div data-product-card="" className="relative aspect-square overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a]">
 
       {/* Full-bleed background image — #43 uses product shot, #12 uses Jack winter */}
       {bg && (
@@ -262,7 +262,7 @@ function BlendCard({ blend }) {
 
 function TheDropSection() {
   return (
-    <section className="bg-[#0d0d0d] py-20 px-5 sm:px-8">
+    <section id="jack-blends" className="bg-[#0d0d0d] py-20 px-5 sm:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="font-['Bebas_Neue'] text-[#39FF14] text-7xl sm:text-8xl md:text-9xl tracking-[4px] leading-none mb-10">
           THE DROP
@@ -505,7 +505,7 @@ function EmailSection() {
   }
 
   return (
-    <section className="noise bg-[#111111] py-28 px-5 sm:px-8">
+    <section id="jack-excited" className="noise bg-[#111111] py-28 px-5 sm:px-8">
       <div className="max-w-2xl mx-auto text-center flex flex-col items-center gap-6">
         <h2 className="font-['Barlow_Condensed'] font-black text-white text-6xl sm:text-7xl md:text-8xl uppercase leading-none tracking-tight">
           LET'S BE<br />

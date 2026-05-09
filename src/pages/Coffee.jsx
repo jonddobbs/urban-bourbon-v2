@@ -1,5 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import RadarChart from '../components/RadarChart.jsx'
+
+const FORMSPREE_URL = 'https://formspree.io/f/xykonvan'
+
+const BLEND_43_PROFILE = { Body: 6, Acidity: 8, Sweetness: 7, Bitterness: 4, Finish: 8 }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COMING_SOON = [
   {
@@ -12,6 +18,7 @@ const COMING_SOON = [
     image: '/images/jack-winter.png',
     imageType: 'fullbleed',
     imageStyle: { objectPosition: 'top', filter: 'grayscale(20%)' },
+    profile: { Body: 7, Acidity: 5, Sweetness: 6, Bitterness: 6, Finish: 7 },
   },
   {
     key: 'bbs',
@@ -23,6 +30,7 @@ const COMING_SOON = [
     image: '/images/bag-butterscotch.png',
     imageType: 'float',
     imageStyle: { filter: 'grayscale(15%)' },
+    profile: { Body: 8, Acidity: 4, Sweetness: 9, Bitterness: 3, Finish: 8 },
   },
   {
     key: 'bvm',
@@ -34,15 +42,32 @@ const COMING_SOON = [
     image: '/images/bag-velvet.png',
     imageType: 'float',
     imageStyle: { filter: 'grayscale(15%)' },
+    profile: { Body: 9, Acidity: 3, Sweetness: 8, Bitterness: 5, Finish: 9 },
   },
 ]
 
 function NotifyCard({ blend }) {
   const [email, setEmail] = useState('')
-  const [done, setDone] = useState(false)
+  const [status, setStatus] = useState('idle') // 'idle' | 'loading' | 'success' | 'error'
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!EMAIL_RE.test(email.trim())) return
+    setStatus('loading')
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email: email.trim(), product: blend.name }),
+      })
+      setStatus(res.ok ? 'success' : 'error')
+    } catch {
+      setStatus('error')
+    }
+  }
 
   return (
-    <div className="relative overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a] flex flex-col">
+    <div data-product-card="" className="relative overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a] flex flex-col">
       <div className="relative aspect-[4/3] overflow-hidden bg-[#111]">
         {blend.imageType === 'fullbleed' ? (
           <img
@@ -81,31 +106,38 @@ function NotifyCard({ blend }) {
           {blend.origin} · {blend.notes}{blend.weight ? ` · ${blend.weight}` : ''}
         </p>
 
+        <RadarChart values={blend.profile} />
+
         <div className="mt-auto pt-2">
-          {done ? (
-            <p className="font-['Barlow_Condensed'] text-[#39FF14] text-sm tracking-[4px] uppercase">
+          {status === 'success' ? (
+            <p className="font-['Bebas_Neue'] text-[#39FF14] text-base tracking-[3px] uppercase">
               YOU'RE ON THE LIST.
             </p>
           ) : (
-            <form
-              onSubmit={e => { e.preventDefault(); if (email) setDone(true) }}
-              className="flex gap-2"
-            >
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Your email"
-                required
-                className="flex-1 min-w-0 bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-3 py-2.5 text-white placeholder-white/20 font-['Inter'] text-xs transition-colors duration-200"
-              />
-              <button
-                type="submit"
-                className="border border-[#39FF14]/50 text-[#39FF14] font-['Bebas_Neue'] text-sm tracking-[2px] px-4 py-2.5 hover:bg-[#39FF14] hover:text-black transition-all duration-200 whitespace-nowrap"
-              >
-                NOTIFY ME
-              </button>
-            </form>
+            <>
+              {status === 'error' && (
+                <p className="font-['Barlow_Condensed'] text-red-400 text-xs tracking-[2px] uppercase mb-2">
+                  Something went wrong — try again.
+                </p>
+              )}
+              <form onSubmit={handleSubmit} className="flex gap-2">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => { setEmail(e.target.value); if (status !== 'idle') setStatus('idle') }}
+                  placeholder="Your email"
+                  required
+                  className="flex-1 min-w-0 bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-3 py-2.5 text-white placeholder-white/20 font-['Inter'] text-xs transition-colors duration-200"
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="border border-[#39FF14]/50 text-[#39FF14] font-['Bebas_Neue'] text-sm tracking-[2px] px-4 py-2.5 hover:bg-[#39FF14] hover:text-black transition-all duration-200 whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {status === 'loading' ? '…' : 'NOTIFY ME'}
+                </button>
+              </form>
+            </>
           )}
         </div>
       </div>
@@ -147,7 +179,7 @@ export default function Coffee() {
           </div>
 
           {/* Product details */}
-          <div className="flex flex-col gap-6">
+          <div data-product-card="" className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <span className="bg-[#39FF14] text-black font-['Bebas_Neue'] text-xs tracking-[3px] px-3 py-1">
                 OUT NOW
@@ -179,6 +211,8 @@ export default function Coffee() {
                 </span>
               ))}
             </div>
+
+            <RadarChart values={BLEND_43_PROFILE} />
 
             <div className="border-t border-white/[0.08] pt-6 flex items-end justify-between flex-wrap gap-5">
               <div>

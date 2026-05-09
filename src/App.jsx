@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
+import JackScrollGuide from './components/JackScrollGuide.jsx'
 import Home from './pages/Home.jsx'
 import Coffee from './pages/Coffee.jsx'
 import OurStory from './pages/OurStory.jsx'
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/subscriptions" element={<ComingSoon page="Subscriptions" />} />
       </Routes>
       <Footer />
+      <JackScrollGuide />
     </BrowserRouter>
   )
 }
