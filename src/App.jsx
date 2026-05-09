@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx'
 import Coffee from './pages/Coffee.jsx'
 import OurStory from './pages/OurStory.jsx'
 import ComingSoon from './pages/ComingSoon.jsx'
+import Waitlist from './pages/Waitlist.jsx'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/coffee" element={<Coffee />} />
         <Route path="/our-story" element={<OurStory />} />
+        <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/merch" element={<ComingSoon page="Merch" />} />
         <Route path="/subscriptions" element={<ComingSoon page="Subscriptions" />} />
       </Routes>
