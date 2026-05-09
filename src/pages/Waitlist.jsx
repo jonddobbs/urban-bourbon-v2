@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-const FORMSPREE_URL = 'https://formspree.io/f/xykonvan'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COMING_SOON = [
@@ -33,10 +32,10 @@ export default function Waitlist() {
     if (!EMAIL_RE.test(email.trim())) return
     setStatus('loading')
     try {
-      const res = await fetch(FORMSPREE_URL, {
+      const res = await fetch('/.netlify/functions/notify', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email: email.trim(), campaign: 'waitlist-sample' }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), blendId: 'waitlist' }),
       })
       setStatus(res.ok ? 'success' : 'error')
     } catch {

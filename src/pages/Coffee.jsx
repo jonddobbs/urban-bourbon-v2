@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import RadarChart from '../components/RadarChart.jsx'
 
-const FORMSPREE_URL = 'https://formspree.io/f/xykonvan'
 
 const BLEND_43_PROFILE = { Body: 8, Acidity: 3, Sweetness: 5, Bitterness: 7, Finish: 7 }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -55,10 +54,10 @@ function NotifyCard({ blend }) {
     if (!EMAIL_RE.test(email.trim())) return
     setStatus('loading')
     try {
-      const res = await fetch(FORMSPREE_URL, {
+      const res = await fetch('/.netlify/functions/notify', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email: email.trim(), product: blend.name }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), blendId: blend.key }),
       })
       setStatus(res.ok ? 'success' : 'error')
     } catch {
