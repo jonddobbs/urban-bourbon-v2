@@ -11,7 +11,7 @@ const COMING_SOON = [
   {
     key: 'b12',
     name: 'BLEND #12',
-    subtitle: 'THE ORIGINAL',
+    subtitle: 'THE WINTER ROAST',
     origin: 'Single Origin',
     notes: 'Small Batch',
     weight: '125g',

@@ -132,7 +132,7 @@ const BLENDS = [
     key: 'b12',
     available: false,
     bigLabel: '#12',
-    name: 'THE ORIGINAL',
+    name: 'THE WINTER ROAST',
     origin: 'Single Origin',
     notes: 'Small Batch',
     weight: '125g',
