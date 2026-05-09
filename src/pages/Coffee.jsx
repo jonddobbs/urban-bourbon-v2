@@ -228,6 +228,7 @@ export default function Coffee() {
                   </p>
                 ) : (
                   <button
+                    data-add-to-bag=""
                     onClick={() => setAdded(true)}
                     className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-12 py-4 hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
                   >

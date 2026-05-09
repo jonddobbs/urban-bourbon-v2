@@ -73,3 +73,25 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
   animation: slideUpIn 2s ease-in-out both;
 }
+
+/* Jack scroll guide animations */
+@keyframes jackBreathe {
+  0%, 100% { transform: rotate(-13deg) translateY(10px) scale(1); }
+  50%       { transform: rotate(-14deg) translateY(14px) scale(0.97); }
+}
+
+@keyframes jackPoint {
+  0%, 100% { transform: translateY(-10px) scale(1.1)  rotate(0deg);  }
+  45%       { transform: translateY(-22px) scale(1.15) rotate(-7deg); }
+  75%       { transform: translateY(-14px) scale(1.11) rotate(-2deg); }
+}
+
+@keyframes jackBounce {
+  0%   { transform: translateY(0px)   scale(1)    rotate(0deg);  }
+  18%  { transform: translateY(-24px) scale(1.08) rotate(-6deg); }
+  36%  { transform: translateY(-5px)  scale(1.01) rotate(3deg);  }
+  54%  { transform: translateY(-17px) scale(1.05) rotate(-3deg); }
+  72%  { transform: translateY(-3px)  scale(1)    rotate(1deg);  }
+  88%  { transform: translateY(-8px)  scale(1.02) rotate(-1deg); }
+  100% { transform: translateY(0px)   scale(1)    rotate(0deg);  }
+}
