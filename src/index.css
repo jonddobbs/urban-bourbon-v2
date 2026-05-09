@@ -126,3 +126,28 @@ h1, h2, h3, h4, h5, h6 {
   from { transform: translateY(0);    opacity: 1; }
   to   { transform: translateY(16px); opacity: 0; }
 }
+
+/* Typing indicator dots */
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1;   }
+}
+
+/* Jack nod — celebratory one-shot after sending */
+@keyframes jackNod {
+  0%   { transform: rotate(0deg) translateY(0px)  scale(1);    }
+  25%  { transform: rotate(8deg) translateY(4px)  scale(0.98); }
+  50%  { transform: rotate(0deg) translateY(0px)  scale(1);    }
+  75%  { transform: rotate(4deg) translateY(2px)  scale(0.99); }
+  100% { transform: rotate(0deg) translateY(0px)  scale(1);    }
+}
+
+/* Jack shrug — one-shot on rate limit */
+@keyframes jackShrug {
+  0%   { transform: scale(1)    rotate(0deg)  translateY(0px);  }
+  20%  { transform: scale(1.04) rotate(-3deg) translateY(-4px); }
+  40%  { transform: scale(1.06) rotate(3deg)  translateY(-6px); }
+  60%  { transform: scale(1.04) rotate(-2deg) translateY(-4px); }
+  80%  { transform: scale(1.02) rotate(1deg)  translateY(-2px); }
+  100% { transform: scale(1)    rotate(0deg)  translateY(0px);  }
+}

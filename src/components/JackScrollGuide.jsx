@@ -1,8 +1,34 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-const FORMSPREE_URL = 'https://formspree.io/f/xykonvan'
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MODEL        = 'claude-sonnet-4-20250514'
+const MAX_TOKENS   = 300
+const MAX_MESSAGES = 10
+
+const CHIPS = [
+  'Help me choose a blend',
+  "Where's the coffee from?",
+  "What's coming next?",
+  'What is Urban Bourbon?',
+]
+
+const RATE_LIMIT_MSG = "I'm off the clock. Come back tomorrow."
+
+const SYSTEM_PROMPT = `You are Jack, the Urban Bourbon bear mascot. You work for Urban Bourbon — a craft coffee brand based in South Wales, established in 2023.
+
+Your personality: deadpan, dry, occasionally sarcastic, never over-enthusiastic. You're a bear. You take coffee seriously but not yourself. Keep responses short — 1 to 3 sentences max. No emojis. No corporate nonsense.
+
+Urban Bourbon products:
+- Blend #43: Our debut. Ethiopian origin, fair trade, small batch, whole bean, 250g, £10.99. Bright and fruity. Available now.
+- Blend #12 (COMING SOON): Single origin, small batch, 125g. The Original. Cleaner, more balanced.
+- Butterscotch Bourbon Macchiato (COMING SOON): Colombian origin, 250g. Butterscotch and toasted almonds.
+- Velvet Mocha (COMING SOON): Dark roast. Dark chocolate and caramel. Rich and heavy.
+
+If someone asks what to buy, help them pick based on their preferences. Blend #43 is the only one available now. The others are coming soon — direct people to sign up on the coffee page. If they want something sweeter or more indulgent, point them to Butterscotch Bourbon Macchiato or Velvet Mocha (both coming soon). If they want something lighter and cleaner, Blend #12.
+
+If someone asks where we're based: South Wales. If they ask about subscriptions or merch: coming soon. If they ask something you genuinely don't know: say so, briefly.
+
+Never break character. You are Jack the bear.`
 
 // ─── Mood → inline style ──────────────────────────────────────
 function getMoodStyle(mood) {
@@ -24,222 +50,75 @@ function getMoodStyle(mood) {
       return { animation: 'none', transform: 'rotate(5deg) translateY(-8px) scale(1.1)', filter: 'drop-shadow(0 0 12px rgba(57,255,20,0.4))', opacity: 1, transition: `transform 0.4s cubic-bezier(0.34,1.56,0.64,1), ${ft}` }
     case 'thumbs-up':
       return { animation: 'jackThumbsUp 0.65s ease-out forwards', filter: 'drop-shadow(0 0 22px rgba(57,255,20,0.65))', opacity: 1, transition: ft }
+    case 'nodding':
+      return { animation: 'jackNod 0.5s ease-in-out both', filter: 'drop-shadow(0 0 10px rgba(57,255,20,0.35))', opacity: 1, transition: ft }
+    case 'shrugging':
+      return { animation: 'jackShrug 0.8s ease-in-out both', filter: 'drop-shadow(0 0 8px rgba(57,255,20,0.25))', opacity: 1, transition: ft }
     default:
       return {}
   }
 }
 
-// ─── Quiz recommendation engine ──────────────────────────────
-function getRecommendation({ strength, sweetness, milk }) {
-  if (strength === 'bold' && sweetness !== 'sweet') {
-    return { blend: 'Blend #43', desc: 'Ethiopian origin. Bright, bold, and built for people who mean it.', available: true, link: '/coffee' }
-  }
-  if (sweetness === 'sweet' && strength === 'bold') {
-    return { blend: 'Velvet Mocha', desc: 'Dark roast, chocolate and caramel. Rich and indulgent.', available: false, product: 'VELVET MOCHA' }
-  }
-  if (sweetness === 'sweet') {
-    return { blend: 'Butterscotch Bourbon Macchiato', desc: 'Colombian origin. Butterscotch, toasted almonds, good vibes.', available: false, product: 'BUTTERSCOTCH BOURBON MACCHIATO' }
-  }
-  if (strength === 'light') {
-    return { blend: 'Blend #12', desc: 'Single origin, small batch. A cleaner, gentler cup — coming soon.', available: false, product: 'BLEND #12' }
-  }
-  return { blend: 'Blend #43', desc: 'Ethiopian origin. Bright, fruity, and unlike anything you\'ve tasted.', available: true, link: '/coffee' }
-}
-
-// ─── Panel: shared styles ─────────────────────────────────────
-const pill = 'w-full flex items-center gap-3 border border-[#39FF14]/30 hover:border-[#39FF14] hover:bg-[#39FF14]/5 text-white/75 hover:text-white text-left px-4 py-3 rounded-full transition-all duration-200 font-[\'Inter\'] text-sm'
-const backBtn = 'text-white/30 hover:text-white/60 transition-colors text-xs self-start mb-1'
-const inputCls = 'flex-1 min-w-0 bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-3 py-2 text-white placeholder-white/20 font-[\'Inter\'] text-xs transition-colors duration-200 rounded-sm'
-const notifyBtn = 'border border-[#39FF14]/50 text-[#39FF14] font-[\'Bebas_Neue\'] text-sm tracking-[2px] px-3 py-2 hover:bg-[#39FF14] hover:text-black transition-all duration-200 whitespace-nowrap disabled:opacity-40 rounded-sm'
-
-// ─── Panel sub-views ─────────────────────────────────────────
-
-function MenuView({ onSelect }) {
+// ─── Typing dots ──────────────────────────────────────────────
+function TypingDots() {
   return (
-    <div className="flex flex-col gap-2">
-      {[
-        { id: 'quiz',   icon: '☕', label: 'Help me choose a blend' },
-        { id: 'teaser', icon: '📦', label: "What's in the next drop?" },
-        { id: 'origin', icon: '🌍', label: "Where's the coffee from?" },
-        { id: 'brand',  icon: '❓', label: 'What is Urban Bourbon?' },
-      ].map(o => (
-        <button key={o.id} onClick={() => onSelect(o.id)} className={pill}>
-          <span className="text-base leading-none">{o.icon}</span>
-          <span>{o.label}</span>
-        </button>
+    <div className="flex items-center gap-1.5">
+      {[0, 1, 2].map(i => (
+        <span
+          key={i}
+          className="w-1.5 h-1.5 rounded-full bg-[#39FF14] inline-block"
+          style={{ animation: `dotPulse 1.2s ease-in-out ${i * 0.22}s infinite` }}
+        />
       ))}
-    </div>
-  )
-}
-
-const QUIZ_STEPS = [
-  { q: 'How do you like your coffee?', key: 'strength',
-    opts: [{ v: 'light', l: 'Light & smooth' }, { v: 'medium', l: 'Medium & balanced' }, { v: 'bold', l: 'Bold & strong' }] },
-  { q: 'How sweet do you go?', key: 'sweetness',
-    opts: [{ v: 'none', l: 'Not at all' }, { v: 'little', l: 'A little' }, { v: 'sweet', l: 'Pretty sweet' }] },
-  { q: 'Black or with milk?', key: 'milk',
-    opts: [{ v: 'black', l: 'Black all day' }, { v: 'milk', l: 'With milk / oat' }] },
-]
-
-function QuizView({ onResult, onBack }) {
-  const [step, setStep] = useState(0)
-  const [answers, setAnswers] = useState({})
-  const { q, key, opts } = QUIZ_STEPS[step]
-
-  function pick(value) {
-    const next = { ...answers, [key]: value }
-    if (step < QUIZ_STEPS.length - 1) { setAnswers(next); setStep(s => s + 1) }
-    else onResult(getRecommendation(next))
-  }
-
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2">
-        <button onClick={onBack} className={backBtn}>← back</button>
-        <span className="text-white/20 text-xs ml-auto">{step + 1} / {QUIZ_STEPS.length}</span>
-      </div>
-      <p className="font-['Barlow_Condensed'] font-bold text-white text-sm tracking-widest uppercase">{q}</p>
-      <div className="flex flex-col gap-2">
-        {opts.map(o => (
-          <button key={o.v} onClick={() => pick(o.v)} className={pill}>{o.l}</button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function NotifyForm({ product }) {
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState('idle')
-
-  async function submit(e) {
-    e.preventDefault()
-    if (!EMAIL_RE.test(email.trim())) return
-    setStatus('loading')
-    try {
-      const res = await fetch(FORMSPREE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email: email.trim(), product }),
-      })
-      setStatus(res.ok ? 'success' : 'error')
-    } catch { setStatus('error') }
-  }
-
-  if (status === 'success') return <p className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[3px] uppercase">YOU'RE ON THE LIST.</p>
-  return (
-    <div className="flex flex-col gap-2">
-      {status === 'error' && <p className="text-red-400 font-['Barlow_Condensed'] text-xs tracking-[2px] uppercase">Something went wrong — try again.</p>}
-      <form onSubmit={submit} className="flex gap-2">
-        <input type="email" value={email} onChange={e => { setEmail(e.target.value); if (status !== 'idle') setStatus('idle') }}
-          placeholder="Your email" required className={inputCls} />
-        <button type="submit" disabled={status === 'loading'} className={notifyBtn}>
-          {status === 'loading' ? '…' : 'NOTIFY ME'}
-        </button>
-      </form>
-    </div>
-  )
-}
-
-function ResultView({ result, onBack, onClose }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <button onClick={onBack} className={backBtn}>← try again</button>
-      <div>
-        <p className="font-['Barlow_Condensed'] text-[#39FF14] text-[10px] tracking-[3px] uppercase mb-0.5">Your match</p>
-        <p className="font-['Bebas_Neue'] text-white text-2xl tracking-wider leading-none">{result.blend}</p>
-      </div>
-      <p className="text-white/55 font-['Inter'] text-xs leading-relaxed">{result.desc}</p>
-      {result.available ? (
-        <Link to={result.link} onClick={onClose}
-          className="w-full bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.18em] uppercase px-4 py-3 rounded-sm text-center hover:bg-[#2ce010] transition-colors duration-200 block">
-          SHOP NOW →
-        </Link>
-      ) : (
-        <>
-          <p className="text-white/35 font-['Inter'] text-xs">Dropping soon — join the waitlist.</p>
-          <NotifyForm product={result.product} />
-        </>
-      )}
-    </div>
-  )
-}
-
-function TeaserView({ onBack }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <button onClick={onBack} className={backBtn}>← back</button>
-      <div className="relative overflow-hidden rounded-sm bg-[#111] aspect-video">
-        <img src="/images/jack-winter.png" alt="Blend #12" className="absolute inset-0 w-full h-full object-cover object-top"
-          style={{ filter: 'grayscale(25%)', opacity: 0.7 }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent" />
-        <div className="absolute bottom-3 left-3">
-          <span className="border border-white/20 text-white/40 font-['Bebas_Neue'] text-[10px] tracking-[3px] px-2 py-0.5">COMING SOON</span>
-          <p className="font-['Bebas_Neue'] text-white text-3xl leading-none mt-1">BLEND #12</p>
-          <p className="font-['Barlow_Condensed'] text-[#39FF14] text-xs tracking-[3px] uppercase">THE ORIGINAL</p>
-        </div>
-      </div>
-      <p className="text-white/50 font-['Inter'] text-xs leading-relaxed">Single origin, small batch. A cleaner, more balanced cup. First of the original series.</p>
-      <NotifyForm product="BLEND #12" />
-    </div>
-  )
-}
-
-function OriginView({ onBack }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <button onClick={onBack} className={backBtn}>← back</button>
-      <p className="font-['Bebas_Neue'] text-[#39FF14] text-xl tracking-wider">WHERE WE SOURCE</p>
-      <div className="flex flex-col gap-3">
-        <div className="border border-white/8 p-3 rounded-sm">
-          <p className="font-['Bebas_Neue'] text-white tracking-wider text-sm mb-1">BLEND #43 — ETHIOPIA</p>
-          <p className="text-white/45 font-['Inter'] text-xs leading-relaxed">Sourced from small farms in the Ethiopian highlands. Fair trade, single origin. Expect bright stone fruit and floral notes.</p>
-        </div>
-        <div className="border border-white/8 p-3 rounded-sm">
-          <p className="font-['Bebas_Neue'] text-white/55 tracking-wider text-sm mb-1">BUTTERSCOTCH BOURBON — COLOMBIA <span className="text-[#39FF14]/50 text-[10px]">SOON</span></p>
-          <p className="text-white/45 font-['Inter'] text-xs leading-relaxed">Colombian beans known for their smooth body and natural sweetness — the base for our flavoured macchiato range.</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function BrandView({ onBack, onClose }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <button onClick={onBack} className={backBtn}>← back</button>
-      <p className="font-['Bebas_Neue'] text-[#39FF14] text-xl tracking-wider">URBAN BOURBON</p>
-      <p className="text-white/65 font-['Inter'] text-xs leading-relaxed">A craft coffee brand built in South Wales — for people who take their coffee seriously but never take themselves too seriously.</p>
-      <p className="text-white/65 font-['Inter'] text-xs leading-relaxed">Bold flavours. No nonsense. Roasted in Wales.</p>
-      <Link to="/our-story" onClick={onClose}
-        className="self-start font-['Barlow_Condensed'] font-bold text-xs tracking-[0.18em] uppercase text-[#39FF14] border-b border-[#39FF14]/40 pb-0.5 hover:border-[#39FF14] transition-colors duration-200">
-        READ OUR STORY →
-      </Link>
     </div>
   )
 }
 
 // ─── Main widget ──────────────────────────────────────────────
 export default function JackScrollGuide() {
-  // Scroll / hover mood system (existing)
-  const [sectionMood, setSectionMood]   = useState('awake')
-  const [cardHovered, setCardHovered]   = useState(false)
-  const [bouncing,    setBouncing]      = useState(false)
+  // Scroll / hover mood system
+  const [sectionMood,  setSectionMood]  = useState('awake')
+  const [cardHovered,  setCardHovered]  = useState(false)
+  const [bouncing,     setBouncing]     = useState(false)
   const bouncingRef = useRef(false)
 
-  // Panel
+  // Panel open/close
   const [panelOpen,  setPanelOpen]  = useState(false)
   const [isClosing,  setIsClosing]  = useState(false)
-  const [view,       setView]       = useState('menu')
-  const [result,     setResult]     = useState(null)
 
-  // One-time wave invite
-  const [waving,     setWaving]     = useState(false)
-  const hasWavedRef  = useRef(false)
-  const waveTimerRef = useRef(null)
+  // Chat state
+  const [messages,     setMessages]     = useState([])
+  const [inputVal,     setInputVal]     = useState('')
+  const [isTyping,     setIsTyping]     = useState(false)
+  const [messageCount, setMessageCount] = useState(0)
+  const [hasSentMsg,   setHasSentMsg]   = useState(false)
+
+  // Transient moods
+  const [waving,    setWaving]    = useState(false)
+  const [nodding,   setNodding]   = useState(false)
+  const [shrugging, setShrugging] = useState(false)
+
+  const hasWavedRef    = useRef(false)
+  const waveTimerRef   = useRef(null)
+  const messagesEndRef = useRef(null)
+  const inputRef       = useRef(null)
 
   const { pathname } = useLocation()
 
+  // Scroll messages to bottom
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isTyping])
+
+  // Focus input on panel open
+  useEffect(() => {
+    if (panelOpen) {
+      const t = setTimeout(() => inputRef.current?.focus(), 120)
+      return () => clearTimeout(t)
+    }
+  }, [panelOpen])
+
+  // Scroll / section observers
   useEffect(() => {
     const observers = []
 
@@ -278,7 +157,6 @@ export default function JackScrollGuide() {
     document.addEventListener('mouseout',  onCardOut)
     document.addEventListener('mouseover', onBagOver)
 
-    // 8-second idle invite — fires once per session
     if (!hasWavedRef.current) {
       waveTimerRef.current = setTimeout(() => {
         if (!hasWavedRef.current) {
@@ -304,8 +182,6 @@ export default function JackScrollGuide() {
     bouncingRef.current = false
     setBouncing(false)
     setIsClosing(false)
-    setView('menu')
-    setResult(null)
     setPanelOpen(true)
   }
 
@@ -317,57 +193,179 @@ export default function JackScrollGuide() {
     if (isClosing) {
       setPanelOpen(false)
       setIsClosing(false)
-      setView('menu')
-      setResult(null)
     }
   }
 
   function handleJackAnimEnd(e) {
-    if (e.animationName === 'jackBounce') { bouncingRef.current = false; setBouncing(false) }
-    if (e.animationName === 'jackWave')   setWaving(false)
-    // jackThumbsUp uses `forwards` fill — no reset needed while panel is open
+    if (e.animationName === 'jackBounce')  { bouncingRef.current = false; setBouncing(false) }
+    if (e.animationName === 'jackWave')    setWaving(false)
+    if (e.animationName === 'jackNod')     setNodding(false)
+    if (e.animationName === 'jackShrug')   setShrugging(false)
   }
 
-  // Derive Jack's current mood — panel state takes priority over scroll state
+  async function sendMessage(text) {
+    const trimmed = text.trim()
+    if (!trimmed || isTyping || messageCount >= MAX_MESSAGES) return
+
+    const newCount = messageCount + 1
+    setMessageCount(newCount)
+
+    const userMsg = { role: 'user', content: trimmed }
+    const updatedMessages = [...messages, userMsg]
+    setMessages(updatedMessages)
+    setInputVal('')
+    setHasSentMsg(true)
+    setNodding(true)
+
+    if (newCount >= MAX_MESSAGES) {
+      setMessages(prev => [...prev, { role: 'assistant', content: RATE_LIMIT_MSG }])
+      setShrugging(true)
+      return
+    }
+
+    setIsTyping(true)
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: MAX_TOKENS,
+          system: SYSTEM_PROMPT,
+          messages: updatedMessages.slice(-6),
+        }),
+      })
+      if (!res.ok) throw new Error('API error')
+      const data = await res.json()
+      const reply = data.content?.[0]?.text ?? '...'
+      setMessages(prev => [...prev, { role: 'assistant', content: reply }])
+    } catch {
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Something went wrong. Try again.' }])
+    } finally {
+      setIsTyping(false)
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      sendMessage(inputVal)
+    }
+  }
+
+  // Derive mood — panel state takes priority over scroll state
   let mood
-  if (panelOpen)       mood = view === 'result' ? 'thumbs-up' : 'looking-up'
-  else if (bouncing)   mood = 'bouncing'
-  else if (waving)     mood = 'waving'
-  else if (cardHovered) mood = 'alert'
-  else                 mood = sectionMood
+  if (panelOpen) {
+    if (nodding)        mood = 'nodding'
+    else if (shrugging) mood = 'shrugging'
+    else                mood = 'looking-up'
+  } else if (shrugging)  mood = 'shrugging'
+  else if (nodding)      mood = 'nodding'
+  else if (bouncing)     mood = 'bouncing'
+  else if (waving)       mood = 'waving'
+  else if (cardHovered)  mood = 'alert'
+  else                   mood = sectionMood
+
+  const rateLimitHit = messageCount >= MAX_MESSAGES
 
   return (
     <div className="fixed bottom-5 right-5 z-40 select-none flex flex-col items-end gap-3 pointer-events-none">
 
-      {/* ── Panel ── */}
+      {/* ── Chat panel ── */}
       {panelOpen && (
         <div
-          className="pointer-events-auto w-72 sm:w-80 max-w-[calc(100vw-2.5rem)] bg-[#1a1a1a] border border-[#39FF14]/50 rounded-lg overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.7)]"
+          className="pointer-events-auto bg-[#1a1a1a] border border-[#39FF14]/50 rounded-lg overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.7)] flex flex-col fixed bottom-28 left-3 right-3 max-h-[420px] z-50 md:static md:w-80 md:left-auto md:right-auto md:bottom-auto md:z-auto"
           style={{ animation: `${isClosing ? 'panelSlideDown' : 'panelSlideUp'} 0.28s ease-out both` }}
           onAnimationEnd={handlePanelAnimEnd}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.07]">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.07] shrink-0">
             <div className="flex items-center gap-2.5">
               <img src="/images/bear-nobg.png" alt="" aria-hidden="true" className="w-7 h-auto" />
               <span className="font-['Bebas_Neue'] text-[#39FF14] text-base tracking-[3px]">ASK JACK</span>
             </div>
-            <button onClick={closePanel} aria-label="Close"
-              className="text-white/30 hover:text-white/70 transition-colors text-sm w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/5">
+            <button
+              onClick={closePanel}
+              aria-label="Close"
+              className="text-white/30 hover:text-white/70 transition-colors text-sm w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/5"
+            >
               ✕
             </button>
           </div>
 
-          {/* Body */}
-          <div className="px-4 py-4">
-            {view === 'menu'   && <MenuView   onSelect={setView} />}
-            {view === 'quiz'   && <QuizView   onResult={r => { setResult(r); setView('result') }} onBack={() => setView('menu')} />}
-            {view === 'teaser' && <TeaserView onBack={() => setView('menu')} />}
-            {view === 'origin' && <OriginView onBack={() => setView('menu')} />}
-            {view === 'brand'  && <BrandView  onBack={() => setView('menu')} onClose={closePanel} />}
-            {view === 'result' && result &&
-              <ResultView result={result} onBack={() => { setView('quiz'); setResult(null) }} onClose={closePanel} />
-            }
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto px-3 py-3 flex flex-col gap-2.5 min-h-0">
+            {messages.length === 0 && (
+              <p className="font-['Inter'] text-white/25 text-xs text-center pt-2 leading-relaxed">
+                Ask me anything about Urban Bourbon.
+              </p>
+            )}
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[85%] px-3 py-2 rounded-lg font-['Inter'] text-xs leading-relaxed ${
+                  msg.role === 'user'
+                    ? 'bg-[#39FF14]/12 text-[#39FF14] border border-[#39FF14]/20'
+                    : 'text-white/75'
+                }`}>
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            {isTyping && (
+              <div className="flex justify-start px-3 py-2">
+                <TypingDots />
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Suggestion chips — shown before first send */}
+          {!hasSentMsg && (
+            <div className="px-3 pb-2 flex flex-wrap gap-1.5 shrink-0">
+              {CHIPS.map(chip => (
+                <button
+                  key={chip}
+                  onClick={() => sendMessage(chip)}
+                  className="font-['Inter'] text-[10px] border border-[#39FF14]/25 text-white/45 hover:border-[#39FF14]/60 hover:text-white/75 px-2.5 py-1.5 rounded-full transition-all duration-200"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Input */}
+          <div className="px-3 pb-3 pt-2 border-t border-white/[0.07] shrink-0">
+            {rateLimitHit ? (
+              <p className="font-['Barlow_Condensed'] text-white/25 text-xs tracking-[2px] uppercase text-center py-1">
+                Back tomorrow.
+              </p>
+            ) : (
+              <form onSubmit={e => { e.preventDefault(); sendMessage(inputVal) }} className="flex gap-2">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputVal}
+                  onChange={e => setInputVal(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask Jack..."
+                  disabled={isTyping}
+                  className="flex-1 min-w-0 bg-white/5 border border-white/10 focus:border-[#39FF14]/60 outline-none px-3 py-2 text-white placeholder-white/20 font-['Inter'] text-xs transition-colors duration-200 rounded-sm disabled:opacity-40"
+                />
+                <button
+                  type="submit"
+                  disabled={isTyping || !inputVal.trim()}
+                  className="border border-[#39FF14]/50 text-[#39FF14] font-['Bebas_Neue'] text-sm tracking-[2px] px-3 py-2 hover:bg-[#39FF14] hover:text-black transition-all duration-200 whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed rounded-sm"
+                >
+                  SEND
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}
@@ -387,18 +385,21 @@ export default function JackScrollGuide() {
           onAnimationEnd={handleJackAnimEnd}
         />
 
-        {/* Sleeping zzz */}
         {mood === 'asleep' && (
-          <span className="absolute -top-2 -right-1 font-['Inter'] text-white/35 leading-none pointer-events-none"
-            style={{ fontSize: '11px', letterSpacing: '3px' }} aria-hidden="true">
+          <span
+            className="absolute -top-2 -right-1 font-['Inter'] text-white/35 leading-none pointer-events-none"
+            style={{ fontSize: '11px', letterSpacing: '3px' }}
+            aria-hidden="true"
+          >
             z z z
           </span>
         )}
 
-        {/* Online indicator dot — pulses when panel is closed */}
         {!panelOpen && (
-          <span className="absolute top-0.5 right-0.5 w-3 h-3 rounded-full bg-[#39FF14] border-2 border-[#0d0d0d] animate-pulse"
-            aria-hidden="true" />
+          <span
+            className="absolute top-0.5 right-0.5 w-3 h-3 rounded-full bg-[#39FF14] border-2 border-[#0d0d0d] animate-pulse"
+            aria-hidden="true"
+          />
         )}
       </button>
     </div>
