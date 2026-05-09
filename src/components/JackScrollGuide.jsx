@@ -298,7 +298,8 @@ export default function JackScrollGuide() {
   const rateLimitHit = messageCount >= MAX_MESSAGES
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 select-none flex flex-col items-end gap-3 pointer-events-none">
+    <div className="fixed right-5 z-50 select-none flex flex-col items-end gap-3 pointer-events-none"
+      style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}>
 
       {/* ── Chat panel ── */}
       {panelOpen && (
