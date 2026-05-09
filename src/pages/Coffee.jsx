@@ -4,7 +4,7 @@ import RadarChart from '../components/RadarChart.jsx'
 
 const FORMSPREE_URL = 'https://formspree.io/f/xykonvan'
 
-const BLEND_43_PROFILE = { Body: 6, Acidity: 8, Sweetness: 7, Bitterness: 4, Finish: 8 }
+const BLEND_43_PROFILE = { Body: 8, Acidity: 3, Sweetness: 5, Bitterness: 7, Finish: 7 }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COMING_SOON = [
@@ -30,7 +30,7 @@ const COMING_SOON = [
     image: '/images/bag-butterscotch.png',
     imageType: 'float',
     imageStyle: { filter: 'grayscale(15%)' },
-    profile: { Body: 8, Acidity: 4, Sweetness: 9, Bitterness: 3, Finish: 8 },
+    profile: { Body: 8, Acidity: 4, Sweetness: 9, Bitterness: 5, Finish: 8 },
   },
   {
     key: 'bvm',
@@ -42,7 +42,7 @@ const COMING_SOON = [
     image: '/images/bag-velvet.png',
     imageType: 'float',
     imageStyle: { filter: 'grayscale(15%)' },
-    profile: { Body: 9, Acidity: 3, Sweetness: 8, Bitterness: 5, Finish: 9 },
+    profile: { Body: 9, Acidity: 3, Sweetness: 7, Bitterness: 8, Finish: 8 },
   },
 ]
 
