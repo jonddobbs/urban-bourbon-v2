@@ -95,3 +95,34 @@ h1, h2, h3, h4, h5, h6 {
   88%  { transform: translateY(-8px)  scale(1.02) rotate(-1deg); }
   100% { transform: translateY(0px)   scale(1)    rotate(0deg);  }
 }
+
+/* Waving invite — rapid wobble to catch attention, plays once */
+@keyframes jackWave {
+  0%   { transform: rotate(0deg)   scale(1)    translateY(0px);  }
+  12%  { transform: rotate(-20deg) scale(1.07) translateY(-9px); }
+  28%  { transform: rotate(16deg)  scale(1.11) translateY(-13px);}
+  44%  { transform: rotate(-13deg) scale(1.08) translateY(-9px); }
+  60%  { transform: rotate(9deg)   scale(1.05) translateY(-5px); }
+  76%  { transform: rotate(-4deg)  scale(1.02) translateY(-2px); }
+  90%  { transform: rotate(2deg)   scale(1.01) translateY(-1px); }
+  100% { transform: rotate(0deg)   scale(1)    translateY(0px);  }
+}
+
+/* Thumbs-up — celebratory burst then holds pose via forwards fill */
+@keyframes jackThumbsUp {
+  0%   { transform: scale(1)    rotate(0deg)  translateY(0px);  }
+  20%  { transform: scale(1.24) rotate(-7deg) translateY(-18px);}
+  40%  { transform: scale(1.19) rotate(5deg)  translateY(-12px);}
+  65%  { transform: scale(1.16) rotate(-2deg) translateY(-10px);}
+  100% { transform: scale(1.15) rotate(-2deg) translateY(-10px);}
+}
+
+/* Panel enter / exit */
+@keyframes panelSlideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes panelSlideDown {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(16px); opacity: 0; }
+}
