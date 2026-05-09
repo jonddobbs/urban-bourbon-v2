@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-const MODEL        = 'claude-sonnet-4-20250514'
+const MODEL        = 'claude-sonnet-4-6'
 const MAX_TOKENS   = 300
 const MAX_MESSAGES = 10
 
@@ -240,11 +240,16 @@ export default function JackScrollGuide() {
           messages: updatedMessages.slice(-6),
         }),
       })
-      if (!res.ok) throw new Error('API error')
+      if (!res.ok) {
+        const errBody = await res.text()
+        console.error('Jack API error:', res.status, errBody)
+        throw new Error(`${res.status}`)
+      }
       const data = await res.json()
       const reply = data.content?.[0]?.text ?? '...'
       setMessages(prev => [...prev, { role: 'assistant', content: reply }])
-    } catch {
+    } catch (err) {
+      console.error('Jack fetch error:', err)
       setMessages(prev => [...prev, { role: 'assistant', content: 'Something went wrong. Try again.' }])
     } finally {
       setIsTyping(false)
