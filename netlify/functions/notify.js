@@ -110,17 +110,16 @@ export async function handler(event) {
       },
       body: JSON.stringify(payload),
     })
+    const body = await res.text()
     if (!res.ok) {
-      const body = await res.text()
       console.error('Resend error:', res.status, body)
-      throw new Error(`Resend ${res.status}`)
+      throw new Error(`Resend ${res.status}: ${body}`)
     }
-    return res.json()
+    return JSON.parse(body)
   }
 
   try {
     await Promise.all([
-      // Confirmation to customer
       send({
         from: FROM_EMAIL,
         to: [email],
@@ -129,7 +128,6 @@ export async function handler(event) {
           : `You're on the list for ${blendName} — Urban Bourbon`,
         html: customerHtml(blendName, isWaitlist),
       }),
-      // Internal notification
       send({
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
@@ -140,7 +138,11 @@ export async function handler(event) {
 
     return { statusCode: 200, body: JSON.stringify({ ok: true }) }
   } catch (err) {
-    console.error('notify function error:', err)
-    return { statusCode: 500, body: 'Failed to send emails' }
+    console.error('notify function error:', err.message)
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: err.message }),
+    }
   }
 }

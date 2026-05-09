@@ -59,8 +59,15 @@ function NotifyCard({ blend }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), blendId: blend.key }),
       })
-      setStatus(res.ok ? 'success' : 'error')
-    } catch {
+      if (!res.ok) {
+        const err = await res.text()
+        console.error('Notify error:', res.status, err)
+        setStatus('error')
+      } else {
+        setStatus('success')
+      }
+    } catch (err) {
+      console.error('Notify fetch error:', err)
       setStatus('error')
     }
   }
