@@ -113,149 +113,148 @@ function CoffeeSection() {
 }
 
 /* ─── The Drop ───────────────────────────────────────────── */
-function Card43({ wide = false }) {
+
+const BLENDS = [
+  {
+    key: 'b43',
+    available: true,
+    bigLabel: '#43',
+    name: 'BLEND #43',
+    origin: 'Ethiopian Origin',
+    notes: 'Bright & Fruity',
+    weight: '250g',
+    bg: '/images/hero-product.jpg',
+    bgPos: 'center',
+    bag: null,
+  },
+  {
+    key: 'b12',
+    available: false,
+    bigLabel: '#12',
+    name: 'THE ORIGINAL',
+    origin: 'Single Origin',
+    notes: 'Small Batch',
+    weight: '125g',
+    bg: '/images/jack-winter.png',
+    bgPos: 'top',
+    bag: null,
+  },
+  {
+    key: 'bbs',
+    available: false,
+    bigLabel: null,
+    name: 'BUTTERSCOTCH BOURBON MACCHIATO',
+    origin: 'Colombian Origin',
+    notes: 'Butterscotch & Toasted Almonds',
+    weight: '250g',
+    bg: null,
+    bgPos: null,
+    bag: '/images/bag-butterscotch.png',
+  },
+  {
+    key: 'bvm',
+    available: false,
+    bigLabel: null,
+    name: 'VELVET MOCHA',
+    origin: 'Dark Roast',
+    notes: 'Dark Chocolate & Caramel',
+    weight: null,
+    bg: null,
+    bgPos: null,
+    bag: '/images/bag-velvet.png',
+  },
+]
+
+function BlendCard({ blend }) {
+  const { available, bigLabel, name, origin, notes, weight, bg, bgPos, bag } = blend
   return (
-    <div className={`relative ${wide ? 'aspect-[4/3]' : 'aspect-square'} overflow-hidden bg-[#0d0d0d] border border-[#222] flex flex-col justify-between p-8`}>
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse at 30% 60%, rgba(57,255,20,0.06) 0%, transparent 70%)'
-      }} />
+    <div className="relative aspect-square overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a]">
 
-      {/* Top: OUT NOW tag + logo */}
-      <div className="relative z-10 flex items-start justify-between">
-        <span className="inline-block bg-[#39FF14] text-black font-['Bebas_Neue'] text-xs tracking-[3px] px-2.5 py-1">
-          OUT NOW
-        </span>
-        <img src="/images/logo.png" alt="Urban Bourbon" className="w-[60px] h-auto opacity-70" />
-      </div>
+      {/* Full-bleed background image — #43 uses product shot, #12 uses Jack winter */}
+      {bg && (
+        <>
+          <img
+            src={bg}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: available ? 0.48 : 0.65,
+              objectPosition: bgPos,
+              filter: available ? 'none' : 'grayscale(35%)',
+            }}
+          />
+          <div className="absolute inset-0" style={{
+            background: available
+              ? 'linear-gradient(to right, rgba(13,13,13,0.93) 0%, rgba(13,13,13,0.72) 50%, rgba(13,13,13,0.25) 100%)'
+              : 'rgba(13,13,13,0.52)',
+          }} />
+        </>
+      )}
 
-      {/* Centre: large number */}
-      <div className="relative z-10 flex-1 flex items-center">
-        <p className="font-['Bebas_Neue'] text-[#39FF14] leading-none tracking-tight"
-          style={{ fontSize: 'clamp(5rem, 14vw, 9rem)', textShadow: '0 0 60px rgba(57,255,20,0.3)' }}>
-          #43
-        </p>
-      </div>
-
-      {/* Bottom: blend details */}
-      <div className="relative z-10 flex flex-col gap-2">
-        <p className="font-['Bebas_Neue'] text-white tracking-[3px]"
-          style={{ fontSize: 'clamp(1.2rem, 3vw, 1.8rem)' }}>
-          URBAN BOURBON
-        </p>
-        <div className="w-8 h-px bg-[#39FF14] mb-1" />
-        <p className="font-['Barlow_Condensed'] text-white/50 text-xs tracking-[2px] uppercase leading-relaxed">
-          Ethiopian Origin<br />
-          Bright &amp; Fruity<br />
-          Small Batch · 250g
-        </p>
-      </div>
-    </div>
-  )
-}
-
-function Card12() {
-  return (
-    <div className="relative aspect-square overflow-hidden bg-[#0a0a0a] border border-[#1a1a1a] flex flex-col items-center justify-center">
-      {/* Radial green-tint glow */}
-      <div className="absolute inset-0" style={{
-        background: 'radial-gradient(ellipse at center, #001a00 0%, #0d0d0d 70%)'
-      }} />
-      {/* Noise */}
-      <div className="absolute inset-0 opacity-15" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
-        backgroundRepeat: 'repeat',
-      }} />
-      {/* Content */}
-      <div className="relative z-10 text-center px-8 flex flex-col items-center">
+      {/* Floating bag mockup — transparent bg, right-anchored */}
+      {bag && (
         <img
-          src="/images/bear-emoji.png"
-          alt="Bear"
-          className="w-16 h-auto mb-4"
-          style={{ filter: 'drop-shadow(0 0 20px rgba(57,255,20,0.3))' }}
+          src={bag}
+          alt=""
+          aria-hidden="true"
+          className="absolute right-0 bottom-0 h-[90%] w-auto object-contain"
+          style={{ filter: 'grayscale(25%) brightness(0.82)', opacity: 0.9 }}
         />
-        <p className="font-['Bebas_Neue'] text-[#39FF14] leading-none"
-          style={{
-            fontSize: 'clamp(5rem, 12vw, 9rem)',
-            textShadow: '0 0 40px rgba(57,255,20,0.4)'
-          }}>
-          #12
-        </p>
-        <p className="font-['Bebas_Neue'] text-white tracking-[6px] -mt-2"
-          style={{ fontSize: 'clamp(1.1rem, 2.5vw, 2rem)' }}>
-          WINTER ROAST
-        </p>
-        <span className="mt-4 border border-[#39FF14] text-[#39FF14] font-['Barlow_Condensed'] font-bold text-[0.65rem] tracking-[5px] uppercase px-5 py-1.5">
-          COMING SOON
-        </span>
-        <p className="mt-4 text-white/40 font-['Barlow_Condensed'] text-[0.65rem] tracking-[3px] uppercase leading-relaxed">
-          Ethiopian Yirgacheffe<br />Bright · Floral · Fruity<br />125g · Small Batch
-        </p>
-      </div>
-    </div>
-  )
-}
+      )}
 
-function CardBrand() {
-  return (
-    <div className="relative aspect-square overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a] flex items-center">
-      {/* Ghost bear behind */}
-      <img
-        src="/images/bear-nobg.png"
-        alt=""
-        aria-hidden="true"
-        className="absolute right-0 bottom-0 h-[90%] w-auto object-contain"
-        style={{ opacity: 0.12, filter: 'grayscale(40%)' }}
-      />
-      {/* Bear main */}
-      <img
-        src="/images/bear-nobg.png"
-        alt="Urban Bourbon Bear"
-        className="absolute right-0 bottom-0 h-[82%] w-auto object-contain z-10"
-      />
-      {/* Left text — max 55% width */}
-      <div className="relative z-20 p-8 max-w-[55%] flex flex-col gap-3">
-        <p className="text-[#39FF14] font-['Barlow_Condensed'] text-[0.65rem] tracking-[5px] uppercase">
-          Urban Bourbon
-        </p>
-        <h3 className="font-['Bebas_Neue'] text-white leading-[0.95]"
-          style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
-          BOLD<br />
-          FLAVOURS.<br />
-          <span className="text-[#39FF14]">NO NONSENSE.</span>
-        </h3>
-        <p className="text-white/60 font-['Barlow_Condensed'] text-[0.75rem] leading-relaxed tracking-[1px] uppercase">
-          Small batch craft coffee. Roasted in Wales.
-        </p>
-        <img src="/images/logo.png" alt="Urban Bourbon" className="w-16 h-auto mt-3" />
-      </div>
-    </div>
-  )
-}
+      {!available && <div className="absolute inset-0 bg-[#0a0a0a]/20" />}
 
-function CardSocial() {
-  return (
-    <div className="relative aspect-square overflow-hidden flex flex-col items-center justify-center"
-      style={{ background: '#39FF14' }}>
-      {/* Top tag */}
-      <div className="absolute top-5 left-5 z-20 bg-black px-3 py-1">
-        <span className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[3px]">LUXURY COFFEE</span>
-      </div>
-      {/* Bear centred */}
-      <img
-        src="/images/bear.png"
-        alt="Urban Bourbon Bear"
-        className="relative z-10 w-[55%] h-auto"
-        style={{ filter: 'drop-shadow(0 8px 30px rgba(0,0,0,0.4))' }}
-      />
-      {/* Black bottom bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 bg-black px-6 py-4 flex items-center justify-between">
-        <span className="font-['Bebas_Neue'] text-[#39FF14] text-2xl tracking-[3px]">
-          URBAN BOURBON
-        </span>
-        <span className="text-white/60 font-['Barlow_Condensed'] text-[0.6rem] tracking-[3px] uppercase text-right leading-relaxed">
-          Roasted in Wales<br />@urbanbourboncoffee
-        </span>
+      {available && (
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at 20% 72%, rgba(57,255,20,0.09) 0%, transparent 60%)',
+        }} />
+      )}
+
+      <div className="relative z-10 h-full flex flex-col justify-between p-7"
+        style={{ maxWidth: bag ? '56%' : '100%' }}>
+
+        <div>
+          {available ? (
+            <span className="inline-block bg-[#39FF14] text-black font-['Bebas_Neue'] text-xs tracking-[3px] px-2.5 py-1">
+              OUT NOW
+            </span>
+          ) : (
+            <span className="inline-block border border-white/20 text-white/35 font-['Bebas_Neue'] text-xs tracking-[3px] px-2.5 py-1">
+              COMING SOON
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          {bigLabel ? (
+            <>
+              <p
+                className="font-['Bebas_Neue'] leading-none"
+                style={{
+                  fontSize: 'clamp(4rem, 11vw, 7.5rem)',
+                  color: available ? '#39FF14' : 'rgba(255,255,255,0.32)',
+                  textShadow: available ? '0 0 50px rgba(57,255,20,0.3)' : 'none',
+                }}
+              >
+                {bigLabel}
+              </p>
+              <p className="font-['Bebas_Neue'] text-white/65 tracking-[3px]"
+                style={{ fontSize: 'clamp(0.8rem, 1.9vw, 1.2rem)' }}>
+                {name}
+              </p>
+            </>
+          ) : (
+            <p className="font-['Bebas_Neue'] text-white/55 tracking-[2px] leading-[1.1]"
+              style={{ fontSize: 'clamp(1.1rem, 2.8vw, 1.85rem)' }}>
+              {name}
+            </p>
+          )}
+          <div className="w-6 h-px bg-[#39FF14]/50 my-1" />
+          <p className="font-['Barlow_Condensed'] text-white/35 text-[0.6rem] tracking-[2px] uppercase leading-relaxed">
+            {origin}<br />{notes}{weight && <><br />{weight}</>}
+          </p>
+        </div>
       </div>
     </div>
   )
@@ -269,10 +268,9 @@ function TheDropSection() {
           THE DROP
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Card43 />
-          <Card12 />
-          <CardBrand />
-          <CardSocial />
+          {BLENDS.map(blend => (
+            <BlendCard key={blend.key} blend={blend} />
+          ))}
         </div>
       </div>
     </section>
@@ -301,13 +299,21 @@ function BrandStorySection() {
     <section className="noise bg-[#111111] overflow-hidden">
       <div className="grid md:grid-cols-2 min-h-[70vh]">
 
-        {/* Bear — full-bleed column, no container, no card */}
-        <div className="relative flex items-end justify-center order-2 md:order-1 pt-10 md:pt-0">
+        {/* Lifestyle photo — full-bleed column */}
+        <div className="relative order-2 md:order-1 overflow-hidden min-h-[50vw] md:min-h-0">
           <img
-            src="/images/bear.png"
-            alt="Urban Bourbon Bear mascot"
-            className="h-[55vh] md:h-[72vh] w-auto object-contain drop-shadow-[0_0_100px_rgba(57,255,20,0.18)] relative z-10 translate-y-px"
+            src="/images/ub-cup-logo.jpg"
+            alt="Urban Bourbon lifestyle"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
+          {/* Fade into text panel on desktop */}
+          <div className="absolute inset-0 hidden md:block" style={{
+            background: 'linear-gradient(to right, transparent 60%, #111111 100%)'
+          }} />
+          {/* Bottom fade on mobile */}
+          <div className="absolute inset-0 md:hidden" style={{
+            background: 'linear-gradient(to top, #111111 0%, transparent 40%)'
+          }} />
         </div>
 
         {/* Text */}
