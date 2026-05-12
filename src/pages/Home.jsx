@@ -129,10 +129,10 @@ const BLENDS = [
     bag: null,
   },
   {
-    key: 'b12',
+    key: 'b7',
     available: false,
-    bigLabel: '#12',
-    name: 'THE WINTER ROAST',
+    bigLabel: '#7',
+    name: 'THE SUMMER BLEND',
     origin: 'Single Origin',
     notes: 'Small Batch',
     weight: '125g',
@@ -392,13 +392,13 @@ function SubscriptionsSection() {
 const igTiles = [
   { type: 'photo', src: '/images/hero-product.jpg',  pos: 'object-center',      alt: '#43 coffee bags and whisky glass' },
   { type: 'photo', src: '/images/banner.png',         pos: 'object-center',      alt: 'Urban Bourbon banner' },
-  { type: 'teaser-12' },
+  { type: 'teaser-7' },
   { type: 'photo', src: '/images/bear.png',           pos: 'object-top',         alt: 'Urban Bourbon Bear mascot' },
   { type: 'teaser-drop' },
   { type: 'photo', src: '/images/banner-mobile.png',  pos: 'object-center',      alt: 'Urban Bourbon mobile banner' },
 ]
 
-function TeaserCard12() {
+function TeaserCard7() {
   return (
     <div className="absolute inset-0 bg-[#0d0d0d] border border-[#39FF14]/30 hover:border-[#39FF14] transition-colors duration-300 flex flex-col items-center justify-center gap-3 p-4">
       <img src="/images/logo.png" alt="Urban Bourbon" className="w-2/5 max-w-[80px] h-auto opacity-90" />
@@ -406,12 +406,11 @@ function TeaserCard12() {
         className="font-['Barlow_Condensed'] font-black text-[#39FF14] leading-none"
         style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)' }}
       >
-        #12
+        #7
       </p>
       <p className="font-['Barlow_Condensed'] font-bold text-white/60 text-xs tracking-[0.3em] uppercase">
         Coming Soon
       </p>
-      {/* corner glow */}
       <div className="absolute inset-0 pointer-events-none rounded-[inherit]"
         style={{ boxShadow: 'inset 0 0 40px rgba(57,255,20,0.04)' }} />
     </div>
@@ -485,7 +484,7 @@ function InstagramSection() {
                   {igHoverOverlay}
                 </>
               )}
-              {tile.type === 'teaser-12'   && <TeaserCard12 />}
+              {tile.type === 'teaser-7'   && <TeaserCard7 />}
               {tile.type === 'teaser-drop' && <TeaserCardDrop />}
             </a>
           ))}

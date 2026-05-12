@@ -133,6 +133,11 @@ h1, h2, h3, h4, h5, h6 {
   40%           { transform: scale(1);   opacity: 1;   }
 }
 
+/* Origins map — marching ants pointer line */
+@keyframes march {
+  to { stroke-dashoffset: -8; }
+}
+
 /* Jack nod — celebratory one-shot after sending */
 @keyframes jackNod {
   0%   { transform: rotate(0deg) translateY(0px)  scale(1);    }

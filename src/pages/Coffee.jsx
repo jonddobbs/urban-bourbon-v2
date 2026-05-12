@@ -8,9 +8,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COMING_SOON = [
   {
-    key: 'b12',
-    name: 'BLEND #12',
-    subtitle: 'THE WINTER ROAST',
+    key: 'b7',
+    name: 'BLEND #7',
+    subtitle: 'THE SUMMER BLEND',
     origin: 'Single Origin',
     notes: 'Small Batch',
     weight: '125g',
@@ -151,8 +151,14 @@ function NotifyCard({ blend }) {
   )
 }
 
+const SIZES = [
+  { label: '125g', price: '£6.99' },
+  { label: '250g', price: '£10.99' },
+]
+
 export default function Coffee() {
   const [added, setAdded] = useState(false)
+  const [size, setSize] = useState('250g')
 
   return (
     <main className="bg-[#0d0d0d] pt-16">
@@ -210,7 +216,7 @@ export default function Coffee() {
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {['Whole Bean', 'Fair Trade', 'Small Batch', '250g'].map(tag => (
+              {['Whole Bean', 'Fair Trade', 'Small Batch'].map(tag => (
                 <span key={tag}
                   className="border border-white/12 text-white/35 font-['Barlow_Condensed'] text-[0.65rem] tracking-[3px] uppercase px-3 py-1">
                   {tag}
@@ -220,27 +226,48 @@ export default function Coffee() {
 
             <RadarChart values={BLEND_43_PROFILE} />
 
-            <div className="border-t border-white/[0.08] pt-6 flex items-end justify-between flex-wrap gap-5">
+            <div className="border-t border-white/[0.08] pt-6 flex flex-col gap-5">
               <div>
-                <p className="font-['Barlow_Condensed'] text-white/30 text-xs tracking-[3px] uppercase mb-1">Price</p>
-                <p className="font-['Bebas_Neue'] text-white leading-none" style={{ fontSize: '3.5rem' }}>
-                  £10.99
-                </p>
+                <p className="font-['Barlow_Condensed'] text-white/30 text-xs tracking-[3px] uppercase mb-3">Size</p>
+                <div className="flex gap-2">
+                  {SIZES.map(({ label, price }) => (
+                    <button
+                      key={label}
+                      onClick={() => { setSize(label); setAdded(false) }}
+                      className={`font-['Barlow_Condensed'] font-bold text-sm tracking-[2px] px-5 py-2 border transition-all duration-150 ${
+                        size === label
+                          ? 'bg-[#39FF14] border-[#39FF14] text-black'
+                          : 'border-white/20 text-white/50 hover:border-white/40 hover:text-white/70'
+                      }`}
+                    >
+                      {label} — {price}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div>
-                {added ? (
-                  <p className="font-['Barlow_Condensed'] text-[#39FF14] text-sm tracking-[4px] uppercase">
-                    ADDED TO BAG ✓
+
+              <div className="flex items-end justify-between flex-wrap gap-5">
+                <div>
+                  <p className="font-['Barlow_Condensed'] text-white/30 text-xs tracking-[3px] uppercase mb-1">Price</p>
+                  <p className="font-['Bebas_Neue'] text-white leading-none" style={{ fontSize: '3.5rem' }}>
+                    {SIZES.find(s => s.label === size)?.price}
                   </p>
-                ) : (
-                  <button
-                    data-add-to-bag=""
-                    onClick={() => setAdded(true)}
-                    className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-12 py-4 hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
-                  >
-                    ADD TO BAG
-                  </button>
-                )}
+                </div>
+                <div>
+                  {added ? (
+                    <p className="font-['Barlow_Condensed'] text-[#39FF14] text-sm tracking-[4px] uppercase">
+                      ADDED TO BAG ✓
+                    </p>
+                  ) : (
+                    <button
+                      data-add-to-bag=""
+                      onClick={() => setAdded(true)}
+                      className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-12 py-4 hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
+                    >
+                      ADD TO BAG
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
