@@ -388,10 +388,10 @@ export default function Origins() {
             alt="Jack"
             className="hidden md:block absolute pointer-events-none select-none"
             style={{
-              left: '0.5%',
+              left: '-1%',
               top: '50%',
               transform: 'translateY(-50%)',
-              height: '80%',
+              height: '60%',
               width: 'auto',
               zIndex: 10,
             }}
