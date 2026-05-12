@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { geoCentroid, geoNaturalEarth1 } from 'd3-geo'
 
-const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
+const GEO_URL = '/countries-110m.json'
 const MAP_W = 800
 const MAP_H = 450
 
@@ -296,8 +296,8 @@ export default function Origins() {
         </p>
       </section>
 
-      <section className="relative w-full bg-[#080808] border-t border-white/[0.04]">
-        <div className="relative w-full" style={{ aspectRatio: `${MAP_W}/${MAP_H}` }}>
+      <section className="relative w-full bg-[#0a0a0a] border-t border-white/[0.04]">
+        <div className="relative w-full aspect-video">
 
           <ComposableMap
             width={MAP_W}
@@ -324,17 +324,17 @@ export default function Origins() {
                           fill: isSelected
                             ? '#39FF14'
                             : isCoffee
-                              ? isAvailable ? 'rgba(57,255,20,0.5)' : 'rgba(57,255,20,0.18)'
-                              : '#131313',
-                          stroke: isCoffee ? 'rgba(57,255,20,0.35)' : '#0d0d0d',
+                              ? isAvailable ? 'rgba(57,255,20,0.55)' : 'rgba(57,255,20,0.22)'
+                              : '#222222',
+                          stroke: '#0d0d0d',
                           strokeWidth: 0.5,
                           outline: 'none',
                           cursor: isCoffee ? 'pointer' : 'default',
                           transition: 'fill 0.15s ease',
                         },
                         hover: {
-                          fill: isCoffee ? (isAvailable ? '#39FF14' : 'rgba(57,255,20,0.55)') : '#131313',
-                          stroke: isCoffee ? '#39FF14' : '#0d0d0d',
+                          fill: isCoffee ? (isAvailable ? '#39FF14' : 'rgba(57,255,20,0.6)') : '#2a2a2a',
+                          stroke: '#0d0d0d',
                           strokeWidth: 0.5,
                           outline: 'none',
                           cursor: isCoffee ? 'pointer' : 'default',
@@ -394,7 +394,6 @@ export default function Origins() {
               height: '80%',
               width: 'auto',
               zIndex: 10,
-              filter: 'drop-shadow(0 0 12px rgba(57,255,20,0.12))',
             }}
           />
         </div>

@@ -136,9 +136,9 @@ const BLENDS = [
     origin: 'Single Origin',
     notes: 'Small Batch',
     weight: '125g',
-    bg: '/images/jack-winter.png',
-    bgPos: 'top',
-    bag: null,
+    bg: null,
+    bgPos: null,
+    bag: '/images/bear-7-blue.png',
   },
   {
     key: 'bbs',

@@ -14,9 +14,9 @@ const COMING_SOON = [
     origin: 'Single Origin',
     notes: 'Small Batch',
     weight: '125g',
-    image: '/images/jack-winter.png',
-    imageType: 'fullbleed',
-    imageStyle: { objectPosition: 'top', filter: 'grayscale(20%)' },
+    image: '/images/bear-7-blue.png',
+    imageType: 'float',
+    imageStyle: { filter: 'grayscale(15%)' },
     profile: { Body: 7, Acidity: 5, Sweetness: 6, Bitterness: 6, Finish: 7 },
   },
   {
