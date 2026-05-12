@@ -384,7 +384,7 @@ export default function Origins() {
 
           {/* Jack mascot — desktop only */}
           <img
-            src="/images/jack-full-length.png"
+            src="/images/jack-nobg.png"
             alt="Jack"
             className="hidden md:block absolute pointer-events-none select-none"
             style={{
