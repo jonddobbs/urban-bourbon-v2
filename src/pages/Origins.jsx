@@ -1,21 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
-import { geoCentroid, geoNaturalEarth1 } from 'd3-geo'
 
-const GEO_URL = '/countries-110m.json'
-const MAP_W = 800
-const MAP_H = 450
-
-// Matches ComposableMap default projection config
-const mapProjection = geoNaturalEarth1()
-  .scale(153)
-  .translate([MAP_W / 2, MAP_H / 2])
-
-// Jack's pointing tip in SVG coordinate space (right-arm area of left-edge character)
-const JACK_TIP_X = 80
-const JACK_TIP_Y = 200
-
+// ── Coffee country data — used in stage 2 (interactive map) ─────────────────
 const COFFEE_COUNTRIES = {
   231: {
     name: 'Ethiopia', flag: '🇪🇹',
@@ -163,314 +149,90 @@ const COFFEE_COUNTRIES = {
   },
 }
 
-function DotMeter({ value, max = 10 }) {
-  return (
-    <div className="flex gap-1.5 items-center">
-      {Array.from({ length: max }, (_, i) => (
-        <div
-          key={i}
-          className="w-2 h-2 rounded-full"
-          style={{
-            background: i < value ? '#39FF14' : 'rgba(255,255,255,0.1)',
-            boxShadow: i < value ? '0 0 4px rgba(57,255,20,0.4)' : 'none',
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-
-function InfoPanel({ country }) {
-  return (
-    <div
-      className="border border-[#1e1e1e] bg-[#080808] p-6 sm:p-8"
-      style={{ animation: 'panelSlideUp 0.3s ease-out both' }}
-    >
-      <div className="flex flex-wrap items-start justify-between gap-6 mb-6">
-        <div className="flex items-center gap-4">
-          <span style={{ fontSize: '3rem', lineHeight: 1 }}>{country.flag}</span>
-          <div>
-            <h2
-              className="font-['Bebas_Neue'] text-white leading-none tracking-[2px]"
-              style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}
-            >
-              {country.name.toUpperCase()}
-            </h2>
-            <p className="font-['Barlow_Condensed'] text-white/40 text-xs tracking-[2px] uppercase mt-1">
-              {country.region} · {country.altitude} · {country.process}
-            </p>
-          </div>
-        </div>
-
-        {country.available ? (
-          <Link
-            to="/coffee"
-            className="bg-[#39FF14] text-black font-['Bebas_Neue'] text-sm tracking-[3px] px-5 py-2.5 hover:bg-[#2ce010] transition-all duration-200 whitespace-nowrap"
-          >
-            {country.blend} — SHOP NOW
-          </Link>
-        ) : (
-          <span className="border border-white/15 text-white/30 font-['Bebas_Neue'] text-sm tracking-[3px] px-5 py-2.5 whitespace-nowrap">
-            COMING SOON
-          </span>
-        )}
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-6 mb-6">
-        <div>
-          <p className="font-['Barlow_Condensed'] text-[#39FF14] text-xs tracking-[3px] uppercase mb-3">
-            Flavour Notes
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {country.notes.map(note => (
-              <span
-                key={note}
-                className="border border-white/12 text-white/55 font-['Barlow_Condensed'] text-[0.65rem] tracking-[2px] uppercase px-3 py-1"
-              >
-                {note}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <p className="font-['Barlow_Condensed'] text-white/40 text-[0.65rem] tracking-[2px] uppercase w-16 shrink-0">
-              Body
-            </p>
-            <DotMeter value={country.body} />
-          </div>
-          <div className="flex items-center gap-4">
-            <p className="font-['Barlow_Condensed'] text-white/40 text-[0.65rem] tracking-[2px] uppercase w-16 shrink-0">
-              Acidity
-            </p>
-            <DotMeter value={country.acidity} />
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-5 border-t border-white/[0.06] flex items-start gap-3">
-        <img
-          src="/images/bear-emoji.png"
-          alt="Jack"
-          className="w-8 h-8 shrink-0 opacity-80"
-          style={{ marginTop: '2px' }}
-        />
-        <p className="font-['Inter'] font-light text-white/55 text-sm leading-relaxed italic">
-          "{country.jack}"
-        </p>
-      </div>
-    </div>
-  )
-}
-
-function CountryModal({ country, onClose }) {
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
-
-  return (
-    <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8"
-      style={{ animation: 'modalFadeIn 0.2s ease-out both' }}
-    >
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        onClick={onClose}
-      />
-      {/* Panel */}
-      <div
-        className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-        style={{ animation: 'modalSlideUp 0.25s ease-out both' }}
-      >
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center bg-[#0d0d0d] border border-[#39FF14]/30 text-white/50 hover:text-[#39FF14] hover:border-[#39FF14]/70 transition-colors duration-200"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-3.5 h-3.5">
-            <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-        <InfoPanel country={country} />
-      </div>
-    </div>
-  )
-}
+// ── Stage 1: page layout scaffold ───────────────────────────────────────────
+// Left panel: Jack the lecturer + country info (placeholder for now)
+// Right area: "COFFEE BY REGION" heading + map placeholder
+// Interactive map and country info panel added in stage 2.
 
 export default function Origins() {
-  const [selected, setSelected] = useState(null)
-
-  function handleCountryClick(geo) {
-    const country = COFFEE_COUNTRIES[geo.id]
-    if (!country) return
-    const centroid = geoCentroid(geo)
-    const projected = mapProjection(centroid)
-    if (!projected) return
-    setSelected({ isoCode: geo.id, cx: projected[0], cy: projected[1] })
-  }
-
-  const selectedCountry = selected ? COFFEE_COUNTRIES[selected.isoCode] : null
+  const [selected] = useState(null)
+  const selectedCountry = selected ? COFFEE_COUNTRIES[selected] : null
 
   return (
-    <main className="bg-[#0d0d0d] pt-16 min-h-screen">
+    <main className="bg-[#0d0d0d] min-h-screen pt-16 flex flex-col">
 
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 pt-16 pb-8">
-        <p className="font-['Barlow_Condensed'] text-[#39FF14] text-sm tracking-[0.35em] uppercase mb-3">
-          Where It All Begins
-        </p>
-        <h1
-          className="font-['Bebas_Neue'] text-white leading-none tracking-tight"
-          style={{ fontSize: 'clamp(5rem, 14vw, 10rem)' }}
+      {/* ── Main layout: left panel + right map area ────────────────── */}
+      <div className="flex flex-1" style={{ minHeight: 'calc(100vh - 4rem)' }}>
+
+        {/* ── Left panel ─────────────────────────────────────────────── */}
+        <aside
+          className="relative shrink-0 flex flex-col bg-[#0a0a0a] border-r border-white/[0.05]"
+          style={{
+            width: 'clamp(220px, 19vw, 300px)',
+            overflow: 'visible',
+            zIndex: 10,
+          }}
         >
-          ORIGINS
-        </h1>
-        <p className="font-['Inter'] text-white/40 text-base max-w-xl mt-3 font-light leading-relaxed">
-          Every great cup starts with a great origin. Click a country to explore.
-        </p>
-      </section>
-
-      <section className="relative w-full bg-[#0a0a0a] border-t border-white/[0.04]">
-        <div className="relative w-full aspect-video">
-
-          <ComposableMap
-            width={MAP_W}
-            height={MAP_H}
-            projection="geoNaturalEarth1"
-            projectionConfig={{ scale: 153 }}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-          >
-            <Geographies geography={GEO_URL}>
-              {({ geographies }) =>
-                geographies.map(geo => {
-                  const country = COFFEE_COUNTRIES[geo.id]
-                  const isCoffee = !!country
-                  const isSelected = selected?.isoCode === geo.id
-                  const isAvailable = country?.available
-
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      onClick={() => handleCountryClick(geo)}
-                      style={{
-                        default: {
-                          fill: isSelected
-                            ? '#39FF14'
-                            : isCoffee
-                              ? isAvailable ? 'rgba(57,255,20,0.55)' : 'rgba(57,255,20,0.22)'
-                              : '#222222',
-                          stroke: '#0d0d0d',
-                          strokeWidth: 0.5,
-                          outline: 'none',
-                          cursor: isCoffee ? 'pointer' : 'default',
-                          transition: 'fill 0.15s ease',
-                        },
-                        hover: {
-                          fill: isCoffee ? (isAvailable ? '#39FF14' : 'rgba(57,255,20,0.6)') : '#2a2a2a',
-                          stroke: '#0d0d0d',
-                          strokeWidth: 0.5,
-                          outline: 'none',
-                          cursor: isCoffee ? 'pointer' : 'default',
-                        },
-                        pressed: { fill: '#39FF14', outline: 'none' },
-                      }}
-                    />
-                  )
-                })
-              }
-            </Geographies>
-          </ComposableMap>
-
-          {/* Pointer line overlay */}
-          {selected && (
-            <svg
-              viewBox={`0 0 ${MAP_W} ${MAP_H}`}
+          {/* Jack — wider than the panel so his pointer tip extends into the map */}
+          <div className="relative" style={{ overflow: 'visible' }}>
+            <img
+              src="/images/jack-lecturer.png"
+              alt="Jack the Lecturer"
+              className="block select-none pointer-events-none"
               style={{
-                position: 'absolute', inset: 0,
-                width: '100%', height: '100%',
-                pointerEvents: 'none',
+                width: '130%',
+                maxWidth: 'none',
               }}
+            />
+          </div>
+
+          {/* Country info — placeholder until stage 2 wires up selection */}
+          <div
+            className="flex-1 border-t border-white/[0.06] px-5 py-6"
+            style={{ background: '#090909' }}
+          >
+            {selectedCountry ? (
+              /* Country info renders here in stage 2 */
+              <p className="font-['Barlow_Condensed'] text-[#39FF14] text-xs tracking-[3px] uppercase">
+                {selectedCountry.name}
+              </p>
+            ) : (
+              <p className="font-['Barlow_Condensed'] text-white/20 text-[0.65rem] tracking-[3px] uppercase leading-relaxed">
+                Click a highlighted region on the map to learn more
+              </p>
+            )}
+          </div>
+        </aside>
+
+        {/* ── Right area: heading + map ───────────────────────────────── */}
+        <div className="flex-1 flex flex-col min-w-0">
+
+          {/* Page heading */}
+          <div className="text-center px-6 pt-10 pb-6 shrink-0">
+            <h1
+              className="font-['Bebas_Neue'] text-white leading-none tracking-[0.05em]"
+              style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)' }}
             >
-              <line
-                key={selected.isoCode}
-                x1={JACK_TIP_X}
-                y1={JACK_TIP_Y}
-                x2={selected.cx}
-                y2={selected.cy}
-                stroke="#39FF14"
-                strokeWidth={1.5}
-                strokeDasharray="5 3"
-                strokeLinecap="round"
-                opacity={0.65}
-                style={{ animation: 'march 0.5s linear infinite' }}
-              />
-              <circle
-                cx={selected.cx}
-                cy={selected.cy}
-                r={3.5}
-                fill="#39FF14"
-                opacity={0.9}
-                style={{ filter: 'drop-shadow(0 0 4px rgba(57,255,20,0.8))' }}
-              />
-            </svg>
-          )}
-
-          {/* Jack mascot — desktop only */}
-          <img
-            src="/images/bear-nobg.png"
-            alt="Jack"
-            className="hidden md:block absolute pointer-events-none select-none"
-            style={{
-              left: '-1%',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              height: '60%',
-              width: 'auto',
-              zIndex: 10,
-            }}
-          />
-        </div>
-
-        {/* Legend */}
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3 flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-sm" style={{ background: 'rgba(57,255,20,0.5)' }} />
-            <span className="font-['Barlow_Condensed'] text-white/35 text-xs tracking-[2px] uppercase">Available Now</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-sm" style={{ background: 'rgba(57,255,20,0.18)' }} />
-            <span className="font-['Barlow_Condensed'] text-white/35 text-xs tracking-[2px] uppercase">Coming Soon</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-sm bg-[#131313] border border-white/10" />
-            <span className="font-['Barlow_Condensed'] text-white/35 text-xs tracking-[2px] uppercase">Not a coffee origin</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Prompt shown below map when nothing is selected */}
-      {!selectedCountry && (
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
-          <div className="border border-dashed border-white/[0.08] py-12 flex items-center justify-center">
-            <p className="font-['Barlow_Condensed'] text-white/25 text-sm tracking-[3px] uppercase text-center px-4">
-              Click a highlighted country on the map to explore its coffee origins
+              COFFEE BY REGION
+            </h1>
+            <p className="font-['Inter'] text-white/45 font-light text-sm sm:text-base mt-3 max-w-xl mx-auto leading-relaxed">
+              Explore the world of coffee. Understand the origin, the process,
+              and the flavour that each region brings to your cup.
             </p>
           </div>
-        </div>
-      )}
 
-      {/* Country info modal */}
-      {selectedCountry && (
-        <CountryModal
-          key={selectedCountry.name}
-          country={selectedCountry}
-          onClose={() => setSelected(null)}
-        />
-      )}
+          {/* Map area — interactive map added in stage 2 */}
+          <div
+            className="flex-1 flex items-center justify-center"
+            style={{ background: '#070707' }}
+          >
+            <p className="font-['Barlow_Condensed'] text-white/10 text-xs tracking-[4px] uppercase">
+              Interactive map — stage 2
+            </p>
+          </div>
+
+        </div>
+      </div>
 
     </main>
   )
