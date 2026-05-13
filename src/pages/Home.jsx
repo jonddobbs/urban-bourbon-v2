@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import emailjs from 'emailjs-com'
 import { Link } from 'react-router-dom'
 
 /* ─── Hero ─────────────────────────────────────────────── */
@@ -495,19 +494,6 @@ function InstagramSection() {
   )
 }
 
-// ─── EmailJS config ────────────────────────────────────────────────────────────
-// 1. Go to https://www.emailjs.com and create a free account
-// 2. Add an Email Service (Gmail / Outlook / etc.) → copy the Service ID below
-// 3. Create an Email Template — use these template variables:
-//      {{to_email}}  — subscriber's address (set "To Email" field to this)
-//      {{from_name}} — always "Jack @ Urban Bourbon"
-//      {{message}}   — welcome body text
-// 4. Copy your Public Key from Account → API Keys
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'   // ← paste Service ID here
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'  // ← paste Template ID here
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'   // ← paste Public Key here
-// ──────────────────────────────────────────────────────────────────────────────
-
 /* ─── Email Signup ────────────────────────────────────────── */
 function EmailSection() {
   const [email, setEmail] = useState('')
@@ -518,19 +504,15 @@ function EmailSection() {
     if (!email) return
     setStatus('sending')
     try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          to_email: email,
-          from_name: 'Jack @ Urban Bourbon',
-          message: "You're in. Welcome to the crew. Expect big flavours, no fluff, and the occasional bit of nonsense — straight from the bear himself.\n\nJack 🐻",
-        },
-        EMAILJS_PUBLIC_KEY
-      )
+      const res = await fetch('/.netlify/functions/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       setStatus('done')
     } catch (err) {
-      console.error('EmailJS error:', err)
+      console.error('Subscribe error:', err)
       setStatus('error')
     }
   }
