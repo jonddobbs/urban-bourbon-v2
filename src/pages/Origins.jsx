@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { geoCentroid, geoNaturalEarth1 } from 'd3-geo'
@@ -264,6 +264,43 @@ function InfoPanel({ country }) {
   )
 }
 
+function CountryModal({ country, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8"
+      style={{ animation: 'modalFadeIn 0.2s ease-out both' }}
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      {/* Panel */}
+      <div
+        className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        style={{ animation: 'modalSlideUp 0.25s ease-out both' }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center bg-[#0d0d0d] border border-[#39FF14]/30 text-white/50 hover:text-[#39FF14] hover:border-[#39FF14]/70 transition-colors duration-200"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-3.5 h-3.5">
+            <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <InfoPanel country={country} />
+      </div>
+    </div>
+  )
+}
+
 export default function Origins() {
   const [selected, setSelected] = useState(null)
 
@@ -384,7 +421,7 @@ export default function Origins() {
 
           {/* Jack mascot — desktop only */}
           <img
-            src="/images/jack-nobg.png"
+            src="/images/bear-nobg.png"
             alt="Jack"
             className="hidden md:block absolute pointer-events-none select-none"
             style={{
@@ -415,18 +452,25 @@ export default function Origins() {
         </div>
       </section>
 
-      {/* Info panel */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
-        {selectedCountry ? (
-          <InfoPanel key={selectedCountry.name} country={selectedCountry} />
-        ) : (
+      {/* Prompt shown below map when nothing is selected */}
+      {!selectedCountry && (
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="border border-dashed border-white/[0.08] py-12 flex items-center justify-center">
             <p className="font-['Barlow_Condensed'] text-white/25 text-sm tracking-[3px] uppercase text-center px-4">
               Click a highlighted country on the map to explore its coffee origins
             </p>
           </div>
-        )}
-      </section>
+        </div>
+      )}
+
+      {/* Country info modal */}
+      {selectedCountry && (
+        <CountryModal
+          key={selectedCountry.name}
+          country={selectedCountry}
+          onClose={() => setSelected(null)}
+        />
+      )}
 
     </main>
   )

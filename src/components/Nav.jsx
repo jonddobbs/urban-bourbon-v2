@@ -37,12 +37,12 @@ export default function Nav() {
           URBAN<br />BOURBON
         </Link>
 
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden md:flex items-center gap-10">
           {links.map(({ label, to }) => (
             <li key={to}>
               <Link
                 to={to}
-                className={`font-['Barlow_Condensed'] font-bold text-sm tracking-[0.15em] uppercase transition-colors duration-200 ${
+                className={`font-['Barlow_Condensed'] font-bold text-base tracking-[0.18em] uppercase transition-colors duration-200 ${
                   pathname === to ? 'text-[#39FF14]' : 'text-white/80 hover:text-[#39FF14]'
                 }`}
               >

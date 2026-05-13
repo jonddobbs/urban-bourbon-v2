@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import emailjs from 'emailjs-com'
 import { Link } from 'react-router-dom'
 
 /* ─── Hero ─────────────────────────────────────────────── */
@@ -494,14 +495,44 @@ function InstagramSection() {
   )
 }
 
+// ─── EmailJS config ────────────────────────────────────────────────────────────
+// 1. Go to https://www.emailjs.com and create a free account
+// 2. Add an Email Service (Gmail / Outlook / etc.) → copy the Service ID below
+// 3. Create an Email Template — use these template variables:
+//      {{to_email}}  — subscriber's address (set "To Email" field to this)
+//      {{from_name}} — always "Jack @ Urban Bourbon"
+//      {{message}}   — welcome body text
+// 4. Copy your Public Key from Account → API Keys
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'   // ← paste Service ID here
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'  // ← paste Template ID here
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'   // ← paste Public Key here
+// ──────────────────────────────────────────────────────────────────────────────
+
 /* ─── Email Signup ────────────────────────────────────────── */
 function EmailSection() {
   const [email, setEmail] = useState('')
-  const [done, setDone] = useState(false)
+  const [status, setStatus] = useState('idle') // 'idle' | 'sending' | 'done' | 'error'
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    if (email) setDone(true)
+    if (!email) return
+    setStatus('sending')
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          to_email: email,
+          from_name: 'Jack @ Urban Bourbon',
+          message: "You're in. Welcome to the crew. Expect big flavours, no fluff, and the occasional bit of nonsense — straight from the bear himself.\n\nJack 🐻",
+        },
+        EMAILJS_PUBLIC_KEY
+      )
+      setStatus('done')
+    } catch (err) {
+      console.error('EmailJS error:', err)
+      setStatus('error')
+    }
   }
 
   return (
@@ -515,29 +546,38 @@ function EmailSection() {
           New drops, limited batches, and the occasional bit of nonsense — straight to your inbox.
         </p>
 
-        {done ? (
+        {status === 'done' ? (
           <p className="font-['Barlow_Condensed'] text-[#39FF14] text-xl tracking-wider mt-2 border border-[#39FF14]/30 px-8 py-4 rounded-sm">
             WELCOME TO THE FOLD.
           </p>
         ) : (
-          <form onSubmit={handleSubmit} className="w-full flex flex-col sm:flex-row gap-3 mt-2">
-            <label htmlFor="email-signup" className="sr-only">Email address</label>
-            <input
-              id="email-signup"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="Your email address"
-              required
-              className="flex-1 bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none rounded-sm px-5 py-4 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200"
-            />
-            <button
-              type="submit"
-              className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.18em] uppercase px-9 py-4 rounded-sm hover:bg-[#2ce010] transition-colors duration-200 whitespace-nowrap"
-            >
-              SUBSCRIBE
-            </button>
-          </form>
+          <>
+            <form onSubmit={handleSubmit} className="w-full flex flex-col sm:flex-row gap-3 mt-2">
+              <label htmlFor="email-signup" className="sr-only">Email address</label>
+              <input
+                id="email-signup"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Your email address"
+                required
+                disabled={status === 'sending'}
+                className="flex-1 bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none rounded-sm px-5 py-4 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200 disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.18em] uppercase px-9 py-4 rounded-sm hover:bg-[#2ce010] transition-colors duration-200 whitespace-nowrap disabled:opacity-60"
+              >
+                {status === 'sending' ? 'SENDING…' : 'SUBSCRIBE'}
+              </button>
+            </form>
+            {status === 'error' && (
+              <p className="font-['Barlow_Condensed'] text-red-400 text-sm tracking-wider">
+                Something went wrong — try again.
+              </p>
+            )}
+          </>
         )}
       </div>
     </section>

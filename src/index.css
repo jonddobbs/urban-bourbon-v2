@@ -138,6 +138,16 @@ h1, h2, h3, h4, h5, h6 {
   to { stroke-dashoffset: -8; }
 }
 
+/* Origins map — country modal */
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
 /* Jack nod — celebratory one-shot after sending */
 @keyframes jackNod {
   0%   { transform: rotate(0deg) translateY(0px)  scale(1);    }
