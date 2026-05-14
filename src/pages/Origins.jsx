@@ -1,239 +1,447 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps'
 
-// ── Coffee country data — used in stage 2 (interactive map) ─────────────────
-const COFFEE_COUNTRIES = {
+const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
+const NAV_H = 64
+
+const REGIONS = {
   231: {
-    name: 'Ethiopia', flag: '🇪🇹',
-    region: 'Yirgacheffe & Sidamo', altitude: '1,700–2,200m', process: 'Washed & Natural',
-    notes: ['Blueberry', 'Jasmine', 'Bergamot', 'Stone Fruit'],
-    body: 7, acidity: 8,
-    jack: "The OG. Coffee was literally born here. Our Blend #43 calls these highlands home.",
-    available: true, blend: 'BLEND #43',
-  },
-  404: {
-    name: 'Kenya', flag: '🇰🇪',
-    region: 'Central Highlands', altitude: '1,400–2,000m', process: 'Washed',
-    notes: ['Blackcurrant', 'Tomato', 'Citrus', 'Wine-like'],
-    body: 7, acidity: 9,
-    jack: "Kenya doesn't mess around. Big, bold, and borderline aggressive. In a good way.",
-    available: false,
+    name: 'Ethiopia',
+    coords: [39.5, 9.0],
+    dx: 25, dy: -20,
+    flavour: 'Floral, Bright, Citrusy',
+    varietals: 'Heirloom',
+    process: 'Washed',
+    description:
+      'Often considered the birthplace of coffee, Ethiopia produces some of the most complex and vibrant coffees in the world. Grown at high altitudes and processed with care, these beans deliver bright acidity, elegant floral notes, and a tea-like clarity.',
   },
   170: {
-    name: 'Colombia', flag: '🇨🇴',
-    region: 'Huila & Nariño', altitude: '1,500–2,000m', process: 'Washed',
-    notes: ['Caramel', 'Red Apple', 'Milk Chocolate', 'Citrus'],
-    body: 6, acidity: 6,
-    jack: "Colombia's the reliable mate who always shows up on time. Smooth, consistent, never lets you down.",
-    available: false,
+    name: 'Colombia',
+    coords: [-74.0, 4.5],
+    dx: 20, dy: -25,
+    flavour: 'Balanced, Caramel, Nutty',
+    varietals: 'Castillo, Caturra',
+    process: 'Washed',
+    description:
+      "Colombia's diverse microclimates and dedicated farming traditions produce consistently excellent coffee. Expect well-balanced cups with natural sweetness, medium body, and a clean, caramel finish.",
   },
   76: {
-    name: 'Brazil', flag: '🇧🇷',
-    region: 'Minas Gerais & São Paulo', altitude: '900–1,300m', process: 'Natural & Pulped Natural',
-    notes: ['Dark Chocolate', 'Almonds', 'Brown Sugar', 'Smooth'],
-    body: 8, acidity: 3,
-    jack: "Brazil: half the world's coffee, zero the pretension. The classic espresso backbone.",
-    available: false,
+    name: 'Brazil',
+    coords: [-51.9, -14.2],
+    dx: 25, dy: 15,
+    flavour: 'Chocolatey, Smooth, Low Acidity',
+    varietals: 'Mundo Novo, Catuai',
+    process: 'Natural',
+    description:
+      "As the world's largest coffee producer, Brazil sets the standard for espresso bases. Natural processing gives the beans their signature low acidity, full body, and notes of dark chocolate, almonds, and brown sugar.",
   },
   320: {
-    name: 'Guatemala', flag: '🇬🇹',
-    region: 'Antigua & Huehuetenango', altitude: '1,500–2,000m', process: 'Washed',
-    notes: ['Dark Chocolate', 'Smoky', 'Spice', 'Dried Fruit'],
-    body: 7, acidity: 5,
-    jack: "Volcanic soil, high altitude, big smoke. Guatemala means business.",
-    available: false,
-  },
-  188: {
-    name: 'Costa Rica', flag: '🇨🇷',
-    region: 'Tarrazú & Central Valley', altitude: '1,200–1,800m', process: 'Honey & Washed',
-    notes: ['Peach', 'Brown Sugar', 'Citrus', 'Floral'],
-    body: 5, acidity: 6,
-    jack: "Pura vida, pura coffee. Clean, sweet, and completely effortless.",
-    available: false,
-  },
-  340: {
-    name: 'Honduras', flag: '🇭🇳',
-    region: 'Copán & Marcala', altitude: '1,000–1,600m', process: 'Washed',
-    notes: ['Peach', 'Honey', 'Caramel', 'Mild'],
-    body: 5, acidity: 5,
-    jack: "Honduras is the dark horse. Quietly brilliant while everyone else grabs the headlines.",
-    available: false,
-  },
-  604: {
-    name: 'Peru', flag: '🇵🇪',
-    region: 'Chanchamayo & Cajamarca', altitude: '1,500–2,200m', process: 'Washed',
-    notes: ['Mild', 'Nutty', 'Milk Chocolate', 'Floral'],
-    body: 5, acidity: 5,
-    jack: "High-altitude Peruvian beans. Like drinking a mountain. A very tasty mountain.",
-    available: false,
-  },
-  484: {
-    name: 'Mexico', flag: '🇲🇽',
-    region: 'Chiapas & Veracruz', altitude: '900–1,800m', process: 'Washed',
-    notes: ['Nutty', 'Mild Spice', 'Light Body', 'Sweet'],
-    body: 4, acidity: 4,
-    jack: "Laid back, easy going, surprisingly nuanced. Much like the best Mexican road trips.",
-    available: false,
-  },
-  887: {
-    name: 'Yemen', flag: '🇾🇪',
-    region: 'Haraz & Bani Matar', altitude: '1,500–2,500m', process: 'Natural (Dry)',
-    notes: ['Wine', 'Dried Fruit', 'Spice', 'Ancient'],
-    body: 8, acidity: 6,
-    jack: "The ancient one. Yemeni coffee has been doing this since before coffee was even cool.",
-    available: false,
-  },
-  356: {
-    name: 'India', flag: '🇮🇳',
-    region: 'Karnataka & Kerala', altitude: '900–1,500m', process: 'Washed & Monsooned',
-    notes: ['Spice', 'Earthiness', 'Low Acid', 'Full Body'],
-    body: 8, acidity: 3,
-    jack: "India invented Monsooning — leaving beans out in monsoon winds. Completely unhinged, completely genius.",
-    available: false,
+    name: 'Guatemala',
+    coords: [-90.2, 15.5],
+    dx: -20, dy: -25,
+    flavour: 'Rich, Cocoa, Spiced',
+    varietals: 'Bourbon, Caturra',
+    process: 'Washed',
+    description:
+      'Grown on volcanic highlands with rich mineral soils and dramatic climate swings, Guatemalan coffee is bold, complex, and distinctive. Ideal for those who want depth, smoke, and character in every cup.',
   },
   360: {
-    name: 'Indonesia', flag: '🇮🇩',
-    region: 'Sumatra & Sulawesi', altitude: '900–1,700m', process: 'Wet-Hulled (Giling Basah)',
-    notes: ['Earthy', 'Tobacco', 'Dark Chocolate', 'Dense'],
-    body: 9, acidity: 3,
-    jack: "Sumatra hits different. Wet-hulled, intense, and absolutely not for the faint-hearted.",
-    available: false,
-  },
-  704: {
-    name: 'Vietnam', flag: '🇻🇳',
-    region: 'Central Highlands', altitude: '500–900m', process: 'Natural',
-    notes: ['Robusta', 'Chocolatey', 'Bold', 'Intense'],
-    body: 9, acidity: 2,
-    jack: "Vietnam exports more coffee than almost anyone. Cà phê sữa đá is a way of life.",
-    available: false,
-  },
-  646: {
-    name: 'Rwanda', flag: '🇷🇼',
-    region: 'Lake Kivu Region', altitude: '1,400–2,000m', process: 'Washed',
-    notes: ['Floral', 'Red Fruit', 'Citrus', 'Bright'],
-    body: 6, acidity: 8,
-    jack: "Rwanda's coffee scene is one of the most inspiring transformations in the game.",
-    available: false,
-  },
-  800: {
-    name: 'Uganda', flag: '🇺🇬',
-    region: 'Mt. Elgon & Rwenzori', altitude: '1,200–2,200m', process: 'Natural & Washed',
-    notes: ['Dark Fruit', 'Cocoa', 'Earthy', 'Full Body'],
-    body: 8, acidity: 5,
-    jack: "Uganda grows serious quality up on Mt. Elgon. Criminally underrated on the world stage.",
-    available: false,
-  },
-  834: {
-    name: 'Tanzania', flag: '🇹🇿',
-    region: 'Kilimanjaro & Mbeya', altitude: '1,400–2,000m', process: 'Washed',
-    notes: ['Bright', 'Fruity', 'Wine-like', 'Citrus'],
-    body: 6, acidity: 8,
-    jack: "Tanzania grows coffee on the slopes of Kilimanjaro. That's just showing off, honestly.",
-    available: false,
-  },
-  222: {
-    name: 'El Salvador', flag: '🇸🇻',
-    region: 'Santa Ana & Ahuachapán', altitude: '900–1,700m', process: 'Washed & Natural',
-    notes: ['Sweet', 'Stone Fruit', 'Honey', 'Mild'],
-    body: 5, acidity: 5,
-    jack: "Small country, massive charm. El Salvador punches way above its weight in the cup.",
-    available: false,
-  },
-  558: {
-    name: 'Nicaragua', flag: '🇳🇮',
-    region: 'Jinotega & Matagalpa', altitude: '900–1,500m', process: 'Washed',
-    notes: ['Mild', 'Caramel', 'Bright', 'Citrus'],
-    body: 5, acidity: 6,
-    jack: "Nicaragua: where the coffee is great and the price of a bag won't make you cry.",
-    available: false,
+    name: 'Indonesia',
+    coords: [117.0, -2.5],
+    dx: 20, dy: 20,
+    flavour: 'Earthy, Dark Chocolate, Dense',
+    varietals: 'Typica, Jember',
+    process: 'Wet-Hulled',
+    description:
+      'Indonesian coffee — especially from Sumatra — is unlike anything else. Wet-hulled processing creates a distinctively heavy, earthy cup with a deep, syrupy body. Divisive, but completely unforgettable.',
   },
 }
 
-// ── Stage 1: page layout scaffold ───────────────────────────────────────────
-// Left panel: Jack the lecturer + country info (placeholder for now)
-// Right area: "COFFEE BY REGION" heading + map placeholder
-// Interactive map and country info panel added in stage 2.
+const REGION_IDS = Object.keys(REGIONS).map(Number)
+const DEFAULT_ID = 231
+
+// ── Icons ──────────────────────────────────────────────────────────────────────
+
+function FlavorIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <circle cx="8" cy="8" r="2" fill="#39FF14" />
+      {[0, 60, 120, 180, 240, 300].map(a => {
+        const rad = (a * Math.PI) / 180
+        return (
+          <line
+            key={a}
+            x1={8 + 3 * Math.cos(rad)} y1={8 + 3 * Math.sin(rad)}
+            x2={8 + 6 * Math.cos(rad)} y2={8 + 6 * Math.sin(rad)}
+            stroke="#39FF14" strokeWidth={1.2} strokeLinecap="round"
+          />
+        )
+      })}
+    </svg>
+  )
+}
+
+function LeafIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <path
+        d="M8 14C8 14 2 10.5 2 5.5C2 5.5 6 2 12 4C12 4 14 10 8 14Z"
+        stroke="#39FF14" strokeWidth={1.2} strokeLinejoin="round"
+      />
+      <line x1="8" y1="14" x2="8" y2="7" stroke="#39FF14" strokeWidth={0.9} />
+    </svg>
+  )
+}
+
+function GearIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <circle cx="8" cy="8" r="2.5" stroke="#39FF14" strokeWidth={1.2} />
+      <circle cx="8" cy="8" r="5.8" stroke="#39FF14" strokeWidth={1.2} strokeDasharray="2.4 1.8" />
+    </svg>
+  )
+}
+
+// ── Sidebar detail panel ───────────────────────────────────────────────────────
+
+function DetailRow({ icon, label, value }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 12 }}>
+      {icon}
+      <div>
+        <p style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: 11,
+          color: '#C9A84C',
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          margin: '0 0 2px 0',
+        }}>
+          {label}
+        </p>
+        <p style={{ fontSize: 13, color: '#ffffff', margin: 0 }}>{value}</p>
+      </div>
+    </div>
+  )
+}
+
+// ── Main ───────────────────────────────────────────────────────────────────────
 
 export default function Origins() {
-  const [selected] = useState(null)
-  const selectedCountry = selected ? COFFEE_COUNTRIES[selected] : null
+  const [selectedId, setSelectedId] = useState(DEFAULT_ID)
+
+  function handleSelect(id) {
+    if (id !== selectedId) setSelectedId(id)
+  }
+
+  const region = REGIONS[selectedId]
 
   return (
-    <main className="bg-[#0d0d0d] min-h-screen pt-16 flex flex-col">
+    <main style={{
+      paddingTop: NAV_H,
+      height: '100vh',
+      overflow: 'hidden',
+      background: '#0d0d0d',
+    }}>
+      <div style={{ display: 'flex', width: '100%', height: `calc(100vh - ${NAV_H}px)` }}>
 
-      {/* ── Main layout: left panel + right map area ────────────────── */}
-      <div className="flex flex-1" style={{ minHeight: 'calc(100vh - 4rem)' }}>
+        {/* ── SIDEBAR ─────────────────────────────────────────────────── */}
+        <aside style={{
+          width: 300,
+          flexShrink: 0,
+          height: '100%',
+          background: '#0d0d0d',
+          borderRight: '1px solid #1f1f1f',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}>
 
-        {/* ── Left panel ─────────────────────────────────────────────── */}
-        <aside
-          className="relative shrink-0 flex flex-col bg-[#0a0a0a] border-r border-white/[0.05]"
-          style={{
-            width: 'clamp(220px, 19vw, 300px)',
-            overflow: 'visible',
-            zIndex: 10,
-          }}
-        >
-          {/* Jack — wider than the panel so his pointer tip extends into the map */}
-          <div className="relative" style={{ overflow: 'visible' }}>
+          {/* Jack image */}
+          <div style={{ flexShrink: 0 }}>
             <img
               src="/images/jack-lecturer.png"
               alt="Jack the Lecturer"
-              className="block select-none pointer-events-none"
               style={{
-                width: '130%',
-                maxWidth: 'none',
+                width: '100%',
+                maxHeight: 240,
+                objectFit: 'contain',
+                objectPosition: 'bottom',
+                display: 'block',
+                pointerEvents: 'none',
+                userSelect: 'none',
               }}
             />
           </div>
 
-          {/* Country info — placeholder until stage 2 wires up selection */}
-          <div
-            className="flex-1 border-t border-white/[0.06] px-5 py-6"
-            style={{ background: '#090909' }}
-          >
-            {selectedCountry ? (
-              /* Country info renders here in stage 2 */
-              <p className="font-['Barlow_Condensed'] text-[#39FF14] text-xs tracking-[3px] uppercase">
-                {selectedCountry.name}
+          {/* Region detail */}
+          <div style={{ flex: 1, padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
+            <div key={selectedId} style={{ animation: 'modalFadeIn 0.2s ease both' }}>
+
+              <h2 style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: 36,
+                color: '#39FF14',
+                letterSpacing: '0.05em',
+                marginBottom: 16,
+                lineHeight: 1,
+              }}>
+                {region.name.toUpperCase()}
+              </h2>
+
+              <DetailRow icon={<FlavorIcon />} label="Flavour Profile" value={region.flavour} />
+              <DetailRow icon={<LeafIcon />}   label="Varietals"       value={region.varietals} />
+              <DetailRow icon={<GearIcon />}   label="Process"         value={region.process} />
+
+              <p style={{
+                fontSize: 12,
+                color: '#71717a',
+                lineHeight: 1.6,
+                marginTop: 16,
+                marginBottom: 20,
+              }}>
+                {region.description}
               </p>
-            ) : (
-              <p className="font-['Barlow_Condensed'] text-white/20 text-[0.65rem] tracking-[3px] uppercase leading-relaxed">
-                Click a highlighted region on the map to learn more
-              </p>
-            )}
+
+              <button
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: 14,
+                  color: '#ffffff',
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.4)',
+                  letterSpacing: '0.1em',
+                  padding: '10px 0',
+                  cursor: 'pointer',
+                  transition: 'background 200ms, border-color 200ms, color 200ms',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = '#39FF14'
+                  e.currentTarget.style.borderColor = '#39FF14'
+                  e.currentTarget.style.color = '#0d0d0d'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'transparent'
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)'
+                  e.currentTarget.style.color = '#ffffff'
+                }}
+              >
+                SHOP {region.name.toUpperCase()} COFFEE
+              </button>
+
+            </div>
+          </div>
+
+          {/* Instruction — flush to bottom */}
+          <div style={{ padding: '16px 24px', flexShrink: 0 }}>
+            <p style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 10,
+              color: '#3f3f46',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              margin: 0,
+              lineHeight: 1.4,
+            }}>
+              CLICK A HIGHLIGHTED REGION ON THE MAP TO LEARN MORE
+            </p>
           </div>
         </aside>
 
-        {/* ── Right area: heading + map ───────────────────────────────── */}
-        <div className="flex-1 flex flex-col min-w-0">
+        {/* ── MAP AREA ─────────────────────────────────────────────────── */}
+        <div style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0 }}>
 
-          {/* Page heading */}
-          <div className="text-center px-6 pt-10 pb-6 shrink-0">
-            <h1
-              className="font-['Bebas_Neue'] text-white leading-none tracking-[0.05em]"
-              style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)' }}
+          <div style={{ width: '100%', height: '100%' }}>
+            <ComposableMap
+              projectionConfig={{ scale: 155, center: [20, 10] }}
+              style={{ width: '100%', height: '100%' }}
             >
-              COFFEE BY REGION
-            </h1>
-            <p className="font-['Inter'] text-white/45 font-light text-sm sm:text-base mt-3 max-w-xl mx-auto leading-relaxed">
-              Explore the world of coffee. Understand the origin, the process,
-              and the flavour that each region brings to your cup.
-            </p>
+              <Geographies geography={GEO_URL}>
+                {({ geographies }) =>
+                  geographies.map(geo => {
+                    const id = Number(geo.id)
+                    const isHighlighted = REGION_IDS.includes(id)
+                    const isSelected = selectedId === id
+
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        onClick={() => isHighlighted && handleSelect(id)}
+                        style={{
+                          default: {
+                            fill: isSelected
+                              ? 'rgba(57,255,20,0.65)'
+                              : isHighlighted ? '#1e3d10' : '#161616',
+                            stroke: '#262626',
+                            strokeWidth: 0.4,
+                            outline: 'none',
+                            transition: 'fill 150ms ease',
+                            cursor: isHighlighted ? 'pointer' : 'default',
+                          },
+                          hover: {
+                            fill: isSelected
+                              ? 'rgba(57,255,20,0.65)'
+                              : isHighlighted ? '#2d5a1b' : '#161616',
+                            stroke: '#262626',
+                            strokeWidth: 0.4,
+                            outline: 'none',
+                            cursor: isHighlighted ? 'pointer' : 'default',
+                          },
+                          pressed: {
+                            fill: isHighlighted ? 'rgba(57,255,20,0.75)' : '#161616',
+                            outline: 'none',
+                          },
+                        }}
+                      />
+                    )
+                  })
+                }
+              </Geographies>
+
+              {/* Annotations + Markers */}
+              {Object.entries(REGIONS).map(([rawId, r]) => {
+                const id = Number(rawId)
+                const anchor = r.dx < 0 ? 'end' : 'start'
+
+                return (
+                  <g key={id}>
+                    <Annotation
+                      subject={r.coords}
+                      dx={r.dx}
+                      dy={r.dy}
+                      connectorProps={{
+                        stroke: 'rgba(255,255,255,0.35)',
+                        strokeWidth: 0.5,
+                        strokeLinecap: 'round',
+                      }}
+                    >
+                      <text
+                        fontFamily="'Bebas Neue', sans-serif"
+                        fontSize={10}
+                        fill="#C9A84C"
+                        letterSpacing={1}
+                        textAnchor={anchor}
+                      >
+                        {r.name.toUpperCase()}
+                      </text>
+                      <text
+                        y={12}
+                        fontSize={8}
+                        fill="rgba(255,255,255,0.7)"
+                        textAnchor={anchor}
+                        fontFamily="sans-serif"
+                      >
+                        {r.flavour}
+                      </text>
+                      <text
+                        y={22}
+                        fontSize={7.5}
+                        fill="rgba(255,255,255,0.42)"
+                        textAnchor={anchor}
+                        fontFamily="sans-serif"
+                      >
+                        {`Varietals:  ${r.varietals}`}
+                      </text>
+                      <text
+                        y={31}
+                        fontSize={7.5}
+                        fill="rgba(255,255,255,0.42)"
+                        textAnchor={anchor}
+                        fontFamily="sans-serif"
+                      >
+                        {`Process:  ${r.process}`}
+                      </text>
+                    </Annotation>
+
+                    <Marker coordinates={r.coords}>
+                      <circle
+                        r={4}
+                        fill="#39FF14"
+                        opacity={0.9}
+                        stroke="#0d0d0d"
+                        strokeWidth={1}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => handleSelect(id)}
+                      />
+                    </Marker>
+                  </g>
+                )
+              })}
+            </ComposableMap>
           </div>
 
-          {/* Map area — interactive map added in stage 2 */}
-          <div
-            className="flex-1 flex items-center justify-center"
-            style={{ background: '#070707' }}
-          >
-            <p className="font-['Barlow_Condensed'] text-white/10 text-xs tracking-[4px] uppercase">
-              Interactive map — stage 2
-            </p>
+          {/* Bottom-centre hint pill */}
+          <div style={{
+            position: 'absolute',
+            bottom: 24,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(0,0,0,0.7)',
+            border: '1px solid #2a2a2a',
+            borderRadius: 999,
+            padding: '8px 20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            whiteSpace: 'nowrap',
+          }}>
+            <span style={{
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              background: '#39FF14',
+              flexShrink: 0,
+              display: 'inline-block',
+            }} />
+            <span style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 10,
+              color: '#ffffff',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}>
+              CLICK A HIGHLIGHTED REGION TO LEARN MORE ABOUT ITS COFFEE
+            </span>
+          </div>
+
+          {/* Bottom-right legend */}
+          <div style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+            display: 'flex',
+            alignItems: 'flex-end',
+            gap: 6,
+          }}>
+            <img
+              src="/images/jack-lecturer.png"
+              alt=""
+              aria-hidden="true"
+              style={{
+                height: 55,
+                width: 'auto',
+                objectFit: 'contain',
+                objectPosition: 'bottom',
+                pointerEvents: 'none',
+                userSelect: 'none',
+              }}
+            />
+            <span style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 9,
+              color: '#52525b',
+              letterSpacing: '0.08em',
+              paddingBottom: 3,
+            }}>
+              ● = CURRENTLY VIEWING
+            </span>
           </div>
 
         </div>
       </div>
-
     </main>
   )
 }
