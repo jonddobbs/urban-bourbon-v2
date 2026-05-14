@@ -152,15 +152,6 @@ export default function Origins() {
           overflow: 'hidden',
         }}>
 
-          {/* Jack image */}
-          <div>
-            <img
-              src="/images/jack-lecturer.png"
-              alt="Jack"
-              style={{ height: '240px', width: '100%', objectFit: 'contain', objectPosition: 'bottom', display: 'block' }}
-            />
-          </div>
-
           {/* Region detail */}
           <div style={{ flex: 1, padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
             <div key={selectedId} style={{ animation: 'modalFadeIn 0.2s ease both' }}>
@@ -221,8 +212,13 @@ export default function Origins() {
             </div>
           </div>
 
-          {/* Instruction — flush to bottom */}
-          <div style={{ padding: '16px 24px', flexShrink: 0 }}>
+          {/* Jack + instruction — flush to bottom */}
+          <div style={{ padding: '0 24px 16px', flexShrink: 0 }}>
+            <img
+              src="/images/jack-lecturer.png"
+              alt="Jack"
+              style={{ height: '160px', width: '100%', objectFit: 'contain', objectPosition: 'bottom center', display: 'block', marginBottom: 8 }}
+            />
             <p style={{
               fontFamily: "'Bebas Neue', sans-serif",
               fontSize: 10,
@@ -394,29 +390,6 @@ export default function Origins() {
             </span>
           </div>
 
-          {/* Bottom-right legend */}
-          <div style={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: 6,
-          }}>
-            <img
-              src="/images/jack-lecturer.png"
-              style={{ height: '55px', objectFit: 'contain' }}
-            />
-            <span style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 9,
-              color: '#52525b',
-              letterSpacing: '0.08em',
-              paddingBottom: 3,
-            }}>
-              ● = CURRENTLY VIEWING
-            </span>
-          </div>
 
         </div>
       </div>
