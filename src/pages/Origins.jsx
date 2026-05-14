@@ -137,13 +137,8 @@ export default function Origins() {
   const region = REGIONS[selectedId]
 
   return (
-    <main style={{
-      paddingTop: NAV_H,
-      height: '100vh',
-      overflow: 'hidden',
-      background: '#0d0d0d',
-    }}>
-      <div style={{ display: 'flex', width: '100%', height: `calc(100vh - ${NAV_H}px)` }}>
+    <main style={{ paddingTop: NAV_H, height: '100vh', overflow: 'hidden', background: '#0d0d0d' }}>
+      <div style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden' }}>
 
         {/* ── SIDEBAR ─────────────────────────────────────────────────── */}
         <aside style={{
@@ -158,21 +153,12 @@ export default function Origins() {
         }}>
 
           {/* Jack image */}
-          <div style={{ flexShrink: 0 }}>
-            <img
-              src="/images/jack-lecturer.png"
-              alt="Jack the Lecturer"
-              style={{
-                width: '100%',
-                maxHeight: 240,
-                objectFit: 'contain',
-                objectPosition: 'bottom',
-                display: 'block',
-                pointerEvents: 'none',
-                userSelect: 'none',
-              }}
-            />
-          </div>
+          <img
+            src="/images/jack-lecturer.png"
+            alt="Jack"
+            className="w-full object-contain object-bottom"
+            style={{ height: 240, display: 'block', flexShrink: 0, pointerEvents: 'none', userSelect: 'none' }}
+          />
 
           {/* Region detail */}
           <div style={{ flex: 1, padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
@@ -418,16 +404,9 @@ export default function Origins() {
           }}>
             <img
               src="/images/jack-lecturer.png"
-              alt=""
+              style={{ height: 55 }}
+              className="object-contain object-bottom"
               aria-hidden="true"
-              style={{
-                height: 55,
-                width: 'auto',
-                objectFit: 'contain',
-                objectPosition: 'bottom',
-                pointerEvents: 'none',
-                userSelect: 'none',
-              }}
             />
             <span style={{
               fontFamily: "'Bebas Neue', sans-serif",
