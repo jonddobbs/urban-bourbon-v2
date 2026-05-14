@@ -137,8 +137,8 @@ export default function Origins() {
   const region = REGIONS[selectedId]
 
   return (
-    <main style={{ paddingTop: NAV_H, height: '100vh', overflow: 'hidden', background: '#0d0d0d' }}>
-      <div style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden' }}>
+    <main style={{ paddingTop: '64px', background: '#0d0d0d' }}>
+      <div style={{ display: 'flex', height: 'calc(100vh - 64px)', overflow: 'hidden', marginTop: '0' }}>
 
         {/* ── SIDEBAR ─────────────────────────────────────────────────── */}
         <aside style={{
@@ -153,12 +153,13 @@ export default function Origins() {
         }}>
 
           {/* Jack image */}
-          <img
-            src="/images/jack-lecturer.png"
-            alt="Jack"
-            className="w-full object-contain object-bottom"
-            style={{ height: 240, display: 'block', flexShrink: 0, pointerEvents: 'none', userSelect: 'none' }}
-          />
+          <div>
+            <img
+              src="/images/jack-lecturer.png"
+              alt="Jack"
+              style={{ height: '240px', width: '100%', objectFit: 'contain', objectPosition: 'bottom', display: 'block' }}
+            />
+          </div>
 
           {/* Region detail */}
           <div style={{ flex: 1, padding: 24, overflowY: 'auto', overflowX: 'hidden' }}>
@@ -404,9 +405,7 @@ export default function Origins() {
           }}>
             <img
               src="/images/jack-lecturer.png"
-              style={{ height: 55 }}
-              className="object-contain object-bottom"
-              aria-hidden="true"
+              style={{ height: '55px', objectFit: 'contain' }}
             />
             <span style={{
               fontFamily: "'Bebas Neue', sans-serif",
