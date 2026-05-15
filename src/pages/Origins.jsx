@@ -14,6 +14,7 @@ const REGIONS = {
     flavour: 'Floral, Bright, Citrusy',
     varietals: 'Heirloom',
     process: 'Washed',
+    story: 'Bright citrus. Floral jasmine. High-altitude complexity. The birthplace of coffee — wild, elegant, and completely unpredictable. Heirloom varieties grown at the edge of what\'s possible.',
     description:
       'Often considered the birthplace of coffee, Ethiopia produces some of the most complex and vibrant coffees in the world. Grown at high altitudes and processed with care, these beans deliver bright acidity, elegant floral notes, and a tea-like clarity.',
   },
@@ -25,6 +26,7 @@ const REGIONS = {
     flavour: 'Balanced, Caramel, Nutty',
     varietals: 'Castillo, Caturra',
     process: 'Washed',
+    story: 'Caramel sweetness. Crisp mountain acidity. Silky, clean body. Where Andean valleys meet near-perfect growing conditions. Colombia doesn\'t gamble with quality — it delivers every single time.',
     description:
       "Colombia's diverse microclimates and dedicated farming traditions produce consistently excellent coffee. Expect well-balanced cups with natural sweetness, medium body, and a clean, caramel finish.",
   },
@@ -36,6 +38,7 @@ const REGIONS = {
     flavour: 'Chocolatey, Smooth, Low Acidity',
     varietals: 'Mundo Novo, Catuai',
     process: 'Natural',
+    story: 'Dark chocolate. Toasted almond. Dense, satisfying body. The engine room of the coffee world. Natural-processed at lower altitudes — full, rich, the backbone of every great espresso blend.',
     description:
       "As the world's largest coffee producer, Brazil sets the standard for espresso bases. Natural processing gives the beans their signature low acidity, full body, and notes of dark chocolate, almonds, and brown sugar.",
   },
@@ -47,6 +50,7 @@ const REGIONS = {
     flavour: 'Rich, Cocoa, Spiced',
     varietals: 'Bourbon, Caturra',
     process: 'Washed',
+    story: 'Volcanic smoke. Deep cocoa. Bright citrus edge. Ancient eruptions left mineral-rich soil no other region can replicate. Guatemala puts terroir at the centre of every cup.',
     description:
       'Grown on volcanic highlands with rich mineral soils and dramatic climate swings, Guatemalan coffee is bold, complex, and distinctive. Ideal for those who want depth, smoke, and character in every cup.',
   },
@@ -58,10 +62,13 @@ const REGIONS = {
     flavour: 'Earthy, Dark Chocolate, Dense',
     varietals: 'Typica, Jember',
     process: 'Wet-Hulled',
+    story: 'Forest floor. Dark spice. Syrupy, heavy body. Wet-hulled in Sumatra\'s highlands — a process found nowhere else on earth. Not for the timid, but unforgettable for everyone else.',
     description:
       'Indonesian coffee — especially from Sumatra — is unlike anything else. Wet-hulled processing creates a distinctively heavy, earthy cup with a deep, syrupy body. Divisive, but completely unforgettable.',
   },
 }
+
+const GLOW_DELAYS = { 231: '0s', 170: '0.7s', 76: '1.4s', 320: '2.1s', 360: '2.8s' }
 
 const REGION_IDS = Object.keys(REGIONS).map(Number)
 
@@ -283,25 +290,28 @@ export default function Origins() {
                       <Geography
                         key={geo.rsmKey}
                         geography={geo}
+                        className={isHighlighted ? 'geo-highlighted' : undefined}
                         onClick={() => isHighlighted && handleSelect(id)}
                         style={{
                           default: {
                             fill: isHighlighted ? '#1e3d10' : '#161616',
-                            stroke: '#262626',
-                            strokeWidth: 0.4,
+                            stroke: isHighlighted ? '#2a4a1a' : '#222222',
+                            strokeWidth: isHighlighted ? 0.6 : 0.4,
                             outline: 'none',
-                            transition: 'fill 150ms ease',
+                            transition: 'fill 200ms ease',
                             cursor: isHighlighted ? 'pointer' : 'default',
+                            animationDelay: isHighlighted ? GLOW_DELAYS[id] : undefined,
                           },
                           hover: {
-                            fill: isHighlighted ? '#2d5a1b' : '#161616',
-                            stroke: '#262626',
-                            strokeWidth: 0.4,
+                            fill: isHighlighted ? '#3a7022' : '#1a1a1a',
+                            stroke: isHighlighted ? '#39FF14' : '#222222',
+                            strokeWidth: isHighlighted ? 0.8 : 0.4,
                             outline: 'none',
                             cursor: isHighlighted ? 'pointer' : 'default',
+                            filter: isHighlighted ? 'drop-shadow(0 0 6px rgba(57,255,20,0.4))' : 'none',
                           },
                           pressed: {
-                            fill: isHighlighted ? 'rgba(57,255,20,0.6)' : '#161616',
+                            fill: isHighlighted ? 'rgba(57,255,20,0.55)' : '#161616',
                             outline: 'none',
                           },
                         }}
@@ -317,32 +327,33 @@ export default function Origins() {
                 const anchor = r.dx < 0 ? 'end' : 'start'
 
                 return (
-                  <g key={id} style={{ cursor: 'pointer' }} onClick={() => handleSelect(id)}>
+                  <g key={id} className="map-pin-group" onClick={() => handleSelect(id)}>
                     <Annotation
                       subject={r.coords}
                       dx={r.dx}
                       dy={r.dy}
                       connectorProps={{
-                        stroke: 'rgba(255,255,255,0.25)',
-                        strokeWidth: 0.5,
+                        stroke: 'rgba(57,255,20,0.3)',
+                        strokeWidth: 0.6,
                         strokeLinecap: 'round',
                       }}
                     >
                       <text
                         fontFamily="'Bebas Neue', sans-serif"
-                        fontSize={10}
-                        fill="#C9A84C"
-                        letterSpacing={1}
+                        fontSize={13}
+                        fill="#E8D5A3"
+                        letterSpacing={2}
                         textAnchor={anchor}
                       >
                         {r.name.toUpperCase()}
                       </text>
                       <text
-                        y={12}
-                        fontSize={8}
-                        fill="rgba(255,255,255,0.6)"
+                        y={14}
+                        fontSize={9}
+                        fill="rgba(255,255,255,0.75)"
                         textAnchor={anchor}
-                        fontFamily="sans-serif"
+                        fontFamily="'Inter', sans-serif"
+                        letterSpacing={0.5}
                       >
                         {r.flavour}
                       </text>
@@ -352,18 +363,20 @@ export default function Origins() {
                       {/* Flag emoji */}
                       <text
                         textAnchor="middle"
-                        y={-10}
-                        style={{ fontSize: '13px', userSelect: 'none' }}
+                        y={-12}
+                        style={{ fontSize: '15px', userSelect: 'none' }}
                       >
                         {r.flag}
                       </text>
-                      {/* Dot */}
+                      {/* Dot — glowing */}
                       <circle
-                        r={4}
+                        r={5}
                         fill="#39FF14"
-                        opacity={0.9}
+                        opacity={0.95}
                         stroke="#0d0d0d"
-                        strokeWidth={1}
+                        strokeWidth={1.5}
+                        className="glow-dot"
+                        style={{ animationDelay: GLOW_DELAYS[id] }}
                       />
                     </Marker>
                   </g>
@@ -371,6 +384,32 @@ export default function Origins() {
               })}
             </ComposableMap>
           </div>
+
+          {/* Grain overlay */}
+          <div style={{
+            position: 'absolute',
+            inset: '-10%',
+            pointerEvents: 'none',
+            zIndex: 4,
+            opacity: 0.045,
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")",
+            backgroundSize: '300px 300px',
+            animation: 'grainDrift 0.35s steps(1) infinite',
+          }} />
+
+          {/* Fog overlay */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 3,
+            animation: 'fogFloat 28s ease-in-out infinite',
+            background: [
+              'radial-gradient(ellipse 55% 45% at 18% 55%, rgba(57,255,20,0.028) 0%, transparent 70%)',
+              'radial-gradient(ellipse 40% 55% at 78% 28%, rgba(57,255,20,0.018) 0%, transparent 60%)',
+              'radial-gradient(ellipse 35% 40% at 50% 80%, rgba(57,255,20,0.012) 0%, transparent 55%)',
+            ].join(', '),
+          }} />
 
           {/* Hint pill */}
           <div style={{

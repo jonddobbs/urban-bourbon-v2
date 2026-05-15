@@ -111,11 +111,21 @@ function DefaultState() {
         }} />
         <p style={{
           fontSize: 11,
-          color: '#666666',
-          margin: 0,
-          lineHeight: 1.55,
+          color: '#555555',
+          margin: '0 0 8px 0',
+          lineHeight: 1.6,
+          letterSpacing: '0.01em',
         }}>
-          Pick a region on the map. I'll walk you through it.
+          Every coffee tells a story.
+        </p>
+        <p style={{
+          fontSize: 10,
+          color: '#3a3a3a',
+          margin: 0,
+          lineHeight: 1.6,
+        }}>
+          Region changes everything — altitude, climate, process, flavour.
+          Choose a destination and Jack will guide you through the full profile.
         </p>
       </div>
 
@@ -219,9 +229,27 @@ function SelectedState({ selectedId, region, onDeselect }) {
         </h2>
       </div>
 
+      {/* Editorial story */}
+      <div style={{
+        padding: '16px 20px 14px',
+        borderBottom: '1px solid #1a1a1a',
+        flexShrink: 0,
+      }}>
+        <p style={{
+          fontSize: 12,
+          color: '#d4d4d4',
+          lineHeight: 1.7,
+          margin: 0,
+          fontStyle: 'italic',
+          letterSpacing: '0.01em',
+        }}>
+          {region.story}
+        </p>
+      </div>
+
       {/* Jack speech bubble */}
       <div style={{
-        padding: '16px 20px',
+        padding: '14px 20px',
         borderBottom: '1px solid #1a1a1a',
         flexShrink: 0,
       }}>
