@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps'
+import TastingLabPanel from '../components/TastingLabPanel'
 
 const GEO_URL = '/countries-110m.json'
 const NAV_H = 64
@@ -257,29 +258,11 @@ export default function Origins() {
     <main style={{ paddingTop: NAV_H, background: '#0d0d0d' }}>
       <div style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden' }}>
 
-        {/* ── JACK STRIP ───────────────────────────────────────────────── */}
-        <div style={{
-          width: 120,
-          flexShrink: 0,
-          position: 'relative',
-          borderRight: '1px solid #1a1a1a',
-        }}>
-          <img
-            src="/images/jack-lecture-with-stick.png"
-            alt="Jack"
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              height: '88%',
-              objectFit: 'contain',
-              objectPosition: 'bottom center',
-              userSelect: 'none',
-              pointerEvents: 'none',
-            }}
-          />
-        </div>
+        {/* ── TASTING LAB PANEL ────────────────────────────────────────── */}
+        <TastingLabPanel
+          selectedId={selectedId}
+          region={selectedId !== null ? REGIONS[selectedId] : null}
+        />
 
         {/* ── MAP AREA ─────────────────────────────────────────────────── */}
         <div style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0 }}>
@@ -425,13 +408,6 @@ export default function Origins() {
         </div>
       </div>
 
-      {/* ── MODAL ────────────────────────────────────────────────────────── */}
-      {selectedId !== null && (
-        <RegionModal
-          region={REGIONS[selectedId]}
-          onClose={() => setSelectedId(null)}
-        />
-      )}
     </main>
   )
 }
