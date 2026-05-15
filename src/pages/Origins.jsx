@@ -262,6 +262,7 @@ export default function Origins() {
         <TastingLabPanel
           selectedId={selectedId}
           region={selectedId !== null ? REGIONS[selectedId] : null}
+          onDeselect={() => setSelectedId(null)}
         />
 
         {/* ── MAP AREA ─────────────────────────────────────────────────── */}

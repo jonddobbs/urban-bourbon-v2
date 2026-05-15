@@ -142,9 +142,9 @@ function DefaultState() {
         ))}
       </div>
 
-      {/* Jack — full panel width, bottom-aligned, seamless #0d0d0d bg */}
+      {/* Jack — full panel width, bottom-aligned, transparent bg */}
       <img
-        src="/images/jack-lab-coat.png"
+        src="/images/jack-lab-coat-nobg.png"
         alt="Jack"
         style={{
           width: '100%',
@@ -158,7 +158,7 @@ function DefaultState() {
   )
 }
 
-function SelectedState({ selectedId, region }) {
+function SelectedState({ selectedId, region, onDeselect }) {
   return (
     <div style={{
       flex: 1,
@@ -166,12 +166,46 @@ function SelectedState({ selectedId, region }) {
       display: 'flex',
       flexDirection: 'column',
     }}>
-      {/* Region hero: flag + name */}
+      {/* Region hero: flag + name + close button */}
       <div style={{
         padding: '20px 20px 16px',
         borderBottom: '1px solid #1a1a1a',
         flexShrink: 0,
+        position: 'relative',
       }}>
+        <button
+          onClick={onDeselect}
+          aria-label="Back to map"
+          style={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            background: 'transparent',
+            border: '1px solid #2a2a2a',
+            borderRadius: '50%',
+            width: 28,
+            height: 28,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#52525b',
+            fontSize: 16,
+            lineHeight: 1,
+            padding: 0,
+            transition: 'border-color 150ms, color 150ms',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = '#39FF14'
+            e.currentTarget.style.color = '#39FF14'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = '#2a2a2a'
+            e.currentTarget.style.color = '#52525b'
+          }}
+        >
+          ×
+        </button>
         <div style={{ fontSize: 40, lineHeight: 1, marginBottom: 10 }}>{region.flag}</div>
         <h2 style={{
           fontFamily: "'Bebas Neue', sans-serif",
@@ -228,7 +262,7 @@ function SelectedState({ selectedId, region }) {
   )
 }
 
-export default function TastingLabPanel({ selectedId, region }) {
+export default function TastingLabPanel({ selectedId, region, onDeselect }) {
   return (
     <div style={{
       width: 320,
@@ -268,7 +302,7 @@ export default function TastingLabPanel({ selectedId, region }) {
 
       {/* Body */}
       {region ? (
-        <SelectedState selectedId={selectedId} region={region} />
+        <SelectedState selectedId={selectedId} region={region} onDeselect={onDeselect} />
       ) : (
         <DefaultState />
       )}
