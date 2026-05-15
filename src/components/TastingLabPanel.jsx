@@ -1,4 +1,5 @@
 const NAV_H = 64
+const JACK_IMG = '/images/jack-lecturer.png'  // public/images/jack-lecturer.png
 
 const JACK_SAYS = {
   231: "Ethiopia is where coffee was born. These beans carry a thousand years of history in every sip.",
@@ -81,7 +82,7 @@ function DefaultState() {
     }}>
       {/* Jack — ~65% of panel height, centred, pinned to top of body */}
       <img
-        src="/images/jack-lecturer.png"
+        src={JACK_IMG}
         alt="Jack"
         style={{
           height: `calc((100vh - ${NAV_H}px) * 0.65)`,
@@ -200,7 +201,7 @@ function SelectedState({ selectedId, region }) {
         flexShrink: 0,
       }}>
         <img
-          src="/images/jack-lecturer.png"
+          src={JACK_IMG}
           alt="Jack"
           style={{
             height: 72,
