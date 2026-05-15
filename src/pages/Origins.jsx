@@ -265,9 +265,9 @@ export default function Origins() {
         />
 
         {/* ── MAP AREA ─────────────────────────────────────────────────── */}
-        <div style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0 }}>
+        <div style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0, overflow: 'hidden' }}>
 
-          <div style={{ width: '100%', height: '100%' }}>
+          <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
             <ComposableMap
               projectionConfig={{ scale: 155, center: [20, 10] }}
               style={{ width: '100%', height: '100%' }}

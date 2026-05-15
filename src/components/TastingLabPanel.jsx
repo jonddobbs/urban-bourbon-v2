@@ -76,58 +76,10 @@ function DefaultState() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'flex-end',
-      position: 'relative',
       overflow: 'hidden',
+      paddingBottom: 24,
     }}>
-      {/* Speech bubble */}
-      <div style={{
-        position: 'absolute',
-        top: '10%',
-        left: 24,
-        right: 24,
-        background: '#16140f',
-        border: '1px solid #2a2a24',
-        borderRadius: 10,
-        padding: '12px 16px',
-        textAlign: 'center',
-      }}>
-        <p style={{
-          fontSize: 12,
-          color: '#999999',
-          margin: 0,
-          lineHeight: 1.55,
-          fontFamily: 'Inter, sans-serif',
-        }}>
-          See those green countries?<br />
-          Click one — I'll give you the full breakdown.
-        </p>
-        {/* Bubble tail pointing down toward Jack */}
-        <div style={{
-          position: 'absolute',
-          bottom: -9,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 0,
-          height: 0,
-          borderLeft: '8px solid transparent',
-          borderRight: '8px solid transparent',
-          borderTop: '8px solid #2a2a24',
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: -7,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 0,
-          height: 0,
-          borderLeft: '7px solid transparent',
-          borderRight: '7px solid transparent',
-          borderTop: '7px solid #16140f',
-        }} />
-      </div>
-
-      {/* Jack image — ~65% of panel height, pinned to bottom */}
+      {/* Jack — ~65% of panel height, centred, pinned to top of body */}
       <img
         src="/images/jack-lecturer.png"
         alt="Jack"
@@ -136,11 +88,77 @@ function DefaultState() {
           width: '100%',
           objectFit: 'contain',
           objectPosition: 'bottom center',
+          flexShrink: 0,
           userSelect: 'none',
           pointerEvents: 'none',
-          flexShrink: 0,
         }}
       />
+
+      {/* Speech bubble — tail points up toward Jack */}
+      <div style={{
+        position: 'relative',
+        background: '#16140f',
+        border: '1px solid #242420',
+        borderRadius: 10,
+        padding: '10px 16px',
+        margin: '12px 24px 0',
+        width: 'calc(100% - 48px)',
+        textAlign: 'center',
+        flexShrink: 0,
+      }}>
+        {/* Tail (outer — border colour) */}
+        <div style={{
+          position: 'absolute',
+          top: -9,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 0, height: 0,
+          borderLeft: '8px solid transparent',
+          borderRight: '8px solid transparent',
+          borderBottom: '8px solid #242420',
+        }} />
+        {/* Tail (inner — fill colour) */}
+        <div style={{
+          position: 'absolute',
+          top: -7,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 0, height: 0,
+          borderLeft: '7px solid transparent',
+          borderRight: '7px solid transparent',
+          borderBottom: '7px solid #16140f',
+        }} />
+        <p style={{
+          fontSize: 11,
+          color: '#666666',
+          margin: 0,
+          lineHeight: 1.55,
+        }}>
+          Pick a region on the map. I'll walk you through it.
+        </p>
+      </div>
+
+      {/* Dim pill tags */}
+      <div style={{
+        display: 'flex',
+        gap: 8,
+        marginTop: 14,
+        flexShrink: 0,
+      }}>
+        {['ORIGINS', 'PROCESS', 'FLAVOUR'].map(tag => (
+          <span key={tag} style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: 10,
+            color: '#2e2e2e',
+            letterSpacing: '1.5px',
+            border: '1px solid #1e1e1e',
+            borderRadius: 999,
+            padding: '3px 10px',
+          }}>
+            {tag}
+          </span>
+        ))}
+      </div>
     </div>
   )
 }
