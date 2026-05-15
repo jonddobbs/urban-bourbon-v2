@@ -191,31 +191,16 @@ function SelectedState({ selectedId, region }) {
         </h2>
       </div>
 
-      {/* Jack + speech bubble */}
+      {/* Jack speech bubble */}
       <div style={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        gap: 12,
         padding: '16px 20px',
         borderBottom: '1px solid #1a1a1a',
         flexShrink: 0,
       }}>
-        <img
-          src={JACK_IMG}
-          alt="Jack"
-          style={{
-            height: 72,
-            width: 'auto',
-            objectFit: 'contain',
-            flexShrink: 0,
-            userSelect: 'none',
-            pointerEvents: 'none',
-          }}
-        />
         <div style={{
           background: '#16140f',
           border: '1px solid #2a2a24',
-          borderRadius: '2px 10px 10px 10px',
+          borderRadius: 10,
           padding: '10px 14px',
         }}>
           <p style={{
