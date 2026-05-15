@@ -65,10 +65,47 @@ const REGIONS = {
     story: 'Forest floor. Dark spice. Syrupy, heavy body. Wet-hulled in Sumatra\'s highlands — a process found nowhere else on earth. Not for the timid, but unforgettable for everyone else.',
     description:
       'Indonesian coffee — especially from Sumatra — is unlike anything else. Wet-hulled processing creates a distinctively heavy, earthy cup with a deep, syrupy body. Divisive, but completely unforgettable.',
+    jackQuote: "Indonesia divides people. But if you want something genuinely wild and unforgettable — this is it.",
+  },
+  404: {
+    name: 'Kenya',
+    flag: '🇰🇪',
+    coords: [37.9, 0.5],
+    dx: 25, dy: -20,
+    flavour: 'Blackcurrant, Wine, Bright Acidity',
+    varietals: 'SL28, SL34',
+    process: 'Washed',
+    story: 'Blackcurrant. Winey complexity. Electric acidity. Kenya produces some of the most sought-after lots on the planet — bold, fruit-forward, and impossible to ignore. This is coffee as a statement.',
+    description: 'Blackcurrant. Winey complexity. Electric acidity. Kenya produces some of the most sought-after lots on the planet — bold, fruit-forward, and impossible to ignore. This is coffee as a statement.',
+    jackQuote: "Kenya doesn't do subtle. Neither do I.",
+  },
+  887: {
+    name: 'Yemen',
+    flag: '🇾🇪',
+    coords: [48.5, 15.5],
+    dx: 25, dy: -20,
+    flavour: 'Wild, Spiced, Ancient',
+    varietals: 'Mocha, Dawairi',
+    process: 'Natural',
+    story: 'Dried fruit. Dark spice. Centuries of history in every cup. Yemen is where coffee began — traded through the ancient port of Mokha, grown on terraced hillsides without irrigation or intervention. Raw, wild, and completely irreplaceable.',
+    description: 'Dried fruit. Dark spice. Centuries of history in every cup. Yemen is where coffee began — traded through the ancient port of Mokha, grown on terraced hillsides without irrigation or intervention. Raw, wild, and completely irreplaceable.',
+    jackQuote: "This is where it all started. Show some respect.",
+  },
+  188: {
+    name: 'Costa Rica',
+    flag: '🇨🇷',
+    coords: [-84.0, 9.7],
+    dx: -25, dy: -20,
+    flavour: 'Honey, Stone Fruit, Clean',
+    varietals: 'Caturra, Catuai',
+    process: 'Honey',
+    story: 'Peach. Honey. Surgical precision. Costa Rica abolished robusta cultivation by law — only arabica allowed. The result is an obsessively clean, fruit-kissed cup that rewards those who pay attention.',
+    description: 'Peach. Honey. Surgical precision. Costa Rica abolished robusta cultivation by law — only arabica allowed. The result is an obsessively clean, fruit-kissed cup that rewards those who pay attention.',
+    jackQuote: "Only arabica. By law. I respect that kind of commitment.",
   },
 }
 
-const GLOW_DELAYS = { 231: '0s', 170: '0.7s', 76: '1.4s', 320: '2.1s', 360: '2.8s' }
+const GLOW_DELAYS = { 231: '0s', 170: '0.7s', 76: '1.4s', 320: '2.1s', 360: '2.8s', 404: '3.5s', 887: '4.2s', 188: '4.9s' }
 
 const REGION_IDS = Object.keys(REGIONS).map(Number)
 

@@ -265,7 +265,7 @@ function SelectedState({ selectedId, region, onDeselect }) {
             margin: 0,
             lineHeight: 1.6,
           }}>
-            {JACK_SAYS[selectedId] ?? region.description}
+            {region.jackQuote ?? JACK_SAYS[selectedId] ?? region.description}
           </p>
         </div>
       </div>
