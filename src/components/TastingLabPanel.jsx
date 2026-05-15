@@ -74,43 +74,40 @@ function DefaultState() {
       flex: 1,
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
       overflow: 'hidden',
-      paddingBottom: 24,
     }}>
-      {/* Speech bubble */}
+      {/* Speech bubble — tail points down toward Jack */}
       <div style={{
         position: 'relative',
         background: '#16140f',
         border: '1px solid #242420',
         borderRadius: 10,
         padding: '10px 16px',
-        margin: '12px 24px 0',
-        width: 'calc(100% - 48px)',
+        margin: '16px 24px 0',
         textAlign: 'center',
         flexShrink: 0,
       }}>
-        {/* Tail (outer — border colour) */}
+        {/* Tail outer (border colour) */}
         <div style={{
           position: 'absolute',
-          top: -9,
+          bottom: -9,
           left: '50%',
           transform: 'translateX(-50%)',
           width: 0, height: 0,
           borderLeft: '8px solid transparent',
           borderRight: '8px solid transparent',
-          borderBottom: '8px solid #242420',
+          borderTop: '8px solid #242420',
         }} />
-        {/* Tail (inner — fill colour) */}
+        {/* Tail inner (fill colour) */}
         <div style={{
           position: 'absolute',
-          top: -7,
+          bottom: -7,
           left: '50%',
           transform: 'translateX(-50%)',
           width: 0, height: 0,
           borderLeft: '7px solid transparent',
           borderRight: '7px solid transparent',
-          borderBottom: '7px solid #16140f',
+          borderTop: '7px solid #16140f',
         }} />
         <p style={{
           fontSize: 11,
@@ -125,6 +122,7 @@ function DefaultState() {
       {/* Dim pill tags */}
       <div style={{
         display: 'flex',
+        justifyContent: 'center',
         gap: 8,
         marginTop: 14,
         flexShrink: 0,
@@ -143,6 +141,19 @@ function DefaultState() {
           </span>
         ))}
       </div>
+
+      {/* Jack — full panel width, bottom-aligned, seamless #0d0d0d bg */}
+      <img
+        src="/images/jack-lab-coat.png"
+        alt="Jack"
+        style={{
+          width: '100%',
+          display: 'block',
+          marginTop: 'auto',
+          userSelect: 'none',
+          pointerEvents: 'none',
+        }}
+      />
     </div>
   )
 }
