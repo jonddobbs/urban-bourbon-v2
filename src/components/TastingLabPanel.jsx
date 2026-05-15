@@ -1,5 +1,3 @@
-const NAV_H = 64
-const JACK_IMG = '/images/jack-lecturer.png'  // public/images/jack-lecturer.png
 
 const JACK_SAYS = {
   231: "Ethiopia is where coffee was born. These beans carry a thousand years of history in every sip.",
@@ -80,22 +78,7 @@ function DefaultState() {
       overflow: 'hidden',
       paddingBottom: 24,
     }}>
-      {/* Jack — ~65% of panel height, centred, pinned to top of body */}
-      <img
-        src={JACK_IMG}
-        alt="Jack"
-        style={{
-          height: `calc((100vh - ${NAV_H}px) * 0.65)`,
-          width: '100%',
-          objectFit: 'contain',
-          objectPosition: 'bottom center',
-          flexShrink: 0,
-          userSelect: 'none',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Speech bubble — tail points up toward Jack */}
+      {/* Speech bubble */}
       <div style={{
         position: 'relative',
         background: '#16140f',
