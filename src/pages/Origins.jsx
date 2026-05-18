@@ -300,17 +300,19 @@ export default function Origins() {
 
   return (
     <main style={{ paddingTop: NAV_H, background: '#0d0d0d' }}>
-      <div style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden' }}>
+      <div className="origins-outer" style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden' }}>
 
         {/* ── TASTING LAB PANEL ────────────────────────────────────────── */}
-        <TastingLabPanel
-          selectedId={selectedId}
-          region={selectedId !== null ? REGIONS[selectedId] : null}
-          onDeselect={() => setSelectedId(null)}
-        />
+        <div className="origins-panel-wrap">
+          <TastingLabPanel
+            selectedId={selectedId}
+            region={selectedId !== null ? REGIONS[selectedId] : null}
+            onDeselect={() => setSelectedId(null)}
+          />
+        </div>
 
         {/* ── MAP AREA ─────────────────────────────────────────────────── */}
-        <div style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0, overflow: 'hidden' }}>
+        <div className="origins-map-wrap" style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0, overflow: 'hidden' }}>
 
           <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
             <ComposableMap

@@ -91,8 +91,8 @@ export default function RadarChart({ values }) {
             y={ly}
             textAnchor={anchor}
             dominantBaseline="middle"
-            fill="rgba(255,255,255,0.38)"
-            fontSize="8"
+            fill="rgba(255,255,255,0.72)"
+            fontSize="9"
             fontFamily="'Barlow Condensed', sans-serif"
             letterSpacing="1"
           >

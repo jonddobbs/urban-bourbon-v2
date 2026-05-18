@@ -240,19 +240,19 @@ function BlendCard({ blend }) {
               >
                 {bigLabel}
               </p>
-              <p className="font-['Bebas_Neue'] text-white/65 tracking-[3px]"
-                style={{ fontSize: 'clamp(0.8rem, 1.9vw, 1.2rem)' }}>
+              <p className="font-['Bebas_Neue'] text-[#39FF14]/85 tracking-[3px]"
+                style={{ fontSize: 'clamp(0.9rem, 2.2vw, 1.35rem)' }}>
                 {name}
               </p>
             </>
           ) : (
-            <p className="font-['Bebas_Neue'] text-white/55 tracking-[2px] leading-[1.1]"
+            <p className="font-['Bebas_Neue'] text-white/80 tracking-[2px] leading-[1.1]"
               style={{ fontSize: 'clamp(1.1rem, 2.8vw, 1.85rem)' }}>
               {name}
             </p>
           )}
           <div className="w-6 h-px bg-[#39FF14]/50 my-1" />
-          <p className="font-['Barlow_Condensed'] text-white/35 text-[0.6rem] tracking-[2px] uppercase leading-relaxed">
+          <p className="font-['Barlow_Condensed'] text-white/65 text-[0.72rem] tracking-[2px] uppercase leading-relaxed">
             {origin}<br />{notes}{weight && <><br />{weight}</>}
           </p>
         </div>
