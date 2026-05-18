@@ -166,9 +166,6 @@ function ReviewsSection() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(false)
 
-  const encode = data =>
-    Object.keys(data).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k])).join('&')
-
   async function handleSubmit(e) {
     e.preventDefault()
     if (!rating) return
@@ -178,7 +175,13 @@ function ReviewsSection() {
       const res = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({ 'form-name': 'reviews', name, location, rating: String(rating), review: reviewText }),
+        body: new URLSearchParams({
+          'form-name': 'reviews',
+          name,
+          location,
+          rating: String(rating),
+          review: reviewText,
+        }).toString(),
       })
       if (!res.ok) throw new Error()
       setSubmitted(true)
