@@ -337,7 +337,7 @@ function BrandStorySection() {
 
           <p className="text-white/55 font-['Inter'] font-light text-base sm:text-lg leading-relaxed max-w-md">
             Urban Bourbon was built for people who take their coffee seriously but never take
-            themselves too seriously. Bold flavours. No nonsense. Roasted in Wales.
+            themselves too seriously. Bold flavours. No nonsense.
           </p>
 
           <Link

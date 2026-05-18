@@ -69,7 +69,7 @@ export default function Footer() {
 
         <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="font-['Barlow_Condensed'] text-white/30 tracking-[0.1em] text-sm uppercase">
-            Urban Bourbon Ltd &middot; Roasted in Wales
+            Urban Bourbon Ltd
           </p>
           <p className="text-white/25 text-xs font-['Inter']">
             &copy; 2025 Urban Bourbon. All rights reserved.
