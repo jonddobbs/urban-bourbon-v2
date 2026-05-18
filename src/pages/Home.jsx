@@ -171,25 +171,26 @@ function ReviewsSection() {
     if (!rating) return
     setSubmitting(true)
     setError(false)
-    try {
-      const res = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          'form-name': 'reviews',
-          name,
-          location,
-          rating: String(rating),
-          review: reviewText,
-        }).toString(),
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'form-name': 'reviews',
+        'bot-field': '',
+        name,
+        location,
+        rating: String(rating),
+        review: reviewText,
+      }).toString(),
+    })
+      .then(() => {
+        setSubmitted(true)
+        setSubmitting(false)
       })
-      if (!res.ok) throw new Error()
-      setSubmitted(true)
-    } catch {
-      setError(true)
-    } finally {
-      setSubmitting(false)
-    }
+      .catch(() => {
+        setError(true)
+        setSubmitting(false)
+      })
   }
 
   return (
