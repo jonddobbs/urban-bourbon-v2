@@ -13,7 +13,7 @@ const COMING_SOON = [
     key: 'bbs',
     name: 'BUTTERSCOTCH BOURBON MACCHIATO',
     subtitle: null,
-    notes: 'Colombian Origin · Butterscotch & Toasted Almonds · 250g',
+    notes: 'Colombian Origin · Butterscotch & Toasted Almonds · 125g',
   },
   {
     key: 'bvm',
@@ -191,7 +191,7 @@ export default function Waitlist() {
               ALREADY TRIED BLEND #43?
             </p>
             <p className="font-['Inter'] text-white/35 text-sm mt-1">
-              It's available now — 250g whole bean, £10.99.
+              It's available now — 125g whole bean, £6.99.
             </p>
           </div>
           <a

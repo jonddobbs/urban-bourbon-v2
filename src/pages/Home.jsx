@@ -113,6 +113,205 @@ function CoffeeSection() {
   )
 }
 
+/* ─── Reviews ────────────────────────────────────────────── */
+
+// ✅ APPROVED REVIEWS — add new reviews here after checking Netlify dashboard
+const approvedReviews = [
+  // { name: "Sarah M.", location: "Bristol", rating: 5, text: "Best morning coffee I've had in years. Smooth, fruity and actually tastes like real coffee." },
+]
+
+function StarIcon({ filled, size = 16, dimEmpty = false }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} style={{ display: 'block', flexShrink: 0 }}>
+      <polygon
+        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+        fill={filled ? '#39FF14' : 'none'}
+        stroke={filled ? '#39FF14' : dimEmpty ? '#1e1e1e' : '#2e2e2e'}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function StarSelector({ rating, onChange }) {
+  const [hovered, setHovered] = useState(0)
+  const active = hovered || rating
+  return (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map(i => (
+        <button
+          key={i}
+          type="button"
+          onClick={() => onChange(i)}
+          onMouseEnter={() => setHovered(i)}
+          onMouseLeave={() => setHovered(0)}
+          aria-label={`${i} star${i > 1 ? 's' : ''}`}
+          className="p-0.5 transition-transform hover:scale-110 focus:outline-none"
+        >
+          <StarIcon filled={i <= active} size={28} />
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function ReviewsSection() {
+  const [name, setName] = useState('')
+  const [location, setLocation] = useState('')
+  const [rating, setRating] = useState(0)
+  const [reviewText, setReviewText] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(false)
+
+  const encode = data =>
+    Object.keys(data).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k])).join('&')
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!rating) return
+    setSubmitting(true)
+    setError(false)
+    try {
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode({ 'form-name': 'reviews', name, location, rating: String(rating), review: reviewText }),
+      })
+      if (!res.ok) throw new Error()
+      setSubmitted(true)
+    } catch {
+      setError(true)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <section className="bg-[#0d0d0d] py-20 px-5 sm:px-8">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Heading */}
+        <div className="mb-12">
+          <h2 className="font-['Bebas_Neue'] text-white text-7xl sm:text-8xl md:text-9xl tracking-[4px] leading-none">
+            WHAT THEY'RE SAYING
+          </h2>
+          <p className="font-['Barlow_Condensed'] text-[#39FF14] text-sm tracking-[0.3em] uppercase mt-2">
+            TRIED IT? TELL US.
+          </p>
+        </div>
+
+        {/* Reviews grid or empty state */}
+        {approvedReviews.length === 0 ? (
+          <p className="font-['Inter'] text-white/30 text-sm mb-16 tracking-wide">
+            No reviews yet — be the first.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+            {approvedReviews.map((r, i) => (
+              <div key={i} className="bg-[#111111] border border-[#39FF14]/20 p-6 flex flex-col gap-4">
+                <div className="flex gap-0.5">
+                  {[1, 2, 3, 4, 5].map(s => <StarIcon key={s} filled={s <= r.rating} size={15} dimEmpty />)}
+                </div>
+                <p className="font-['Inter'] text-white/80 text-sm leading-relaxed flex-1">
+                  &ldquo;{r.text}&rdquo;
+                </p>
+                <div>
+                  <p className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[2px]">{r.name}</p>
+                  <p className="font-['Inter'] text-white/35 text-xs mt-0.5">{r.location}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Divider */}
+        <div className="w-full h-px bg-[#1a1a1a] mb-10" />
+
+        {/* Form */}
+        <div className="max-w-xl">
+          {submitted ? (
+            <p className="font-['Barlow_Condensed'] text-[#39FF14] text-xl tracking-wider border border-[#39FF14]/30 px-8 py-5 inline-block">
+              Thanks for your review — we'll get it live soon.
+            </p>
+          ) : (
+            <form
+              name="reviews"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-5"
+            >
+              <input type="hidden" name="form-name" value="reviews" />
+              <input type="hidden" name="bot-field" />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="flex flex-col gap-2">
+                  <label className="font-['Bebas_Neue'] text-white/50 text-xs tracking-[2px]">FIRST NAME</label>
+                  <input
+                    type="text" name="name" value={name} required
+                    placeholder="e.g. Sarah"
+                    onChange={e => setName(e.target.value)}
+                    className="bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-4 py-3 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200 rounded-sm"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="font-['Bebas_Neue'] text-white/50 text-xs tracking-[2px]">LOCATION</label>
+                  <input
+                    type="text" name="location" value={location} required
+                    placeholder="e.g. Cardiff"
+                    onChange={e => setLocation(e.target.value)}
+                    className="bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-4 py-3 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200 rounded-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="font-['Bebas_Neue'] text-white/50 text-xs tracking-[2px]">YOUR RATING</label>
+                <StarSelector rating={rating} onChange={setRating} />
+                {!rating && <p className="font-['Inter'] text-white/25 text-xs">Select a star rating to continue</p>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-baseline">
+                  <label className="font-['Bebas_Neue'] text-white/50 text-xs tracking-[2px]">YOUR REVIEW</label>
+                  <span className={`font-['Inter'] text-xs ${reviewText.length >= 280 ? 'text-[#39FF14]/70' : 'text-white/25'}`}>
+                    {reviewText.length}/300
+                  </span>
+                </div>
+                <textarea
+                  name="review" value={reviewText} required rows={4}
+                  placeholder="Tell us what you thought..."
+                  onChange={e => setReviewText(e.target.value.slice(0, 300))}
+                  className="bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-4 py-3 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200 rounded-sm resize-none"
+                />
+              </div>
+
+              {error && (
+                <p className="font-['Barlow_Condensed'] text-red-400 text-sm tracking-wider">
+                  Something went wrong — please try again.
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={submitting || !rating}
+                className="self-start bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.18em] uppercase px-10 py-4 rounded-sm hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-[#39FF14]"
+              >
+                {submitting ? 'SUBMITTING…' : 'SUBMIT REVIEW'}
+              </button>
+            </form>
+          )}
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
 /* ─── The Drop ───────────────────────────────────────────── */
 
 const BLENDS = [
@@ -123,7 +322,7 @@ const BLENDS = [
     name: 'BLEND #43',
     origin: 'Ethiopian Origin',
     notes: 'Bright & Fruity',
-    weight: '250g',
+    weight: '125g',
     bg: '/images/hero-product.jpg',
     bgPos: 'center',
     bag: null,
@@ -147,7 +346,7 @@ const BLENDS = [
     name: 'BUTTERSCOTCH BOURBON MACCHIATO',
     origin: 'Colombian Origin',
     notes: 'Butterscotch & Toasted Almonds',
-    weight: '250g',
+    weight: '125g',
     bg: null,
     bgPos: null,
     bag: '/images/bag-butterscotch.png',
@@ -579,6 +778,7 @@ export default function Home({ scrollTo }) {
     <main>
       <HeroSection />
       <CoffeeSection />
+      <ReviewsSection />
       <TheDropSection />
       <BrandStorySection />
       <SubscriptionsSection />

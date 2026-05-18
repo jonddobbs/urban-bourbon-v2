@@ -25,7 +25,7 @@ const COMING_SOON = [
     subtitle: null,
     origin: 'Colombian Origin',
     notes: 'Butterscotch & Toasted Almonds',
-    weight: '250g',
+    weight: '125g',
     image: '/images/bag-butterscotch.png',
     imageType: 'float',
     imageStyle: { filter: 'grayscale(15%)' },
@@ -153,12 +153,11 @@ function NotifyCard({ blend }) {
 
 const SIZES = [
   { label: '125g', price: '£6.99' },
-  { label: '250g', price: '£10.99' },
 ]
 
 export default function Coffee() {
   const [added, setAdded] = useState(false)
-  const [size, setSize] = useState('250g')
+  const [size, setSize] = useState('125g')
 
   return (
     <main className="bg-[#0d0d0d] pt-16">
