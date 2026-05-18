@@ -47,6 +47,14 @@ function GearIcon() {
   )
 }
 
+function AltitudeIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <path d="M1 13L5.5 5L9 9.5L11 7L15 13H1Z" stroke="#39FF14" strokeWidth={1.2} strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 function DetailRow({ icon, label, value }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 12 }}>
@@ -272,20 +280,52 @@ function SelectedState({ selectedId, region, onDeselect }) {
 
       {/* Detail rows */}
       <div style={{ padding: '20px 20px 0', flexShrink: 0 }}>
-        <DetailRow icon={<FlavorIcon />} label="Flavour Profile" value={region.flavour} />
-        <DetailRow icon={<LeafIcon />}   label="Varietals"       value={region.varietals} />
-        <DetailRow icon={<GearIcon />}   label="Process"         value={region.process} />
+        <DetailRow icon={<FlavorIcon />}  label="Flavour Profile"   value={region.flavour} />
+        <DetailRow icon={<LeafIcon />}    label="Varietals"         value={region.varietals} />
+        <DetailRow icon={<GearIcon />}    label="Process"           value={region.process} />
+        {region.altitude && (
+          <DetailRow icon={<AltitudeIcon />} label="Growing Altitude" value={region.altitude} />
+        )}
       </div>
 
       {/* Description */}
       <p style={{
         fontSize: 12,
-        color: '#71717a',
+        color: '#a1a1aa',
         lineHeight: 1.75,
-        margin: '4px 20px 28px',
+        margin: '4px 20px 16px',
       }}>
         {region.description}
       </p>
+
+      {/* Sourcing & farming story */}
+      {region.farmingStory && (
+        <div style={{
+          margin: '0 20px 28px',
+          padding: '14px 16px',
+          background: '#0d0b08',
+          borderLeft: '2px solid rgba(57,255,20,0.35)',
+          flexShrink: 0,
+        }}>
+          <p style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: 10,
+            color: '#39FF14',
+            letterSpacing: '3px',
+            margin: '0 0 8px 0',
+          }}>
+            SOURCING &amp; FARMING
+          </p>
+          <p style={{
+            fontSize: 11,
+            color: '#8a8a8a',
+            lineHeight: 1.8,
+            margin: 0,
+          }}>
+            {region.farmingStory}
+          </p>
+        </div>
+      )}
     </div>
   )
 }

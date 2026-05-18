@@ -17,6 +17,8 @@ const REGIONS = {
     story: 'Bright citrus. Floral jasmine. High-altitude complexity. The birthplace of coffee — wild, elegant, and completely unpredictable. Heirloom varieties grown at the edge of what\'s possible.',
     description:
       'Often considered the birthplace of coffee, Ethiopia produces some of the most complex and vibrant coffees in the world. Grown at high altitudes and processed with care, these beans deliver bright acidity, elegant floral notes, and a tea-like clarity.',
+    altitude: '1,800–2,200m',
+    farmingStory: 'Most Ethiopian coffee grows wild in the ancient forests of Kaffa, Jimma, and Illubabor — farmers don\'t plant it, they tend what already exists. In Yirgacheffe and Sidamo, smallholders hand-pick ripe cherries from ancient, unregistered heirloom trees and carry them to centralised washing stations. There are no large estates here — just thousands of small plots, deep forest shade, and centuries of inherited knowledge passed from generation to generation without paperwork or certification.',
   },
   170: {
     name: 'Colombia',
@@ -29,6 +31,8 @@ const REGIONS = {
     story: 'Caramel sweetness. Crisp mountain acidity. Silky, clean body. Where Andean valleys meet near-perfect growing conditions. Colombia doesn\'t gamble with quality — it delivers every single time.',
     description:
       "Colombia's diverse microclimates and dedicated farming traditions produce consistently excellent coffee. Expect well-balanced cups with natural sweetness, medium body, and a clean, caramel finish.",
+    altitude: '1,200–2,000m',
+    farmingStory: "Colombia's coffee is built on small family farms — fincas — averaging just two to four hectares each. The Colombian Coffee Growers Federation (FNC) has supported these families for nearly a century, providing technical guidance and a guaranteed purchase price. Most cherries are hand-picked on steep Andean slopes, then wet-processed at on-farm washing stations. The result is one of the most consistent, traceable origins in the world — quality that's structurally built into the supply chain, not left to chance.",
   },
   76: {
     name: 'Brazil',
@@ -41,6 +45,8 @@ const REGIONS = {
     story: 'Dark chocolate. Toasted almond. Dense, satisfying body. The engine room of the coffee world. Natural-processed at lower altitudes — full, rich, the backbone of every great espresso blend.',
     description:
       "As the world's largest coffee producer, Brazil sets the standard for espresso bases. Natural processing gives the beans their signature low acidity, full body, and notes of dark chocolate, almonds, and brown sugar.",
+    altitude: '800–1,300m',
+    farmingStory: 'Brazil operates at a scale no other origin can match — roughly a third of the world\'s coffee comes from here. Behind the statistics are regions like Sul de Minas and the Cerrado Mineiro, where farms range from small family plots to vast mechanised estates. Natural processing dominates: cherries are picked and laid on raised beds or patios to dry whole in the sun for weeks. This long, slow drying is what gives Brazilian coffee its signature sweetness and low acidity — the backbone of almost every espresso blend in the world.',
   },
   320: {
     name: 'Guatemala',
@@ -53,6 +59,8 @@ const REGIONS = {
     story: 'Volcanic smoke. Deep cocoa. Bright citrus edge. Ancient eruptions left mineral-rich soil no other region can replicate. Guatemala puts terroir at the centre of every cup.',
     description:
       'Grown on volcanic highlands with rich mineral soils and dramatic climate swings, Guatemalan coffee is bold, complex, and distinctive. Ideal for those who want depth, smoke, and character in every cup.',
+    altitude: '1,300–2,000m',
+    farmingStory: "Guatemala's best coffee comes from the volcanic highlands of Huehuetenango and the valley floors around Antigua. Small co-operatives pool their harvests and share access to wet-milling infrastructure that individual farmers couldn't afford alone. Shade-grown under native canopy, the beans develop slowly at altitude, concentrating sugars that give the cup its characteristic depth. The volcanic soil — rich in minerals from ancient eruptions — adds a complexity that's entirely a product of place.",
   },
   360: {
     name: 'Indonesia',
@@ -66,6 +74,8 @@ const REGIONS = {
     description:
       'Indonesian coffee — especially from Sumatra — is unlike anything else. Wet-hulled processing creates a distinctively heavy, earthy cup with a deep, syrupy body. Divisive, but completely unforgettable.',
     jackQuote: "Indonesia divides people. But if you want something genuinely wild and unforgettable — this is it.",
+    altitude: '900–1,600m',
+    farmingStory: "Indonesia's defining method — wet-hulling, known locally as giling basah — was born from necessity. In Sumatra's humid highland climate, fully drying coffee takes too long and risks mould. Farmers sell their partially dried parchment to local collectors, who strip it while the bean is still wet, then dry it again. This double-handling creates the dense, earthy, low-acid character that defines Sumatran coffee. Smallholders in the Gayo highlands of Aceh and the Mandheling region near Padang are the primary source.",
   },
   404: {
     name: 'Kenya',
@@ -78,6 +88,8 @@ const REGIONS = {
     story: 'Blackcurrant. Winey complexity. Electric acidity. Kenya produces some of the most sought-after lots on the planet — bold, fruit-forward, and impossible to ignore. This is coffee as a statement.',
     description: 'Blackcurrant. Winey complexity. Electric acidity. Kenya produces some of the most sought-after lots on the planet — bold, fruit-forward, and impossible to ignore. This is coffee as a statement.',
     jackQuote: "Kenya doesn't do subtle. Neither do I.",
+    altitude: '1,400–2,100m',
+    farmingStory: 'Kenyan coffee passes through one of the most rigorous quality systems in the world. Smallholder farmers deliver cherry to cooperative washing stations — known locally as factories — where it\'s processed and graded before sale at the Nairobi Coffee Exchange, a weekly auction where buyers from around the world compete for the best lots. The SL28 and SL34 varietals were developed in the 1930s by Scott Agricultural Laboratories specifically for Kenya\'s conditions. That genetic foundation, combined with the auction system, is why Kenyan coffee consistently tops cupping tables globally.',
   },
   887: {
     name: 'Yemen',
@@ -90,6 +102,8 @@ const REGIONS = {
     story: 'Dried fruit. Dark spice. Centuries of history in every cup. Yemen is where coffee began — traded through the ancient port of Mokha, grown on terraced hillsides without irrigation or intervention. Raw, wild, and completely irreplaceable.',
     description: 'Dried fruit. Dark spice. Centuries of history in every cup. Yemen is where coffee began — traded through the ancient port of Mokha, grown on terraced hillsides without irrigation or intervention. Raw, wild, and completely irreplaceable.',
     jackQuote: "This is where it all started. Show some respect.",
+    altitude: '1,500–2,500m',
+    farmingStory: "Yemeni farmers have been growing coffee on hand-built stone terraces in the Haraz and Bani Matar mountains for over five centuries — long before anyone else had a commercial coffee industry. No irrigation, no agrochemicals, no certification. The trees grow in thin mountain soil, stressed by altitude and drought, producing tiny yields of intensely flavoured cherries that dry naturally in the mountain air. Sourcing from Yemen is genuinely difficult — ongoing conflict has fractured supply chains and made direct trade relationships nearly impossible — but the coffee that does reach us is extraordinary.",
   },
   188: {
     name: 'Costa Rica',
@@ -102,6 +116,8 @@ const REGIONS = {
     story: 'Peach. Honey. Surgical precision. Costa Rica abolished robusta cultivation by law — only arabica allowed. The result is an obsessively clean, fruit-kissed cup that rewards those who pay attention.',
     description: 'Peach. Honey. Surgical precision. Costa Rica abolished robusta cultivation by law — only arabica allowed. The result is an obsessively clean, fruit-kissed cup that rewards those who pay attention.',
     jackQuote: "Only arabica. By law. I respect that kind of commitment.",
+    altitude: '1,200–1,900m',
+    farmingStory: "Costa Rica is the only country in the world where cultivating robusta is illegal — a government decision from 1989 to protect the country's premium coffee reputation. Most farms are tiny, family-run operations in the Tarrazú and Central Valley regions. The rise of micro-mills — small, farm-level processing facilities — has transformed quality here. Farmers now control the entire journey from cherry to dried parchment, enabling precise experimentation with honey and washed profiles that would be impossible in a centralised mill.",
   },
 }
 
@@ -147,6 +163,14 @@ function GearIcon() {
     <svg viewBox="0 0 16 16" width="16" height="16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
       <circle cx="8" cy="8" r="2.5" stroke="#39FF14" strokeWidth={1.2} />
       <circle cx="8" cy="8" r="5.8" stroke="#39FF14" strokeWidth={1.2} strokeDasharray="2.4 1.8" />
+    </svg>
+  )
+}
+
+function AltitudeIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <path d="M1 13L5.5 5L9 9.5L11 7L15 13H1Z" stroke="#39FF14" strokeWidth={1.2} strokeLinejoin="round" strokeLinecap="round" />
     </svg>
   )
 }
@@ -200,6 +224,8 @@ function RegionModal({ region, onClose }) {
           padding: '40px 48px 36px',
           maxWidth: 520,
           width: '90%',
+          maxHeight: '90vh',
+          overflowY: 'auto',
           position: 'relative',
           animation: 'modalSlideUp 0.3s ease both',
         }}
@@ -243,19 +269,49 @@ function RegionModal({ region, onClose }) {
         </div>
 
         {/* Details */}
-        <DetailRow icon={<FlavorIcon />} label="Flavour Profile" value={region.flavour} />
-        <DetailRow icon={<LeafIcon />}   label="Varietals"       value={region.varietals} />
-        <DetailRow icon={<GearIcon />}   label="Process"         value={region.process} />
+        <DetailRow icon={<FlavorIcon />}  label="Flavour Profile"   value={region.flavour} />
+        <DetailRow icon={<LeafIcon />}    label="Varietals"         value={region.varietals} />
+        <DetailRow icon={<GearIcon />}    label="Process"           value={region.process} />
+        {region.altitude && (
+          <DetailRow icon={<AltitudeIcon />} label="Growing Altitude" value={region.altitude} />
+        )}
 
         <p style={{
           fontSize: 13,
-          color: '#71717a',
+          color: '#a1a1aa',
           lineHeight: 1.7,
           marginTop: 16,
-          marginBottom: 28,
+          marginBottom: 16,
         }}>
           {region.description}
         </p>
+
+        {region.farmingStory && (
+          <div style={{
+            marginBottom: 28,
+            padding: '14px 16px',
+            background: '#0d0b08',
+            borderLeft: '2px solid rgba(57,255,20,0.35)',
+          }}>
+            <p style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 10,
+              color: '#39FF14',
+              letterSpacing: '3px',
+              margin: '0 0 8px 0',
+            }}>
+              SOURCING &amp; FARMING
+            </p>
+            <p style={{
+              fontSize: 12,
+              color: '#8a8a8a',
+              lineHeight: 1.8,
+              margin: 0,
+            }}>
+              {region.farmingStory}
+            </p>
+          </div>
+        )}
 
         <button
           style={{
