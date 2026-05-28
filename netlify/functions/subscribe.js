@@ -28,7 +28,7 @@ function welcomeHtml() {
               Welcome to the crew. You'll hear from us when there's a new drop, a limited batch, or the occasional bit of nonsense. Nothing else.
             </p>
             <p style="margin:0 0 32px;font-family:Arial,sans-serif;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;">
-              While you're here — Blend #43 is out now. Ethiopian origin, fair trade, small batch. Bright and fruity. £10.99 for 250g.
+              While you're here — Blend #43 is out now. Ethiopian origin, fair trade, small batch. Bright and fruity. £6.99 for 125g.
             </p>
             <a href="https://urbanbourbon.co.uk/coffee"
               style="display:inline-block;background:#39FF14;color:#000000;font-family:Arial,sans-serif;font-size:14px;font-weight:900;letter-spacing:3px;text-transform:uppercase;text-decoration:none;padding:14px 32px;">

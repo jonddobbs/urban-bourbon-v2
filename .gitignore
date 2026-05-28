@@ -13,6 +13,10 @@ dist-ssr
 *.local
 .env
 
+# Local asset folders and standalone projects
+UB Best Files/
+agent/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -23,3 +27,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local Netlify folder
+.netlify

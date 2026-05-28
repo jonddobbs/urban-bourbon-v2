@@ -40,7 +40,7 @@ function customerHtml(blendName, isWaitlist) {
               ${bodyText}
             </p>
             <p style="margin:0 0 32px;font-family:Arial,sans-serif;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;">
-              In the meantime, Blend #43 is available now — Ethiopian origin, fair trade, small batch. £10.99 for 250g.
+              In the meantime, Blend #43 is available now — Ethiopian origin, fair trade, small batch. £6.99 for 125g.
             </p>
             <a href="https://urbanbourbon.co.uk/coffee"
               style="display:inline-block;background:#39FF14;color:#000000;font-family:Arial,sans-serif;font-size:14px;font-weight:900;letter-spacing:3px;text-transform:uppercase;text-decoration:none;padding:14px 32px;">

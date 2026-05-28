@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import RadarChart from '../components/RadarChart.jsx'
+import { useCart } from '../context/CartContext.jsx'
 
 
 const BLEND_43_PROFILE = { Body: 8, Acidity: 3, Sweetness: 5, Bitterness: 7, Finish: 7 }
@@ -152,12 +153,13 @@ function NotifyCard({ blend }) {
 }
 
 const SIZES = [
-  { label: '125g', price: '£6.99' },
+  { label: '125g', price: '£6.99', priceNum: 6.99 },
 ]
 
 export default function Coffee() {
   const [added, setAdded] = useState(false)
   const [size, setSize] = useState('125g')
+  const { addToCart } = useCart()
 
   return (
     <main className="bg-[#0d0d0d] pt-16">
@@ -260,7 +262,18 @@ export default function Coffee() {
                   ) : (
                     <button
                       data-add-to-bag=""
-                      onClick={() => setAdded(true)}
+                      onClick={() => {
+                        const chosen = SIZES.find(s => s.label === size)
+                        addToCart({
+                          id: `ub-43-${size}`,
+                          name: 'Blend #43 Ethiopian',
+                          size,
+                          price: chosen.priceNum,
+                          currency: 'GBP',
+                        })
+                        setAdded(true)
+                        setTimeout(() => setAdded(false), 2000)
+                      }}
                       className="bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.2em] uppercase px-12 py-4 hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
                     >
                       ADD TO BAG

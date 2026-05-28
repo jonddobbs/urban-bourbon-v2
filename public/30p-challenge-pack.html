@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>30p Flat White Challenge — Urban Bourbon Content Pack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #39FF14;
+      --black: #0d0d0d;
+      --surface: #161616;
+      --surface2: #1e1e1e;
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f5;
+      --muted: rgba(245,245,245,0.5);
+      --tag-bg: rgba(57,255,20,0.1);
+    }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .header-left { display: flex; align-items: center; gap: 20px; }
+    .logo { height: 44px; }
+    .header-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      line-height: 1;
+    }
+    .header-title span { color: var(--green); }
+    .header-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+    .header-meta strong { color: var(--text); }
+
+    /* ── Layout ── */
+    .container { max-width: 900px; margin: 0 auto; padding: 48px 32px 80px; }
+
+    /* ── Campaign Banner ── */
+    .campaign-banner {
+      background: var(--green);
+      border-radius: 12px;
+      padding: 36px 40px;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+    .campaign-banner::before {
+      content: '30p';
+      position: absolute;
+      right: -10px;
+      top: -20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 180px;
+      color: rgba(0,0,0,0.07);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .campaign-banner-text {}
+    .campaign-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.55);
+      margin-bottom: 6px;
+    }
+    .campaign-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 0.02em;
+      color: #000;
+      line-height: 1;
+    }
+    .campaign-dates {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(0,0,0,0.6);
+      margin-top: 8px;
+    }
+    .campaign-signal {
+      background: rgba(0,0,0,0.12);
+      border-radius: 8px;
+      padding: 16px 20px;
+      max-width: 340px;
+      flex-shrink: 0;
+    }
+    .campaign-signal p {
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(0,0,0,0.75);
+      line-height: 1.5;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 40px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .day-pill {
+      background: var(--green);
+      color: #000;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .platform-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .platform-badge svg { opacity: 0.6; }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      flex: 1;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card + .card { margin-top: 12px; }
+
+    .card-label {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .card-label.green { color: var(--green); }
+
+    .card-body { padding: 20px; }
+
+    /* Shot list */
+    .shot-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .shot-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .shot-num {
+      background: var(--green);
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .shot-desc { font-size: 14px; line-height: 1.5; }
+
+    /* Overlay text display */
+    .overlay-text {
+      background: #000;
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      color: var(--green);
+      line-height: 1.3;
+      margin: 4px 0;
+    }
+
+    /* Copy block */
+    .copy-block {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-line;
+      position: relative;
+    }
+    .copy-block.caption { font-style: italic; }
+
+    .hashtags {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .hashtag {
+      background: var(--tag-bg);
+      color: var(--green);
+      border: 1px solid rgba(57,255,20,0.2);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Email fields */
+    .email-field { margin-bottom: 16px; }
+    .email-field-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .email-subject {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .email-preview {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .email-body {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 20px;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+    .email-body .ps {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* Jack's Take */
+    .jack-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .jack-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--surface2);
+    }
+    .jack-quote {
+      font-size: 14px;
+      line-height: 1.8;
+      color: rgba(245,245,245,0.85);
+      font-style: italic;
+    }
+    .jack-name {
+      margin-top: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    /* Watch list */
+    .watch-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .watch-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .watch-icon {
+      color: var(--green);
+      font-size: 16px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+    .watch-text { font-size: 14px; line-height: 1.5; }
+    .watch-text strong { color: var(--green); }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 44px 0;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 640px) {
+      .header { flex-direction: column; align-items: flex-start; }
+      .campaign-banner { flex-direction: column; }
+      .campaign-signal { max-width: 100%; }
+      .container { padding: 32px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <img src="/images/logo.png" alt="Urban Bourbon" class="logo" onerror="this.style.display='none'" />
+      <div class="header-title">SOCIAL CONTENT PACK — <span>30P FLAT WHITE CHALLENGE</span></div>
+    </div>
+    <div class="header-meta">
+      <strong>Week of 13 May 2026</strong><br />
+      Blend #43 · Ethiopian · 30p per cup
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Campaign Banner -->
+    <div class="campaign-banner">
+      <div class="campaign-banner-text">
+        <div class="campaign-label">Priority Campaign · May 2026</div>
+        <div class="campaign-name">30P FLAT<br />WHITE CHALLENGE</div>
+        <div class="campaign-dates">Mon 13 · Wed 15 · Fri 17 May 2026</div>
+      </div>
+      <div class="campaign-signal">
+        <p>Post-bank holiday spending is tightening. Premium home coffee is up 25% as people quit £4.50 café habits. This week we're the smart financial decision that doesn't taste like punishment.</p>
+      </div>
+    </div>
+
+    <!-- ── INSTAGRAM ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="day-pill">Mon 13 May</div>
+        <div class="platform-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          Instagram Reel
+        </div>
+        <div class="section-title">THE POUR SHOT</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Shot List · 15 seconds, no voiceover</div>
+        <div class="card-body">
+          <ul class="shot-list">
+            <li>
+              <div class="shot-num">1</div>
+              <div class="shot-desc"><strong>0–3s</strong> — Tight overhead: Blend #43 bag on dark surface. Jack's paw slides it into frame. No words yet.</div>
+            </li>
+            <li>
+              <div class="shot-num">2</div>
+              <div class="shot-desc"><strong>3–8s</strong> — Close macro: beans tumbling into grinder. Rich pour sounds only. Slow motion if possible.</div>
+            </li>
+            <li>
+              <div class="shot-num">3</div>
+              <div class="shot-desc"><strong>8–13s</strong> — The money shot: espresso over ice, coconut water poured alongside — cloud coffee cascade effect. Shoot from the side, backlit.</div>
+            </li>
+            <li>
+              <div class="shot-num">4</div>
+              <div class="shot-desc"><strong>13–15s</strong> — Freeze frame. Text overlay fades in.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <div class="card-label green">Text Overlay (final frame)</div>
+        <div class="card-body">
+          <div class="overlay-text">Café: £4.50 / This: 30p / Tastes better: Priceless</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <div class="card-label">Caption</div>
+        <div class="card-body">
+          <div class="copy-block">Blend #43: Ethiopian. Citrus-forward. 30p per cup.
+
+Your flat white habit just became affordable. 250g bags shipping now — link in bio.
+
+(Your bank account will send a thank you card.)</div>
+          <div class="hashtags">
+            <span class="hashtag">#UrbanBourbon</span>
+            <span class="hashtag">#Blend43</span>
+            <span class="hashtag">#CoffeeTok</span>
+            <span class="hashtag">#UKCoffee</span>
+            <span class="hashtag">#HomeBrew</span>
+            <span class="hashtag">#FlatWhite</span>
+            <span class="hashtag">#CraftCoffee</span>
+            <span class="hashtag">#MadeInWales</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── TIKTOK ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="day-pill">Wed 15 May</div>
+        <div class="platform-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.02a8.19 8.19 0 0 0 4.79 1.53V7.12a4.85 4.85 0 0 1-1.02-.43z"/></svg>
+          TikTok
+        </div>
+        <div class="section-title">POV: THE DESK FLIP</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Video Concept · Duet-able format</div>
+        <div class="card-body">
+          <ul class="shot-list">
+            <li>
+              <div class="shot-num">L</div>
+              <div class="shot-desc"><strong>Left side:</strong> Sad desk energy. Vending machine instant coffee in a sad paper cup. Grey office light. No eye contact. Defeated sip.</div>
+            </li>
+            <li>
+              <div class="shot-num">R</div>
+              <div class="shot-desc"><strong>Right side:</strong> Same desk — suddenly good. Urban Bourbon pour. Steam rising slowly. Jack's paw slides a proper mug into frame from the bottom. One beat pause. Satisfied.</div>
+            </li>
+            <li>
+              <div class="shot-num">E</div>
+              <div class="shot-desc"><strong>End card:</strong> Both sides freeze. Text appears centre: "30p. No excuses." Blend #43 bag visible on right-hand desk.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <div class="card-label green">Hook Text (first 2 seconds)</div>
+        <div class="card-body">
+          <div class="overlay-text">POV: You remembered to bring the good stuff</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <div class="card-label">Caption</div>
+        <div class="card-body">
+          <div class="copy-block">Making café-quality coffee at home shouldn't require a mortgage.
+
+Blend #43. Because £4.50 flat whites are financial self-harm. 🐻
+
+Duet this with your sad vending machine moment 👇</div>
+          <div class="hashtags">
+            <span class="hashtag">#UrbanBourbon</span>
+            <span class="hashtag">#CoffeeTok</span>
+            <span class="hashtag">#UKCoffee</span>
+            <span class="hashtag">#Blend43</span>
+            <span class="hashtag">#HomeCoffee</span>
+            <span class="hashtag">#30pChallenge</span>
+            <span class="hashtag">#CraftCoffeeUK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── EMAIL ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="day-pill">Fri 17 May</div>
+        <div class="platform-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+          Email Blast
+        </div>
+        <div class="section-title">THE £4.50 LIE</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Subject Line</div>
+        <div class="card-body">
+          <div class="email-subject">The £4.50 lie</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <div class="card-label">Preview Text</div>
+        <div class="card-body">
+          <div class="email-preview">High street coffee isn't better. It's just louder.</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <div class="card-label green">Email Body · Jack's voice</div>
+        <div class="card-body">
+          <div class="email-body">Jack here. Let's talk about the scam.
+
+You're paying £4.50 for a flat white that took 90 seconds to make from beans roasted three months ago. Served in a cup with a name on it that isn't yours.
+
+<strong>Blend #43 costs 30p per cup.</strong>
+
+It tastes like bergamot and stone fruit. It was roasted last Tuesday in Wales by people who actually care what's in the bag. You make it at home in the time it takes to queue.
+
+Three reasons Ethiopian citrus beats high street bitterness:
+
+1. <strong>Origin actually matters.</strong> Our Ethiopian beans are traceable. Your café's "house blend" is not.
+2. <strong>Fresh roast, not fresh paint.</strong> Most high street coffee is months old before it hits the machine. Ours ships within days of roasting.
+3. <strong>30p per cup.</strong> Every single day. Do the maths. That's your gym membership back in a month.
+
+The choice shouldn't be hard.
+<a href="#" style="color:#39FF14;">Shop Blend #43 →</a>
+          <div class="ps">P.S. I stopped paying rent-level prices for burnt beans six months ago and I've never looked back. My bank account now makes better life choices than I do. — Jack 🐻</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── JACK'S TAKE ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">JACK'S TAKE · Internal Brand Context</div>
+      </div>
+      <div class="jack-card">
+        <img src="/images/bear-nobg.png" alt="Jack" class="jack-avatar" onerror="this.style.display='none'" />
+        <div>
+          <div class="jack-quote">Right, so apparently everyone spent their wages on Easter chocolate and bank holiday beer, and now we're all pretending to have budgets. Perfect timing for Blend #43, honestly. While TikTok's losing its mind over putting coconut water in coffee (which, fine, looks good on camera), the actual opportunity is this: people still want the <em>feeling</em> of spending £4.50 on a flat white, they just can't afford to do it five times a week anymore. Ethiopian citrus notes photograph like expensive therapy. Cost-per-cup makes fiscal sense. This week we're the smart financial decision that doesn't taste like punishment.</div>
+          <div class="jack-name">— Jack, Urban Bourbon Mascot</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── WATCH LIST ── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">WATCH LIST · Next 2–4 Weeks</div>
+      </div>
+      <ul class="watch-list">
+        <li class="watch-item">
+          <div class="watch-icon">◆</div>
+          <div class="watch-text"><strong>Blend #12 Winter Roast launch (late May):</strong> Hook home brewers now with #43's value positioning, then flip them to limited-edition #12 pre-orders in 2 weeks when novelty beats price sensitivity. Start teasing "numbered drops sell out" scarcity messaging now.</div>
+        </li>
+        <li class="watch-item">
+          <div class="watch-icon">◆</div>
+          <div class="watch-text"><strong>TikTok iced coffee surge (early June):</strong> Cloud coffee is May's trend but UK summer content shifts to iced everything by early June. Test cold brew tutorials with #43 now — Ethiopian citrus reads as "refreshing" not "winter warmth."</div>
+        </li>
+        <li class="watch-item">
+          <div class="watch-icon">◆</div>
+          <div class="watch-text"><strong>Welsh culture moments (summer):</strong> If any Wales-related sporting or cultural events land in June 2026, Urban Bourbon is positioned to own the "Welsh craft" narrative before bigger brands notice. Monitor for content hijack opportunities.</div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span>Urban Bourbon · Weekly Content Pack · Week of 13 May 2026</span>
+    <span>Blend #43 · Ethiopian · 250g · £10.99</span>
+  </footer>
+
+</body>
+</html>
