@@ -62,7 +62,8 @@ export default function Nav() {
           <Link
             to="/"
             onClick={() => setOpen(false)}
-            className="font-['Bebas_Neue'] text-[#39FF14] leading-none hover:opacity-80 transition-opacity duration-200"
+            className="font-['Bebas_Neue'] leading-none hover:opacity-80 transition-opacity duration-200"
+            style={{ color: pathname === '/lounge' ? '#c9a84c' : '#39FF14' }}
             style={{ fontSize: '28px', lineHeight: 1.05 }}
           >
             URBAN<br />BOURBON
