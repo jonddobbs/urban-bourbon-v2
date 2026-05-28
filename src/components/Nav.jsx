@@ -75,7 +75,9 @@ export default function Nav() {
                   <Link
                     to={to}
                     className={`font-['Barlow_Condensed'] font-bold text-base tracking-[0.18em] uppercase transition-colors duration-200 ${
-                      pathname === to ? 'text-[#39FF14]' : 'text-white/80 hover:text-[#39FF14]'
+                      pathname === '/lounge'
+                        ? 'text-white/70 hover:text-white'
+                        : pathname === to ? 'text-[#39FF14]' : 'text-white/80 hover:text-[#39FF14]'
                     }`}
                   >
                     {label}

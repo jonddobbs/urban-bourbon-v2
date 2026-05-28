@@ -66,8 +66,8 @@ export default function Lounge() {
           className="absolute inset-0"
           style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
         />
-        {/* Dark overlay — 45% base */}
-        <div className="absolute inset-0" style={{ background: 'rgba(3,2,1,0.45)' }} />
+        {/* Dark overlay — 35% base */}
+        <div className="absolute inset-0" style={{ background: 'rgba(3,2,1,0.35)' }} />
         {/* Edge vignette */}
         <div
           className="absolute inset-0"
