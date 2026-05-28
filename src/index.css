@@ -266,18 +266,10 @@ h1, h2, h3, h4, h5, h6 {
   .origins-connector-svg { display: block; }
 }
 
-/* Country name label below pin — hidden on desktop */
+/* Country name label — hidden everywhere (kept in DOM for accessibility, not shown) */
 .pin-label {
   font-size: 0;
   fill: transparent;
-}
-@media (max-width: 767px) {
-  .pin-label {
-    font-size: 21px;
-    fill: #E8D5A3;
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 1px;
-  }
 }
 
 /* Mobile origins country list */

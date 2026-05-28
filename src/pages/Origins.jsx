@@ -641,8 +641,10 @@ export default function Origins() {
               stroke="#39FF14"
               strokeWidth={1.5}
               strokeLinecap="round"
-              strokeDasharray={`${connectorLine.length} ${connectorLine.length}`}
-              style={{ strokeDashoffset: connectorLine.length, animation: 'drawConnector 0.55s ease forwards' }}
+              pathLength={100}
+              strokeDasharray="8 5"
+              strokeDashoffset={100}
+              style={{ animation: 'drawConnector 0.55s ease forwards' }}
             />
             {/* Dot at pin end */}
             <circle cx={connectorLine.x1} cy={connectorLine.y1} r={3.5} fill="#39FF14" />
