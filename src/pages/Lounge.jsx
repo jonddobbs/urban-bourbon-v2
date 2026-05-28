@@ -54,16 +54,18 @@ export default function Lounge() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
         {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/Welcome%20to%20the%20Lounge.png')" }}
+        <img
+          src="/images/Welcome to the Lounge.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Dark overlay */}
+        {/* Dark overlay — ~60% uniform with heavier fade at bottom */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, rgba(5,3,1,0.82) 0%, rgba(5,3,1,0.70) 40%, rgba(5,3,1,0.80) 75%, rgba(5,3,1,0.96) 100%)',
+            background: 'linear-gradient(to bottom, rgba(5,3,1,0.62) 0%, rgba(5,3,1,0.58) 40%, rgba(5,3,1,0.65) 75%, rgba(5,3,1,0.92) 100%)',
           }}
         />
 
