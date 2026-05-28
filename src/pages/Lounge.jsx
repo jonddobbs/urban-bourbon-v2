@@ -66,13 +66,13 @@ export default function Lounge() {
           className="absolute inset-0"
           style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
         />
-        {/* Dark overlay — 65% base */}
-        <div className="absolute inset-0" style={{ background: 'rgba(3,2,1,0.65)' }} />
+        {/* Dark overlay — 45% base */}
+        <div className="absolute inset-0" style={{ background: 'rgba(3,2,1,0.45)' }} />
         {/* Edge vignette */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, rgba(3,2,1,0.3) 0%, rgba(3,2,1,0) 20%, rgba(3,2,1,0) 70%, rgba(3,2,1,0.6) 100%)',
+            background: 'linear-gradient(to bottom, rgba(3,2,1,0.2) 0%, rgba(3,2,1,0) 20%, rgba(3,2,1,0) 70%, rgba(3,2,1,0.5) 100%)',
           }}
         />
 
