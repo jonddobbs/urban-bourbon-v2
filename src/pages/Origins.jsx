@@ -349,20 +349,51 @@ function RegionModal({ region, onClose }) {
 
 export default function Origins() {
   const [selectedId, setSelectedId] = useState(null)
+  const [connectorLine, setConnectorLine] = useState(null)
+  const [animKey, setAnimKey] = useState(0)
   const panelRef = useRef(null)
+  const mapRef = useRef(null)
+  const outerRef = useRef(null)
+  const cardRefs = useRef({})
 
-  function handleSelect(id) {
+  function drawConnectorLine(id) {
+    const container = outerRef.current
+    if (!container) return
+    const pinEl = container.querySelector(`[data-pin-id="${id}"]`)
+    const cardEl = cardRefs.current[id]
+    if (!pinEl || !cardEl) return
+    const cRect = container.getBoundingClientRect()
+    const pinRect = pinEl.getBoundingClientRect()
+    const cardRect = cardEl.getBoundingClientRect()
+    const x1 = pinRect.left + pinRect.width / 2 - cRect.left
+    const y1 = pinRect.top + pinRect.height / 2 - cRect.top
+    const x2 = cardRect.left + cardRect.width / 2 - cRect.left
+    const y2 = cardRect.top - cRect.top
+    const length = Math.hypot(x2 - x1, y2 - y1)
+    setConnectorLine({ x1, y1, x2, y2, length })
+    setAnimKey(k => k + 1)
+  }
+
+  function handleSelect(id, source = 'map') {
     setSelectedId(id)
+    setConnectorLine(null)
     if (window.innerWidth < 768) {
-      requestAnimationFrame(() => {
-        panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      })
+      if (source === 'card') {
+        requestAnimationFrame(() => {
+          mapRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        })
+        setTimeout(() => drawConnectorLine(id), 500)
+      } else {
+        requestAnimationFrame(() => {
+          panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        })
+      }
     }
   }
 
   return (
     <main style={{ paddingTop: NAV_H, background: '#0d0d0d' }}>
-      <div className="origins-outer" style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden' }}>
+      <div className="origins-outer" ref={outerRef} style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden', position: 'relative' }}>
 
         {/* ── TASTING LAB PANEL ────────────────────────────────────────── */}
         <div className="origins-panel-wrap" ref={panelRef}>
@@ -374,7 +405,7 @@ export default function Origins() {
         </div>
 
         {/* ── MAP AREA ─────────────────────────────────────────────────── */}
-        <div className="origins-map-wrap" style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0, overflow: 'hidden' }}>
+        <div className="origins-map-wrap" ref={mapRef} style={{ flex: 1, position: 'relative', height: '100%', minWidth: 0, overflow: 'hidden' }}>
 
           <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
             <ComposableMap
@@ -392,7 +423,7 @@ export default function Origins() {
                         key={geo.rsmKey}
                         geography={geo}
                         className={isHighlighted ? 'geo-highlighted' : undefined}
-                        onClick={() => isHighlighted && handleSelect(id)}
+                        onClick={() => isHighlighted && handleSelect(id, 'map')}
                         style={{
                           default: {
                             fill: isHighlighted ? '#1e3d10' : '#161616',
@@ -428,7 +459,7 @@ export default function Origins() {
                 const anchor = r.dx < 0 ? 'end' : 'start'
 
                 return (
-                  <g key={id} className="map-pin-group" onClick={() => handleSelect(id)}>
+                  <g key={id} className="map-pin-group" onClick={() => handleSelect(id, 'map')}>
                     {/* Annotation — hidden on mobile via CSS (too small to read at reduced scale) */}
                     <g className="map-annotation">
                       <Annotation
@@ -464,8 +495,12 @@ export default function Origins() {
                     </g>
 
                     <Marker coordinates={r.coords}>
-                      {/* Invisible tap target — substantially larger than the visible dot */}
-                      <circle r={22} fill="transparent" style={{ cursor: 'pointer' }} />
+                      {/* Invisible tap target — anchored with data-pin-id for connector line calculations */}
+                      <circle r={22} fill="transparent" data-pin-id={id} style={{ cursor: 'pointer' }} />
+                      {/* Pulse ring — shown when this pin is selected */}
+                      {selectedId === id && (
+                        <circle r={8} fill="none" stroke="#39FF14" strokeWidth={1.5} className="pin-pulse" />
+                      )}
                       {/* Flag emoji */}
                       <text
                         textAnchor="middle"
@@ -560,27 +595,65 @@ export default function Origins() {
           </div>
 
         </div>
-      </div>
 
-      {/* Mobile country list — hidden on desktop via CSS */}
-      <div className="origins-country-list">
-        <p className="origins-list-heading">EXPLORE ORIGINS</p>
-        <div className="origins-list-grid">
-          {Object.entries(REGIONS).map(([rawId, r]) => {
-            const id = Number(rawId)
-            return (
-              <button
-                key={rawId}
-                className={`origins-country-card${selectedId === id ? ' origins-country-card--active' : ''}`}
-                onClick={() => handleSelect(id)}
-              >
-                <span className="origins-card-flag">{r.flag}</span>
-                <span className="origins-card-name">{r.name.toUpperCase()}</span>
-                <span className="origins-card-flavour">{r.flavour}</span>
-              </button>
-            )
-          })}
+        {/* Mobile country list — inside origins-outer so the SVG overlay spans map + cards */}
+        <div className="origins-country-list">
+          <p className="origins-list-heading">EXPLORE ORIGINS</p>
+          <div className="origins-list-grid">
+            {Object.entries(REGIONS).map(([rawId, r]) => {
+              const id = Number(rawId)
+              return (
+                <button
+                  key={rawId}
+                  ref={el => { if (el) cardRefs.current[id] = el }}
+                  className={`origins-country-card${selectedId === id ? ' origins-country-card--active' : ''}`}
+                  onClick={() => handleSelect(id, 'card')}
+                >
+                  <span className="origins-card-flag">{r.flag}</span>
+                  <span className="origins-card-name">{r.name.toUpperCase()}</span>
+                  <span className="origins-card-flavour">{r.flavour}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
+
+        {/* SVG connector — drawn on mobile when a card is tapped */}
+        {connectorLine && (
+          <svg
+            key={animKey}
+            className="origins-connector-svg"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+              pointerEvents: 'none',
+              zIndex: 20,
+              overflow: 'visible',
+            }}
+          >
+            {/* Animated dashed line — draws from pin down to card */}
+            <line
+              x1={connectorLine.x1} y1={connectorLine.y1}
+              x2={connectorLine.x2} y2={connectorLine.y2}
+              stroke="#39FF14"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeDasharray={`${connectorLine.length} ${connectorLine.length}`}
+              style={{ strokeDashoffset: connectorLine.length, animation: 'drawConnector 0.55s ease forwards' }}
+            />
+            {/* Dot at pin end */}
+            <circle cx={connectorLine.x1} cy={connectorLine.y1} r={3.5} fill="#39FF14" />
+            {/* Dot at card end — fades in once the line arrives */}
+            <circle
+              cx={connectorLine.x2} cy={connectorLine.y2} r={3.5} fill="#39FF14"
+              style={{ opacity: 0, animation: 'dotAppear 0.1s 0.5s ease forwards' }}
+            />
+          </svg>
+        )}
+
       </div>
 
     </main>

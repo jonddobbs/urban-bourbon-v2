@@ -243,6 +243,29 @@ h1, h2, h3, h4, h5, h6 {
   .map-annotation { display: none; }
 }
 
+/* Pin pulse ring on selection */
+@keyframes pinPulse {
+  0%   { r: 8;  opacity: 0.9; }
+  100% { r: 26; opacity: 0; }
+}
+.pin-pulse {
+  animation: pinPulse 1.4s ease-out infinite;
+}
+
+/* Connector line draw animation */
+@keyframes drawConnector {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes dotAppear {
+  to { opacity: 1; }
+}
+
+/* Connector SVG overlay — desktop hidden, mobile shown */
+.origins-connector-svg { display: none; }
+@media (max-width: 767px) {
+  .origins-connector-svg { display: block; }
+}
+
 /* Country name label below pin — hidden on desktop */
 .pin-label {
   font-size: 0;
