@@ -177,9 +177,9 @@ export default function Nav() {
               onClick={() => setOpen(!open)}
               aria-label="Toggle menu"
             >
-              <span className={`block h-px bg-[#39FF14] transition-all duration-300 origin-center ${open ? 'rotate-45 translate-y-[7px]' : 'w-full'}`} />
-              <span className={`block h-px bg-[#39FF14] transition-all duration-300 ${open ? 'opacity-0 w-0' : 'w-full'}`} />
-              <span className={`block h-px bg-[#39FF14] transition-all duration-300 origin-center ${open ? '-rotate-45 -translate-y-[7px]' : 'w-full'}`} />
+              <span className={`block h-px transition-all duration-300 origin-center ${pathname === '/lounge' ? 'bg-[#c9a84c]' : 'bg-[#39FF14]'} ${open ? 'rotate-45 translate-y-[7px]' : 'w-full'}`} />
+              <span className={`block h-px transition-all duration-300 ${pathname === '/lounge' ? 'bg-[#c9a84c]' : 'bg-[#39FF14]'} ${open ? 'opacity-0 w-0' : 'w-full'}`} />
+              <span className={`block h-px transition-all duration-300 origin-center ${pathname === '/lounge' ? 'bg-[#c9a84c]' : 'bg-[#39FF14]'} ${open ? '-rotate-45 -translate-y-[7px]' : 'w-full'}`} />
             </button>
           </div>
         </div>
