@@ -55,7 +55,7 @@ export default function Lounge() {
 
         {/* Background image */}
         <img
-          src="/images/Welcome to the Lounge.png"
+          src="/images/Welcome to the Lounge.png?v=2"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center"
