@@ -59,30 +59,31 @@ export default function Lounge() {
           style={{ backgroundImage: "url('/images/Welcome%20to%20the%20Lounge.png')" }}
         />
 
-        {/* Dark overlay — heavier at top/bottom, lighter in centre */}
+        {/* Dark overlay */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, rgba(5,3,1,0.72) 0%, rgba(5,3,1,0.52) 45%, rgba(5,3,1,0.68) 80%, rgba(5,3,1,0.92) 100%)',
+            background: 'linear-gradient(to bottom, rgba(5,3,1,0.82) 0%, rgba(5,3,1,0.70) 40%, rgba(5,3,1,0.80) 75%, rgba(5,3,1,0.96) 100%)',
           }}
         />
 
-        {/* Hero content */}
-        <div className="relative z-10 flex flex-col items-center text-center px-5 py-24 max-w-2xl mx-auto">
+        {/* Hero content — full width so heading is unconstrained */}
+        <div className="relative z-10 flex flex-col items-center text-center px-5 sm:px-10 py-24 w-full">
 
           {/* Eyebrow */}
           <p
-            className="font-['Barlow_Condensed'] tracking-[0.45em] uppercase mb-6 text-xs"
-            style={{ color: 'rgba(201,168,76,0.7)', letterSpacing: '0.45em' }}
+            className="font-['Barlow_Condensed'] tracking-[0.45em] uppercase mb-5 text-xs"
+            style={{ color: 'rgba(201,168,76,0.7)' }}
           >
             Urban Bourbon · Members
           </p>
 
-          {/* Heading */}
+          {/* Heading — single line, scales with viewport */}
           <h1
-            className="font-['Bebas_Neue'] leading-none tracking-[0.06em] mb-4"
+            className="font-['Bebas_Neue'] leading-none tracking-[0.06em] mb-6"
             style={{
-              fontSize: 'clamp(5.5rem, 18vw, 13rem)',
+              fontSize: 'clamp(3rem, 11vw, 9.5rem)',
+              whiteSpace: 'nowrap',
               color: '#c9a84c',
               textShadow: '0 0 60px rgba(201,168,76,0.25), 0 2px 4px rgba(0,0,0,0.8)',
             }}
@@ -90,63 +91,68 @@ export default function Lounge() {
             THE LOUNGE
           </h1>
 
-          {/* Subtitle — serif italic */}
-          <p
-            className="text-white/90 mb-5"
-            style={{
-              fontFamily: 'Georgia, "Times New Roman", serif',
-              fontStyle: 'italic',
-              fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
-              letterSpacing: '0.02em',
-            }}
-          >
-            Members Only. You&rsquo;re in.
-          </p>
+          {/* Everything below the heading — constrained width */}
+          <div className="flex flex-col items-center max-w-md w-full">
 
-          {/* Thin gold rule */}
-          <div
-            className="w-16 mb-6"
-            style={{ height: '1px', background: 'rgba(201,168,76,0.5)' }}
-          />
-
-          {/* Body copy */}
-          <p
-            className="font-['Inter'] font-light leading-relaxed mb-3 max-w-md"
-            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.95rem' }}
-          >
-            A private space for our most loyal community. Exclusive coffees.
-            First access. Rewarded loyalty. Pull up a chair — you belong here.
-          </p>
-
-          {/* Personalised greeting */}
-          {user?.email && (
+            {/* Subtitle — serif italic */}
             <p
-              className="font-['Barlow_Condensed'] tracking-widest uppercase mb-8 text-sm"
-              style={{ color: 'rgba(201,168,76,0.65)' }}
+              className="text-white/90 mb-5"
+              style={{
+                fontFamily: 'Georgia, "Times New Roman", serif',
+                fontStyle: 'italic',
+                fontSize: 'clamp(1.05rem, 2vw, 1.35rem)',
+                letterSpacing: '0.02em',
+              }}
             >
-              Welcome back, {user.email}
+              Members Only. You&rsquo;re in.
             </p>
-          )}
 
-          {/* CTA — gold outline button */}
-          <button
-            className="font-['Bebas_Neue'] tracking-[0.18em] text-lg px-10 py-3.5 transition-all duration-200"
-            style={{
-              color: '#c9a84c',
-              border: '1px solid rgba(201,168,76,0.6)',
-              background: 'rgba(201,168,76,0.06)',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(201,168,76,0.14)'
-              e.currentTarget.style.borderColor = '#c9a84c'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(201,168,76,0.06)'
-              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.6)'
-            }}
-          >
-            WELCOME BACK, MEMBER
-          </button>
+            {/* Thin gold rule */}
+            <div
+              className="w-16 mb-6"
+              style={{ height: '1px', background: 'rgba(201,168,76,0.5)' }}
+            />
+
+            {/* Body copy */}
+            <p
+              className="font-['Inter'] font-light leading-relaxed mb-4"
+              style={{ color: 'rgba(255,255,255,0.58)', fontSize: '0.95rem' }}
+            >
+              A private space for our most loyal community. Exclusive coffees.
+              First access. Rewarded loyalty. Pull up a chair — you belong here.
+            </p>
+
+            {/* Personalised greeting */}
+            {user?.email && (
+              <p
+                className="font-['Barlow_Condensed'] tracking-widest uppercase mb-8 text-sm"
+                style={{ color: 'rgba(201,168,76,0.65)' }}
+              >
+                Welcome back, {user.email}
+              </p>
+            )}
+
+            {/* CTA — gold outline button */}
+            <button
+              className="font-['Bebas_Neue'] tracking-[0.18em] text-lg px-10 py-3.5 transition-all duration-200 whitespace-nowrap"
+              style={{
+                color: '#c9a84c',
+                border: '1px solid rgba(201,168,76,0.6)',
+                background: 'rgba(201,168,76,0.06)',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(201,168,76,0.14)'
+                e.currentTarget.style.borderColor = '#c9a84c'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(201,168,76,0.06)'
+                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.6)'
+              }}
+            >
+              WELCOME BACK, MEMBER
+            </button>
+
+          </div>
         </div>
       </section>
 
