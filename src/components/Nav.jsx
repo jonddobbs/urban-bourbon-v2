@@ -82,6 +82,23 @@ export default function Nav() {
                   </Link>
                 </li>
               ))}
+              {user && (
+                <li>
+                  <Link
+                    to="/lounge"
+                    className={`font-['Barlow_Condensed'] font-bold text-base tracking-[0.18em] uppercase transition-colors duration-200 ${
+                      pathname === '/lounge' ? '' : ''
+                    }`}
+                    style={{
+                      color: pathname === '/lounge' ? '#c9a84c' : 'rgba(201,168,76,0.7)',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = '#c9a84c' }}
+                    onMouseLeave={e => { e.currentTarget.style.color = pathname === '/lounge' ? '#c9a84c' : 'rgba(201,168,76,0.7)' }}
+                  >
+                    THE LOUNGE
+                  </Link>
+                </li>
+              )}
             </ul>
 
             {/* Basket icon */}
@@ -182,6 +199,18 @@ export default function Nav() {
                   </Link>
                 </li>
               ))}
+              {user && (
+                <li>
+                  <Link
+                    to="/lounge"
+                    onClick={() => setOpen(false)}
+                    className="block font-['Barlow_Condensed'] font-bold text-xl tracking-[0.12em] uppercase transition-colors duration-200"
+                    style={{ color: pathname === '/lounge' ? '#c9a84c' : 'rgba(201,168,76,0.75)' }}
+                  >
+                    THE LOUNGE
+                  </Link>
+                </li>
+              )}
             </ul>
 
             {/* Mobile auth */}
