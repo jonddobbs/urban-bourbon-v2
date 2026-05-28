@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps'
 import TastingLabPanel from '../components/TastingLabPanel'
 
@@ -349,9 +349,15 @@ function RegionModal({ region, onClose }) {
 
 export default function Origins() {
   const [selectedId, setSelectedId] = useState(null)
+  const panelRef = useRef(null)
 
   function handleSelect(id) {
     setSelectedId(id)
+    if (window.innerWidth < 768) {
+      requestAnimationFrame(() => {
+        panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
   }
 
   return (
@@ -359,7 +365,7 @@ export default function Origins() {
       <div className="origins-outer" style={{ display: 'flex', height: `calc(100vh - ${NAV_H}px)`, overflow: 'hidden' }}>
 
         {/* ── TASTING LAB PANEL ────────────────────────────────────────── */}
-        <div className="origins-panel-wrap">
+        <div className="origins-panel-wrap" ref={panelRef}>
           <TastingLabPanel
             selectedId={selectedId}
             region={selectedId !== null ? REGIONS[selectedId] : null}
@@ -423,38 +429,43 @@ export default function Origins() {
 
                 return (
                   <g key={id} className="map-pin-group" onClick={() => handleSelect(id)}>
-                    <Annotation
-                      subject={r.coords}
-                      dx={r.dx}
-                      dy={r.dy}
-                      connectorProps={{
-                        stroke: 'rgba(57,255,20,0.3)',
-                        strokeWidth: 0.6,
-                        strokeLinecap: 'round',
-                      }}
-                    >
-                      <text
-                        fontFamily="'Bebas Neue', sans-serif"
-                        fontSize={13}
-                        fill="#E8D5A3"
-                        letterSpacing={2}
-                        textAnchor={anchor}
+                    {/* Annotation — hidden on mobile via CSS (too small to read at reduced scale) */}
+                    <g className="map-annotation">
+                      <Annotation
+                        subject={r.coords}
+                        dx={r.dx}
+                        dy={r.dy}
+                        connectorProps={{
+                          stroke: 'rgba(57,255,20,0.3)',
+                          strokeWidth: 0.6,
+                          strokeLinecap: 'round',
+                        }}
                       >
-                        {r.name.toUpperCase()}
-                      </text>
-                      <text
-                        y={14}
-                        fontSize={9}
-                        fill="rgba(255,255,255,0.75)"
-                        textAnchor={anchor}
-                        fontFamily="'Inter', sans-serif"
-                        letterSpacing={0.5}
-                      >
-                        {r.flavour}
-                      </text>
-                    </Annotation>
+                        <text
+                          fontFamily="'Bebas Neue', sans-serif"
+                          fontSize={13}
+                          fill="#E8D5A3"
+                          letterSpacing={2}
+                          textAnchor={anchor}
+                        >
+                          {r.name.toUpperCase()}
+                        </text>
+                        <text
+                          y={14}
+                          fontSize={9}
+                          fill="rgba(255,255,255,0.75)"
+                          textAnchor={anchor}
+                          fontFamily="'Inter', sans-serif"
+                          letterSpacing={0.5}
+                        >
+                          {r.flavour}
+                        </text>
+                      </Annotation>
+                    </g>
 
                     <Marker coordinates={r.coords}>
+                      {/* Invisible tap target — substantially larger than the visible dot */}
+                      <circle r={22} fill="transparent" style={{ cursor: 'pointer' }} />
                       {/* Flag emoji */}
                       <text
                         textAnchor="middle"
@@ -463,16 +474,24 @@ export default function Origins() {
                       >
                         {r.flag}
                       </text>
-                      {/* Dot — glowing */}
+                      {/* Dot — glowing; enlarged on mobile via .marker-dot CSS */}
                       <circle
                         r={5}
                         fill="#39FF14"
                         opacity={0.95}
                         stroke="#0d0d0d"
                         strokeWidth={1.5}
-                        className="glow-dot"
+                        className="glow-dot marker-dot"
                         style={{ animationDelay: GLOW_DELAYS[id] }}
                       />
+                      {/* Country name label — hidden on desktop, shown on mobile */}
+                      <text
+                        textAnchor="middle"
+                        y={22}
+                        className="pin-label"
+                      >
+                        {r.name.toUpperCase()}
+                      </text>
                     </Marker>
                   </g>
                 )
@@ -540,6 +559,27 @@ export default function Origins() {
             </span>
           </div>
 
+        </div>
+      </div>
+
+      {/* Mobile country list — hidden on desktop via CSS */}
+      <div className="origins-country-list">
+        <p className="origins-list-heading">EXPLORE ORIGINS</p>
+        <div className="origins-list-grid">
+          {Object.entries(REGIONS).map(([rawId, r]) => {
+            const id = Number(rawId)
+            return (
+              <button
+                key={rawId}
+                className={`origins-country-card${selectedId === id ? ' origins-country-card--active' : ''}`}
+                onClick={() => handleSelect(id)}
+              >
+                <span className="origins-card-flag">{r.flag}</span>
+                <span className="origins-card-name">{r.name.toUpperCase()}</span>
+                <span className="origins-card-flavour">{r.flavour}</span>
+              </button>
+            )
+          })}
         </div>
       </div>
 

@@ -233,3 +233,87 @@ h1, h2, h3, h4, h5, h6 {
     min-height: 320px;
   }
 }
+
+/* Mobile map pin enhancements */
+@media (max-width: 767px) {
+  /* Larger visible dot — CSS r property is supported in all modern browsers */
+  .marker-dot { r: 8; }
+
+  /* Hide annotations on mobile — too small to read at reduced map scale */
+  .map-annotation { display: none; }
+}
+
+/* Country name label below pin — hidden on desktop */
+.pin-label {
+  font-size: 0;
+  fill: transparent;
+}
+@media (max-width: 767px) {
+  .pin-label {
+    font-size: 21px;
+    fill: #E8D5A3;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+  }
+}
+
+/* Mobile origins country list */
+.origins-country-list { display: none; }
+@media (max-width: 767px) {
+  .origins-country-list {
+    display: block;
+    background: #0d0d0d;
+    padding: 20px 16px 40px;
+    border-top: 1px solid #1a1a1a;
+  }
+  .origins-list-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    color: rgba(201,168,76,0.5);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 16px 0;
+  }
+  .origins-list-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .origins-country-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 14px 14px;
+    min-height: 88px;
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid rgba(57,255,20,0.12);
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 150ms, border-color 150ms;
+  }
+  .origins-country-card:active,
+  .origins-country-card--active {
+    background: #0d1a09;
+    border-color: rgba(57,255,20,0.5);
+  }
+  .origins-card-flag  { font-size: 22px; line-height: 1; display: block; }
+  .origins-card-name  {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    color: #E8D5A3;
+    letter-spacing: 0.08em;
+    display: block;
+  }
+  .origins-card-flavour {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.3;
+    display: block;
+  }
+}
