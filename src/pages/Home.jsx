@@ -1,56 +1,41 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 /* ─── Hero ─────────────────────────────────────────────── */
 function HeroSection() {
-  const videoRef = useRef(null)
-  const [videoPaused, setVideoPaused] = useState(false)
-
-  useEffect(() => {
-    videoRef.current?.play().catch(() => setVideoPaused(true))
-  }, [])
-
   return (
-    <section id="jack-asleep" className="relative w-full h-screen overflow-hidden bg-black">
-      <video
-        ref={videoRef}
-        src="/images/ub-reel.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-60"
-      />
+    <section id="jack-asleep" className="relative w-full h-screen overflow-hidden bg-[#0d0d0d]">
 
-      {/* Left-side legibility gradient — covers ~60% width */}
+      {/* Product shot — all three bags, right side, desktop+ */}
+      <div className="hidden md:flex absolute right-0 bottom-0 h-full w-[52%] items-end justify-center overflow-hidden">
+        <img
+          src="/images/the-fam.png"
+          alt="Urban Bourbon blends #17, #41 and #43"
+          className="h-[92%] w-auto object-contain object-bottom"
+        />
+      </div>
+
+      {/* Gradient — legibility left, fades toward product image */}
       <div className="absolute inset-0" style={{
-        background: 'linear-gradient(to right, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.80) 40%, rgba(13,13,13,0.2) 65%, transparent 100%)'
+        background: 'linear-gradient(to right, rgba(13,13,13,1) 0%, rgba(13,13,13,0.97) 30%, rgba(13,13,13,0.65) 50%, rgba(13,13,13,0.15) 70%, transparent 85%)'
       }} />
       {/* Bottom fade into next section */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
+      {/* Subtle green atmosphere from the product side */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 55% 50% at 72% 60%, rgba(57,255,20,0.05) 0%, transparent 70%)'
+      }} />
 
       {/* Left-aligned content */}
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto w-full px-8 sm:px-12 lg:px-16 flex flex-col items-start gap-5 max-w-[55%]">
-          {videoPaused && (
-            <button
-              onClick={() => { videoRef.current?.play(); setVideoPaused(false) }}
-              className="text-[#39FF14]/70 hover:text-[#39FF14] transition-colors"
-              aria-label="Play video"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 drop-shadow-[0_0_16px_rgba(57,255,20,0.6)]">
-                <path d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" />
-              </svg>
-            </button>
-          )}
-
           <h1 className="fade-up font-['Barlow_Condensed'] font-black text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase">
             MAY WE FILL
             <br />YOUR CUP
           </h1>
 
           <p className="fade-up fade-up-d1 font-['Barlow_Condensed'] font-bold text-[#39FF14] text-lg sm:text-xl tracking-[0.25em] uppercase">
-            #43 — OUT NOW
+            #43 · #41 · #17 — ALL OUT NOW
           </p>
 
           <div className="fade-up fade-up-d2 flex flex-col sm:flex-row gap-3">
@@ -80,34 +65,71 @@ function HeroSection() {
 }
 
 /* ─── Our Coffee ─────────────────────────────────────────── */
+
+const COFFEE_CARDS = [
+  {
+    key: '43',
+    image: '/images/urban-43-promo.png',
+    alt: 'Blend #43 Ethiopian — Out Now',
+    name: 'BLEND #43',
+    subtitle: 'Ethiopian · Bright & Fruity',
+    label: '#43',
+  },
+  {
+    key: '41',
+    image: '/images/label-41.png',
+    alt: '#41 Colombian Gold — Out Now',
+    name: '#41 COLOMBIAN GOLD',
+    subtitle: 'Colombia Excelso · Washed',
+    label: '#41',
+  },
+  {
+    key: '17',
+    image: '/images/label-17.png',
+    alt: '#17 Cocoa Ridge — Out Now',
+    name: '#17 COCOA RIDGE',
+    subtitle: 'Nicaragua Jinotega · Washed',
+    label: '#17',
+  },
+]
+
 function CoffeeSection() {
   return (
     <section id="coffee" className="bg-[#0d0d0d]">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-24 pb-6">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-24 pb-12">
         <h2 className="font-['Barlow_Condensed'] font-black text-white text-6xl sm:text-7xl md:text-8xl uppercase tracking-tight leading-none mb-12">
           OUR COFFEE
         </h2>
-      </div>
 
-      <div className="max-w-2xl mx-auto px-5 sm:px-8 w-full">
-        <img
-          src="/images/urban-43-promo.png"
-          alt="Urban Bourbon #43 — Out Now"
-          className="w-full h-auto block"
-        />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-10 pb-20 flex flex-col sm:flex-row items-start justify-between gap-6">
-        <p className="text-white/60 font-['Inter'] font-light text-base sm:text-lg leading-relaxed max-w-xl">
-          #43 is our debut blend — a fair trade, small batch Ethiopian whole bean coffee.
-          Bright, fruity and unlike anything you've tasted. The first of many.
-        </p>
-        <Link
-          to="/coffee"
-          className="shrink-0 bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.18em] uppercase px-9 py-3.5 rounded-sm hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
-        >
-          ORDER #43
-        </Link>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12 pb-8">
+          {COFFEE_CARDS.map(card => (
+            <div key={card.key} className="flex flex-col gap-5">
+              <div className="relative aspect-[4/5] bg-[#111] overflow-hidden">
+                <img
+                  src={card.image}
+                  alt={card.alt}
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p className="font-['Bebas_Neue'] text-white text-2xl tracking-[2px] leading-none">
+                    {card.name}
+                  </p>
+                  <p className="font-['Barlow_Condensed'] text-white/50 text-xs tracking-[2px] uppercase mt-1">
+                    {card.subtitle}
+                  </p>
+                </div>
+                <Link
+                  to="/coffee"
+                  className="shrink-0 bg-[#39FF14] text-black font-['Barlow_Condensed'] font-bold text-sm tracking-[0.18em] uppercase px-7 py-3 rounded-sm hover:bg-[#2ce010] transition-all duration-200 hover:scale-[1.03]"
+                >
+                  ORDER {card.label}
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )
