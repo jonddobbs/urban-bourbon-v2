@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-const MODEL        = 'claude-sonnet-4-6'
-const MAX_TOKENS   = 300
 const MAX_MESSAGES = 10
 
 const CHIPS = [
@@ -230,43 +228,18 @@ export default function JackScrollGuide() {
       const history = updatedMessages.slice(-6)
       let reply
 
-      if (import.meta.env.DEV) {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true',
-          },
-          body: JSON.stringify({
-            model: MODEL,
-            max_tokens: MAX_TOKENS,
-            system: SYSTEM_PROMPT,
-            messages: history,
-          }),
-        })
-        if (!res.ok) {
-          const errBody = await res.text()
-          console.error('Jack API error:', res.status, errBody)
-          throw new Error(`${res.status}`)
-        }
-        const data = await res.json()
-        reply = data.content?.[0]?.text ?? '...'
-      } else {
-        const res = await fetch('/.netlify/functions/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: history }),
-        })
-        if (!res.ok) {
-          const errBody = await res.text()
-          console.error('Jack function error:', res.status, errBody)
-          throw new Error(`${res.status}`)
-        }
-        const data = await res.json()
-        reply = data.reply ?? '...'
+      const res = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      })
+      if (!res.ok) {
+        const errBody = await res.text()
+        console.error('Jack function error:', res.status, errBody)
+        throw new Error(`${res.status}`)
       }
+      const data = await res.json()
+      reply = data.reply ?? '...'
 
       setMessages(prev => [...prev, { role: 'assistant', content: reply }])
     } catch (err) {
