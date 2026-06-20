@@ -93,12 +93,16 @@ export async function handler(event) {
 
   const total = (fullSession.amount_total ?? 0) / 100
 
+  // shipping_details shape: { name, address: { line1, line2, city, state, postal_code, country } }
+  const shippingAddress = fullSession.shipping_details ?? null
+
   const { error: insertError } = await supabase.from('orders').insert({
-    user_id:           null,   // guest checkout — no Supabase auth user linked at payment time
+    user_id:          null,   // guest checkout — no Supabase auth user linked at payment time
     items,
     total,
     stripe_session_id: session.id,
-    status:            'paid',
+    status:           'paid',
+    shipping_address: shippingAddress,
   })
 
   if (insertError) {

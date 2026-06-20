@@ -27,3 +27,7 @@ create policy "Service role can insert orders"
 grant all on table public.orders to anon;
 grant all on table public.orders to authenticated;
 grant all on table public.orders to service_role;
+
+-- Migration: add shipping address column (run once in SQL Editor if table already exists)
+alter table public.orders
+  add column if not exists shipping_address jsonb;
