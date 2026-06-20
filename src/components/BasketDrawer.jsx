@@ -105,8 +105,8 @@ export default function BasketDrawer() {
                 <li key={item.id} className="flex gap-4 pb-5 border-b border-white/[0.08]">
                   {/* Thumbnail */}
                   <div className="w-16 h-16 rounded bg-[#111] border border-white/10 flex items-center justify-center shrink-0">
-                    <span className="font-['Bebas_Neue'] text-[#39FF14] text-[11px] text-center leading-tight px-1">
-                      BLEND<br />#{item.id.includes('43') ? '43' : '12'}
+                    <span className="font-['Bebas_Neue'] text-[#39FF14] text-[13px] text-center leading-tight px-1">
+                      #{item.id.match(/^ub-(\d+)/)?.[1] ?? '?'}
                     </span>
                   </div>
 
