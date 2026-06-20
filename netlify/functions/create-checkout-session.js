@@ -52,7 +52,10 @@ export async function handler(event) {
       0
     )
 
-    const shippingOption = subtotalPence >= FREE_SHIPPING_THRESHOLD_PENCE
+    // Internal test orders always get free shipping — sentinel is the item name prefix
+    const isTestOrder = items.every(i => i.name.startsWith('[INTERNAL TEST]'))
+
+    const shippingOption = isTestOrder || subtotalPence >= FREE_SHIPPING_THRESHOLD_PENCE
       ? {
           shipping_rate_data: {
             type: 'fixed_amount',
