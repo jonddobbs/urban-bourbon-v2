@@ -11,6 +11,7 @@ import Origins from './pages/Origins.jsx'
 import OurStory from './pages/OurStory.jsx'
 import ComingSoon from './pages/ComingSoon.jsx'
 import Subscriptions from './pages/Subscriptions.jsx'
+import TestCheckout from './pages/TestCheckout.jsx'
 import Waitlist from './pages/Waitlist.jsx'
 import OrderSuccess from './pages/OrderSuccess.jsx'
 import Lounge from './pages/Lounge.jsx'
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/merch" element={<ComingSoon page="Merch" />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/test-checkout" element={<TestCheckout />} />
           <Route path="/lounge" element={<ProtectedRoute><Lounge /></ProtectedRoute>} />
         </Routes>
         <Footer />
