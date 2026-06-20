@@ -112,7 +112,7 @@ function ProductSection({ product }) {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 grid md:grid-cols-2 gap-10 lg:gap-20 items-center">
 
         {/* Product image */}
-        <div className="relative overflow-hidden bg-[#111] aspect-square md:aspect-auto md:h-[560px]">
+        <div className="relative overflow-hidden bg-[#0d0d0d] aspect-square md:aspect-auto md:h-[560px]">
           <img
             src={product.image}
             alt={product.imageAlt}
