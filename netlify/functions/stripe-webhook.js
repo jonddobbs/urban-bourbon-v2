@@ -59,7 +59,7 @@ function customerEmailHtml({ orderRef, items, total, shippingPaid, shippingAddre
           <td style="padding-bottom:32px;">
             <p style="margin:0 0 16px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;">
               Your order is in. We'll get it packed and out to you shortly &mdash;
-              expect a dispatch notification once it's with Royal Mail.
+              we'll be in touch once it's on its way.
             </p>
             <p style="margin:0;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;">
               In the meantime, if anything looks wrong here just reply to this
