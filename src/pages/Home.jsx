@@ -332,40 +332,28 @@ const BLENDS = [
     bag: null,
   },
   {
-    key: 'b7',
-    available: false,
-    bigLabel: '#7',
-    name: 'THE SUMMER BLEND',
-    origin: 'Single Origin',
-    notes: 'Small Batch',
-    weight: '125g',
-    bg: null,
-    bgPos: null,
-    bag: '/images/bear-7-blue.png',
-  },
-  {
-    key: 'bbs',
-    available: false,
-    bigLabel: null,
-    name: 'BUTTERSCOTCH BOURBON MACCHIATO',
-    origin: 'Colombian Origin',
-    notes: 'Butterscotch & Toasted Almonds',
-    weight: '125g',
-    bg: null,
-    bgPos: null,
-    bag: '/images/bag-butterscotch.png',
-  },
-  {
-    key: 'bvm',
-    available: false,
-    bigLabel: null,
-    name: 'VELVET MOCHA',
-    origin: 'Dark Roast',
-    notes: 'Dark Chocolate & Caramel',
+    key: 'b41',
+    available: true,
+    bigLabel: '#41',
+    name: 'COLOMBIAN GOLD',
+    origin: 'Colombia Excelso',
+    notes: 'Orange, Brown Sugar, Cedar',
     weight: null,
     bg: null,
     bgPos: null,
-    bag: '/images/bag-velvet.png',
+    bag: '/images/label-41.png',
+  },
+  {
+    key: 'b17',
+    available: true,
+    bigLabel: '#17',
+    name: 'COCOA RIDGE',
+    origin: 'Nicaragua Jinotega',
+    notes: 'Chocolate, Pear, Caramel',
+    weight: null,
+    bg: null,
+    bgPos: null,
+    bag: '/images/label-17.png',
   },
 ]
 
@@ -403,7 +391,7 @@ function BlendCard({ blend }) {
           alt=""
           aria-hidden="true"
           className="absolute right-0 bottom-0 h-[90%] w-auto object-contain"
-          style={{ filter: 'grayscale(25%) brightness(0.82)', opacity: 0.9 }}
+          style={{ filter: available ? 'none' : 'grayscale(25%) brightness(0.82)', opacity: 0.9 }}
         />
       )}
 
@@ -471,7 +459,7 @@ function TheDropSection() {
         <h2 className="font-['Bebas_Neue'] text-[#39FF14] text-7xl sm:text-8xl md:text-9xl tracking-[4px] leading-none mb-10">
           THE DROP
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {BLENDS.map(blend => (
             <BlendCard key={blend.key} blend={blend} />
           ))}
@@ -591,53 +579,14 @@ function SubscriptionsSection() {
 
 /* ─── Instagram Grid ──────────────────────────────────────── */
 
-// All 4 available product images + 2 teaser card slots
 const igTiles = [
-  { type: 'photo', src: '/images/hero-product.jpg',  pos: 'object-center',      alt: '#43 coffee bags and whisky glass' },
-  { type: 'photo', src: '/images/banner.png',         pos: 'object-center',      alt: 'Urban Bourbon banner' },
-  { type: 'teaser-7' },
-  { type: 'photo', src: '/images/bear.png',           pos: 'object-top',         alt: 'Urban Bourbon Bear mascot' },
-  { type: 'teaser-drop' },
-  { type: 'photo', src: '/images/banner-mobile.png',  pos: 'object-center',      alt: 'Urban Bourbon mobile banner' },
+  { src: '/images/hero-product.jpg',       pos: 'object-center', alt: '#43 coffee bags and whisky glass' },
+  { src: '/images/urban-43-promo.png',     pos: 'object-center', alt: 'Urban Bourbon #43 promo' },
+  { src: '/images/jack-lab-coat-nobg.png', pos: 'object-top',    alt: 'Jack the mascot in lab coat' },
+  { src: '/images/bear.png',               pos: 'object-top',    alt: 'Urban Bourbon Bear mascot' },
+  { src: '/images/free-30g-promo.png',     pos: 'object-center', alt: 'Free 30g promo' },
+  { src: '/images/banner-mobile.png',      pos: 'object-center', alt: 'Urban Bourbon banner' },
 ]
-
-function TeaserCard7() {
-  return (
-    <div className="absolute inset-0 bg-[#0d0d0d] border border-[#39FF14]/30 hover:border-[#39FF14] transition-colors duration-300 flex flex-col items-center justify-center gap-3 p-4">
-      <img src="/images/logo.png" alt="Urban Bourbon" className="w-2/5 max-w-[80px] h-auto opacity-90" />
-      <p
-        className="font-['Barlow_Condensed'] font-black text-[#39FF14] leading-none"
-        style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)' }}
-      >
-        #7
-      </p>
-      <p className="font-['Barlow_Condensed'] font-bold text-white/60 text-xs tracking-[0.3em] uppercase">
-        Coming Soon
-      </p>
-      <div className="absolute inset-0 pointer-events-none rounded-[inherit]"
-        style={{ boxShadow: 'inset 0 0 40px rgba(57,255,20,0.04)' }} />
-    </div>
-  )
-}
-
-function TeaserCardDrop() {
-  return (
-    <div className="absolute inset-0 bg-[#0d0d0d] border border-[#39FF14]/30 hover:border-[#39FF14] transition-colors duration-300 flex flex-col items-center justify-center gap-3 p-4">
-      <img src="/images/bear.png" alt="Urban Bourbon Bear" className="w-1/4 max-w-[56px] h-auto opacity-80" />
-      <p
-        className="font-['Barlow_Condensed'] font-black text-[#39FF14] leading-none tracking-tight"
-        style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)' }}
-      >
-        NEW DROP
-      </p>
-      <p className="font-['Barlow_Condensed'] font-bold text-white/60 text-xs tracking-[0.3em] uppercase">
-        Stay Tuned
-      </p>
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ boxShadow: 'inset 0 0 40px rgba(57,255,20,0.04)' }} />
-    </div>
-  )
-}
 
 const igHoverOverlay = (
   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity duration-300">
@@ -677,18 +626,12 @@ function InstagramSection() {
               rel="noopener noreferrer"
               className="group relative aspect-square overflow-hidden bg-[#0d0d0d]"
             >
-              {tile.type === 'photo' && (
-                <>
-                  <img
-                    src={tile.src}
-                    alt={tile.alt}
-                    className={`absolute inset-0 w-full h-full object-cover ${tile.pos} transition-transform duration-500 group-hover:scale-105`}
-                  />
-                  {igHoverOverlay}
-                </>
-              )}
-              {tile.type === 'teaser-7'   && <TeaserCard7 />}
-              {tile.type === 'teaser-drop' && <TeaserCardDrop />}
+              <img
+                src={tile.src}
+                alt={tile.alt}
+                className={`absolute inset-0 w-full h-full object-cover ${tile.pos} transition-transform duration-500 group-hover:scale-105`}
+              />
+              {igHoverOverlay}
             </a>
           ))}
         </div>
