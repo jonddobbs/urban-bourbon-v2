@@ -1,34 +1,48 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 /* ─── Hero ─────────────────────────────────────────────── */
 function HeroSection() {
+  const videoRef = useRef(null)
+  const [videoPaused, setVideoPaused] = useState(false)
+
+  useEffect(() => {
+    videoRef.current?.play().catch(() => setVideoPaused(true))
+  }, [])
+
   return (
-    <section id="jack-asleep" className="relative w-full h-screen overflow-hidden bg-[#0d0d0d]">
+    <section id="jack-asleep" className="relative w-full h-screen overflow-hidden bg-black">
+      <video
+        ref={videoRef}
+        src="/images/grok-hero.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover opacity-60"
+      />
 
-      {/* Product shot — all three bags, right side, desktop+ */}
-      <div className="hidden md:flex absolute right-0 bottom-0 h-full w-[52%] items-end justify-center overflow-hidden">
-        <img
-          src="/images/the-fam.png"
-          alt="Urban Bourbon blends #17, #41 and #43"
-          className="h-[92%] w-auto object-contain object-bottom"
-        />
-      </div>
-
-      {/* Gradient — legibility left, fades toward product image */}
+      {/* Left-side legibility gradient */}
       <div className="absolute inset-0" style={{
-        background: 'linear-gradient(to right, rgba(13,13,13,1) 0%, rgba(13,13,13,0.97) 30%, rgba(13,13,13,0.65) 50%, rgba(13,13,13,0.15) 70%, transparent 85%)'
+        background: 'linear-gradient(to right, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.80) 40%, rgba(13,13,13,0.2) 65%, transparent 100%)'
       }} />
       {/* Bottom fade into next section */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
-      {/* Subtle green atmosphere from the product side */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 55% 50% at 72% 60%, rgba(57,255,20,0.05) 0%, transparent 70%)'
-      }} />
 
       {/* Left-aligned content */}
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto w-full px-8 sm:px-12 lg:px-16 flex flex-col items-start gap-5 max-w-[55%]">
+          {videoPaused && (
+            <button
+              onClick={() => { videoRef.current?.play(); setVideoPaused(false) }}
+              className="text-[#39FF14]/70 hover:text-[#39FF14] transition-colors"
+              aria-label="Play video"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 drop-shadow-[0_0_16px_rgba(57,255,20,0.6)]">
+                <path d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" />
+              </svg>
+            </button>
+          )}
           <h1 className="fade-up font-['Barlow_Condensed'] font-black text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight uppercase">
             MAY WE FILL
             <br />YOUR CUP
@@ -104,7 +118,7 @@ function CoffeeSection() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12 pb-8">
           {COFFEE_CARDS.map(card => (
             <div key={card.key} className="flex flex-col gap-5">
-              <div className="relative aspect-[4/5] bg-[#111] overflow-hidden">
+              <div className="relative aspect-[4/5] bg-[#0d0d0d] overflow-hidden">
                 <img
                   src={card.image}
                   alt={card.alt}
