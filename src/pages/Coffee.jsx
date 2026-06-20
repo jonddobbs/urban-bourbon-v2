@@ -29,6 +29,16 @@ const PRODUCTS = [
       { label: '1kg',  price: '£30',   priceNum: 30   },
     ],
     formats: null,
+    brewGuide: {
+      method: 'AeroPress',
+      specs: {
+        grind: 'Medium-coarse',
+        temp:  '88–91°C',
+        ratio: '1:15 (15g / 225ml)',
+        time:  '2–3 min',
+      },
+      jackNote: "Whole beans only — which means you're grinding fresh. AeroPress is the move: it keeps the brown sugar sweetness intact and controls the bitterness without a paper filter flattening everything out. Don't use boiling water. Ninety degrees. I'll know if you don't.",
+    },
   },
   {
     sku: 'ub-41',
@@ -54,6 +64,16 @@ const PRODUCTS = [
       { label: '1kg',  price: '£34',   priceNum: 34   },
     ],
     formats: ['Whole Beans', 'Ground Medium'],
+    brewGuide: {
+      method: 'Pour Over',
+      specs: {
+        grind: 'Medium',
+        temp:  '93–96°C',
+        ratio: '1:15 (15g / 225ml)',
+        time:  '3–4 min',
+      },
+      jackNote: "SCA 83. Washed process. Bright, high acidity. This one rewards patience — bloom it for 30 seconds, then two or three controlled pours. The orange and cedar come through in a way nothing else gives you. V60 is the call. Cafetière works too, if that's all you've got.",
+    },
   },
   {
     sku: 'ub-17',
@@ -79,8 +99,78 @@ const PRODUCTS = [
       { label: '1kg',  price: '£36',   priceNum: 36   },
     ],
     formats: ['Whole Beans'],
+    brewGuide: {
+      method: 'Espresso',
+      specs: {
+        grind: 'Fine',
+        temp:  '93°C',
+        ratio: '1:2 (18g in / 36g out)',
+        time:  '25–30 sec',
+      },
+      jackNote: "High body, chocolate, caramel, pear. SCA 84. This one was built for a machine — espresso or bean-to-cup, take your pick. Fine grind, 93 degrees, 25 seconds. It's the straightforward one. If you're hand-pouring a Nicaraguan with this profile and wondering why it tastes flat, that's on you.",
+    },
   },
 ]
+
+// ── BrewGuide ──────────────────────────────────────────────────────────────────
+
+function BrewGuide({ guide, productName }) {
+  if (!guide) return null
+  const specs = [
+    { label: 'Grind', value: guide.specs.grind },
+    { label: 'Temp',  value: guide.specs.temp  },
+    { label: 'Ratio', value: guide.specs.ratio },
+    { label: 'Time',  value: guide.specs.time  },
+  ]
+  return (
+    <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 border-t border-white/[0.04]">
+      <div className="flex items-baseline gap-4 mb-10">
+        <span className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[0.3em] uppercase">
+          Jack's Brew Guide
+        </span>
+        <span className="font-['Barlow_Condensed'] text-white/25 text-xs tracking-[0.2em] uppercase">
+          {productName}
+        </span>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-10 lg:gap-20">
+        {/* Method + specs */}
+        <div>
+          <h3 className="font-['Bebas_Neue'] text-white text-5xl tracking-wide mb-8">
+            {guide.method}
+          </h3>
+          <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+            {specs.map(({ label, value }) => (
+              <div key={label}>
+                <p className="font-['Barlow_Condensed'] text-[#39FF14]/60 text-[0.65rem] tracking-[0.3em] uppercase mb-1.5">
+                  {label}
+                </p>
+                <p className="font-['Inter'] text-white text-sm font-light">{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Jack's note */}
+        <div className="border-l border-white/[0.06] pl-8 md:pl-12 flex gap-5 items-start">
+          <img
+            src="/images/bear-nobg.png"
+            alt="Jack"
+            className="w-12 h-auto shrink-0 opacity-70 mt-1"
+          />
+          <div>
+            <p className="font-['Barlow_Condensed'] text-white/25 text-[0.6rem] tracking-[0.3em] uppercase mb-3">
+              Jack says
+            </p>
+            <p className="font-['Inter'] text-white/60 text-sm leading-relaxed italic">
+              "{guide.jackNote}"
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // ── ProductSection ─────────────────────────────────────────────────────────────
 
@@ -284,6 +374,8 @@ function ProductSection({ product }) {
         </div>
 
       </div>
+
+      <BrewGuide guide={product.brewGuide} productName={product.cartName} />
     </section>
   )
 }

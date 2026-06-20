@@ -16,6 +16,14 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <!-- Netlify Forms detection — not visible to users -->
+    <form name="subscription-waitlist" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="subscription-waitlist" />
+      <input type="email" name="email" />
+      <input type="text" name="blend" />
+      <input type="text" name="size" />
+      <input type="text" name="format" />
+      <input type="text" name="frequency" />
+    </form>
     <form name="reviews" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="hidden" name="form-name" value="reviews" />
       <input type="text" name="name" />
