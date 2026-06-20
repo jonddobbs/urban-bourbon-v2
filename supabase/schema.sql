@@ -20,3 +20,10 @@ create policy "Users can view own orders"
 create policy "Service role can insert orders"
   on orders for insert
   with check (true);
+
+-- Object-level grants: Supabase applies these automatically when a table is created
+-- via the dashboard, but not when created with raw SQL. Without these, service_role
+-- gets a Postgres 42501 "permission denied" before RLS is even evaluated.
+grant all on table public.orders to anon;
+grant all on table public.orders to authenticated;
+grant all on table public.orders to service_role;
