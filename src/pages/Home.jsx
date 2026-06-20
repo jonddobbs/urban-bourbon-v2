@@ -69,7 +69,7 @@ function HeroSection() {
 const COFFEE_CARDS = [
   {
     key: '43',
-    image: '/images/urban-43-promo.png',
+    image: '/images/fam-43.png',
     alt: 'Blend #43 Ethiopian — Out Now',
     name: 'BLEND #43',
     subtitle: 'Ethiopian · Bright & Fruity',
@@ -77,7 +77,7 @@ const COFFEE_CARDS = [
   },
   {
     key: '41',
-    image: '/images/label-41.png',
+    image: '/images/fam-41.png',
     alt: '#41 Colombian Gold — Out Now',
     name: '#41 COLOMBIAN GOLD',
     subtitle: 'Colombia Excelso · Washed',
@@ -85,7 +85,7 @@ const COFFEE_CARDS = [
   },
   {
     key: '17',
-    image: '/images/label-17.png',
+    image: '/images/fam-17.png',
     alt: '#17 Cocoa Ridge — Out Now',
     name: '#17 COCOA RIDGE',
     subtitle: 'Nicaragua Jinotega · Washed',
@@ -349,9 +349,9 @@ const BLENDS = [
     origin: 'Ethiopian Origin',
     notes: 'Bright & Fruity',
     weight: '125g',
-    bg: '/images/hero-product.jpg',
-    bgPos: 'center',
-    bag: null,
+    bg: null,
+    bgPos: null,
+    bag: '/images/fam-43.png',
   },
   {
     key: 'b41',
@@ -363,7 +363,7 @@ const BLENDS = [
     weight: null,
     bg: null,
     bgPos: null,
-    bag: '/images/label-41.png',
+    bag: '/images/fam-41.png',
   },
   {
     key: 'b17',
@@ -375,7 +375,7 @@ const BLENDS = [
     weight: null,
     bg: null,
     bgPos: null,
-    bag: '/images/label-17.png',
+    bag: '/images/fam-17.png',
   },
 ]
 
