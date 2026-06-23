@@ -1,5 +1,5 @@
 const ADMIN_EMAIL = 'hello@urbanbourbon.co.uk'
-const FROM_EMAIL  = 'Jack at Urban Bourbon <hello@urbanbourbon.co.uk>'
+const FROM_EMAIL  = 'Jon at Urban Bourbon <hello@urbanbourbon.co.uk>'
 
 const BLEND_DISPLAY = {
   'b12':      'Blend #12 — The Winter Roast',

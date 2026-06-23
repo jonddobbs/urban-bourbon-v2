@@ -1,4 +1,4 @@
-const FROM_EMAIL = 'Jack at Urban Bourbon <hello@urbanbourbon.co.uk>'
+const FROM_EMAIL = 'Jon at Urban Bourbon <hello@urbanbourbon.co.uk>'
 
 function welcomeHtml() {
   return `<!DOCTYPE html>
