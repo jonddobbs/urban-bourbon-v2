@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase.js'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export default function Cwmcarn() {
+export default function Qr() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle') // idle | loading | success | error
 
@@ -11,7 +11,7 @@ export default function Cwmcarn() {
     e.preventDefault()
     if (!EMAIL_RE.test(email.trim())) return
     setStatus('loading')
-    const { error } = await supabase.from('signups').insert({ email: email.trim(), source: 'cwmcarn' })
+    const { error } = await supabase.from('signups').insert({ email: email.trim(), source: 'qr' })
     setStatus(error ? 'error' : 'success')
   }
 
@@ -39,9 +39,9 @@ export default function Cwmcarn() {
           </p>
 
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 mt-2">
-            <label htmlFor="cwmcarn-email" className="sr-only">Email address</label>
+            <label htmlFor="qr-email" className="sr-only">Email address</label>
             <input
-              id="cwmcarn-email"
+              id="qr-email"
               type="email"
               inputMode="email"
               autoComplete="email"
