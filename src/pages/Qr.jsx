@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase.js'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const CODE = 'CWMCARN10'
 
 export default function Qr() {
   const [email, setEmail] = useState('')
@@ -11,7 +12,15 @@ export default function Qr() {
     e.preventDefault()
     if (!EMAIL_RE.test(email.trim())) return
     setStatus('loading')
-    const { error } = await supabase.from('signups').insert({ email: email.trim(), source: 'qr' })
+    const trimmedEmail = email.trim()
+    const { error } = await supabase.from('signups').insert({ email: trimmedEmail, source: 'qr' })
+    if (!error) {
+      fetch('/.netlify/functions/qr-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmedEmail }),
+      }).catch(err => console.error('QR signup email error:', err))
+    }
     setStatus(error ? 'error' : 'success')
   }
 
@@ -23,7 +32,10 @@ export default function Qr() {
             YOU'RE IN.
           </p>
           <p className="font-['Inter'] text-white/60 text-base leading-relaxed">
-            Keep an eye on your inbox — your 10% off code is on its way.
+            Keep an eye on your inbox — your code's on its way. Can't wait? Here it is:
+          </p>
+          <p className="font-['Bebas_Neue'] text-[#39FF14] text-3xl tracking-[4px] border border-[#39FF14] bg-[#39FF14]/[0.04] px-8 py-3">
+            {CODE}
           </p>
         </div>
       ) : (
