@@ -15,6 +15,7 @@ import TestCheckout from './pages/TestCheckout.jsx'
 import Waitlist from './pages/Waitlist.jsx'
 import OrderSuccess from './pages/OrderSuccess.jsx'
 import Lounge from './pages/Lounge.jsx'
+import Cwmcarn from './pages/Cwmcarn.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/test-checkout" element={<TestCheckout />} />
           <Route path="/lounge" element={<ProtectedRoute><Lounge /></ProtectedRoute>} />
+          <Route path="/cwmcarn" element={<Cwmcarn />} />
         </Routes>
         <Footer />
         <JackScrollGuide />

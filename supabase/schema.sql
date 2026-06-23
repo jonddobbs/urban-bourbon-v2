@@ -31,3 +31,22 @@ grant all on table public.orders to service_role;
 -- Migration: add shipping address column (run once in SQL Editor if table already exists)
 alter table public.orders
   add column if not exists shipping_address jsonb;
+
+-- Email signups (homepage footer subscribe form, waitlist, QR campaigns, etc.)
+create table if not exists signups (
+  id         uuid primary key default gen_random_uuid(),
+  email      text not null,
+  source     text,
+  created_at timestamptz not null default now()
+);
+
+alter table signups enable row level security;
+
+-- Public forms insert directly from the browser via the anon key — no select policy,
+-- so anon can never read back the list of emails.
+create policy "Anyone can insert signups"
+  on signups for insert
+  with check (true);
+
+grant insert on table public.signups to anon;
+grant all on table public.signups to service_role;
