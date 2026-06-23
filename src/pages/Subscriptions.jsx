@@ -70,7 +70,7 @@ export default function Subscriptions() {
     e.preventDefault()
     setStatus('loading')
     try {
-      const res = await fetch('/', {
+      const formRes = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
@@ -82,7 +82,12 @@ export default function Subscriptions() {
           frequency: freqLabel,
         }).toString(),
       })
-      setStatus(res.ok ? 'success' : 'error')
+      fetch('/.netlify/functions/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      }).catch(err => console.error('Subscribe email error:', err))
+      setStatus(formRes.ok ? 'success' : 'error')
     } catch {
       setStatus('error')
     }
