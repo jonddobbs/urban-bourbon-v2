@@ -10,6 +10,7 @@ import Coffee from './pages/Coffee.jsx'
 import Origins from './pages/Origins.jsx'
 import OurStory from './pages/OurStory.jsx'
 import ComingSoon from './pages/ComingSoon.jsx'
+import Merch from './pages/Merch.jsx'
 import Subscriptions from './pages/Subscriptions.jsx'
 import TestCheckout from './pages/TestCheckout.jsx'
 import Waitlist from './pages/Waitlist.jsx'
@@ -31,7 +32,7 @@ export default function App() {
           <Route path="/origins" element={<Origins />} />
           <Route path="/our-story" element={<OurStory />} />
           <Route path="/waitlist" element={<Waitlist />} />
-          <Route path="/merch" element={<ComingSoon page="Merch" />} />
+          <Route path="/merch" element={<Merch />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/test-checkout" element={<TestCheckout />} />
