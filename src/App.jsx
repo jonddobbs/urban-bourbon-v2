@@ -17,6 +17,7 @@ import OrderSuccess from './pages/OrderSuccess.jsx'
 import Lounge from './pages/Lounge.jsx'
 import Qr from './pages/Qr.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import AdminReviews from './pages/AdminReviews.jsx'
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/test-checkout" element={<TestCheckout />} />
           <Route path="/lounge" element={<ProtectedRoute><Lounge /></ProtectedRoute>} />
+          <Route path="/admin/reviews" element={<ProtectedRoute><AdminReviews /></ProtectedRoute>} />
           <Route path="/qr" element={<Qr />} />
         </Routes>
         <Footer />

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 /* ─── Hero ─────────────────────────────────────────────── */
 function HeroSection() {
@@ -151,10 +152,11 @@ function CoffeeSection() {
 
 /* ─── Reviews ────────────────────────────────────────────── */
 
-// ✅ APPROVED REVIEWS — add new reviews here after checking Netlify dashboard
-const approvedReviews = [
-  // { name: "Sarah M.", location: "Bristol", rating: 5, text: "Best morning coffee I've had in years. Smooth, fruity and actually tastes like real coffee." },
+const BLOCKED_WORDS = [
+  'fuck', 'shit', 'cunt', 'dick', 'cock', 'bitch', 'bastard',
+  'wanker', 'twat', 'bollocks', 'piss', 'arse', 'slut', 'whore',
 ]
+const hasProfanity = str => BLOCKED_WORDS.some(w => str.toLowerCase().includes(w))
 
 function StarIcon({ filled, size = 16, dimEmpty = false }) {
   return (
@@ -194,39 +196,53 @@ function StarSelector({ rating, onChange }) {
 }
 
 function ReviewsSection() {
+  const [reviews, setReviews] = useState([])
+  const [loadingReviews, setLoadingReviews] = useState(true)
   const [name, setName] = useState('')
   const [location, setLocation] = useState('')
   const [rating, setRating] = useState(0)
   const [reviewText, setReviewText] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(null)
+
+  async function loadReviews() {
+    const { data, error: fetchError } = await supabase
+      .from('reviews')
+      .select('customer_name, location, rating, review_text')
+      .order('created_at', { ascending: false })
+    if (fetchError) console.error('[Reviews] fetch error:', fetchError)
+    setReviews(data ?? [])
+    setLoadingReviews(false)
+  }
+
+  useEffect(() => { loadReviews() }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
     if (!rating) return
+    if (honeypot) { setSubmitted(true); return }
+    if (hasProfanity(name) || hasProfanity(reviewText)) {
+      setError('Your review contains language we can\'t publish — please revise and try again.')
+      return
+    }
     setSubmitting(true)
-    setError(false)
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        'form-name': 'reviews',
-        'bot-field': '',
-        name,
-        location,
-        rating: String(rating),
-        review: reviewText,
-      }).toString(),
+    setError(null)
+    const { error: insertError } = await supabase.from('reviews').insert({
+      customer_name: name,
+      location,
+      rating,
+      review_text: reviewText,
     })
-      .then(() => {
-        setSubmitted(true)
-        setSubmitting(false)
-      })
-      .catch(() => {
-        setError(true)
-        setSubmitting(false)
-      })
+    if (insertError) {
+      setError('Something went wrong — please try again.')
+      setSubmitting(false)
+    } else {
+      setSubmitted(true)
+      setSubmitting(false)
+      loadReviews()
+    }
   }
 
   return (
@@ -243,28 +259,30 @@ function ReviewsSection() {
           </p>
         </div>
 
-        {/* Reviews grid or empty state */}
-        {approvedReviews.length === 0 ? (
-          <p className="font-['Inter'] text-white/30 text-sm mb-16 tracking-wide">
-            No reviews yet — be the first.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-            {approvedReviews.map((r, i) => (
-              <div key={i} className="bg-[#111111] border border-[#39FF14]/20 p-6 flex flex-col gap-4">
-                <div className="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map(s => <StarIcon key={s} filled={s <= r.rating} size={15} dimEmpty />)}
+        {/* Reviews grid — hidden while loading, empty state or cards once resolved */}
+        {!loadingReviews && (
+          reviews.length === 0 ? (
+            <p className="font-['Inter'] text-white/30 text-sm mb-16 tracking-wide">
+              No reviews yet — be the first.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+              {reviews.map((r, i) => (
+                <div key={i} className="bg-[#111111] border border-[#39FF14]/20 p-6 flex flex-col gap-4">
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map(s => <StarIcon key={s} filled={s <= r.rating} size={15} dimEmpty />)}
+                  </div>
+                  <p className="font-['Inter'] text-white/80 text-sm leading-relaxed flex-1">
+                    &ldquo;{r.review_text}&rdquo;
+                  </p>
+                  <div>
+                    <p className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[2px]">{r.customer_name}</p>
+                    <p className="font-['Inter'] text-white/35 text-xs mt-0.5">{r.location}</p>
+                  </div>
                 </div>
-                <p className="font-['Inter'] text-white/80 text-sm leading-relaxed flex-1">
-                  &ldquo;{r.text}&rdquo;
-                </p>
-                <div>
-                  <p className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-[2px]">{r.name}</p>
-                  <p className="font-['Inter'] text-white/35 text-xs mt-0.5">{r.location}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )
         )}
 
         {/* Divider */}
@@ -274,25 +292,27 @@ function ReviewsSection() {
         <div className="max-w-xl">
           {submitted ? (
             <p className="font-['Barlow_Condensed'] text-[#39FF14] text-xl tracking-wider border border-[#39FF14]/30 px-8 py-5 inline-block">
-              Thanks for your review — we'll get it live soon.
+              Thanks — your review is now live. Cheers!
             </p>
           ) : (
-            <form
-              name="reviews"
-              method="POST"
-              data-netlify="true"
-              data-netlify-honeypot="bot-field"
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-5"
-            >
-              <input type="hidden" name="form-name" value="reviews" />
-              <input type="hidden" name="bot-field" />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              {/* Honeypot — visually hidden, only bots fill this */}
+              <input
+                type="text"
+                name="website"
+                value={honeypot}
+                onChange={e => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="flex flex-col gap-2">
                   <label className="font-['Bebas_Neue'] text-white/50 text-xs tracking-[2px]">FIRST NAME</label>
                   <input
-                    type="text" name="name" value={name} required
+                    type="text" value={name} required
                     placeholder="e.g. Sarah"
                     onChange={e => setName(e.target.value)}
                     className="bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-4 py-3 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200 rounded-sm"
@@ -301,7 +321,7 @@ function ReviewsSection() {
                 <div className="flex flex-col gap-2">
                   <label className="font-['Bebas_Neue'] text-white/50 text-xs tracking-[2px]">LOCATION</label>
                   <input
-                    type="text" name="location" value={location} required
+                    type="text" value={location} required
                     placeholder="e.g. Cardiff"
                     onChange={e => setLocation(e.target.value)}
                     className="bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-4 py-3 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200 rounded-sm"
@@ -323,7 +343,7 @@ function ReviewsSection() {
                   </span>
                 </div>
                 <textarea
-                  name="review" value={reviewText} required rows={4}
+                  value={reviewText} required rows={4}
                   placeholder="Tell us what you thought..."
                   onChange={e => setReviewText(e.target.value.slice(0, 300))}
                   className="bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-4 py-3 text-white placeholder-white/20 font-['Inter'] text-sm transition-colors duration-200 rounded-sm resize-none"
@@ -332,7 +352,7 @@ function ReviewsSection() {
 
               {error && (
                 <p className="font-['Barlow_Condensed'] text-red-400 text-sm tracking-wider">
-                  Something went wrong — please try again.
+                  {error}
                 </p>
               )}
 
