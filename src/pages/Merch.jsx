@@ -31,6 +31,18 @@ export default function Merch() {
   return (
     <main className="min-h-screen bg-[#0d0d0d] pt-16">
 
+      {/* Lifestyle hero */}
+      <div className="relative w-full h-[65vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
+        <img
+          src="/images/better-days-person.png"
+          alt="Better Coffee Better Days — Urban Bourbon"
+          className="absolute inset-0 w-full h-full object-cover [object-position:30%_50%] sm:object-center"
+        />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to bottom, rgba(13,13,13,0.15) 0%, transparent 40%, rgba(13,13,13,0.85) 100%)'
+        }} />
+      </div>
+
       {/* Merch preview — heading and subtitle are baked into the image */}
       <img
         src="/images/merch-coming-soon.png"
