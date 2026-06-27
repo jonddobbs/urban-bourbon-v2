@@ -1,7 +1,5 @@
 import { useState } from 'react'
-
-const FORMSPREE_URL = 'https://formspree.io/f/xykonvan'
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+import { supabase } from '../lib/supabase'
 
 export default function Merch() {
   const [email, setEmail] = useState('')
@@ -9,16 +7,23 @@ export default function Merch() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!EMAIL_RE.test(email.trim())) return
+    if (!email.trim()) return
     setStatus('loading')
     try {
-      const res = await fetch(FORMSPREE_URL, {
+      const res = await fetch('/.netlify/functions/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email: email.trim(), product: 'Merch' }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
       })
-      setStatus(res.ok ? 'success' : 'error')
-    } catch {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+      // Save to signups table tagged as merch — fire and forget
+      supabase.from('signups').insert({ email: email.trim(), source: 'merch' })
+        .then(({ error }) => { if (error) console.error('[Merch] signups insert:', error) })
+
+      setStatus('success')
+    } catch (err) {
+      console.error('[Merch] subscribe error:', err)
       setStatus('error')
     }
   }
