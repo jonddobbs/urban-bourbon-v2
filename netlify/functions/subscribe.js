@@ -41,7 +41,7 @@ function welcomeHtml() {
         <tr>
           <td style="padding-top:32px;border-top:1px solid #1a1a1a;">
             <p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.25);letter-spacing:2px;text-transform:uppercase;">
-              — Jack, Urban Bourbon · South Wales
+              — Jon, Urban Bourbon · South Wales
             </p>
             <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.15);">
               You're receiving this because you signed up at urbanbourbon.co.uk.
