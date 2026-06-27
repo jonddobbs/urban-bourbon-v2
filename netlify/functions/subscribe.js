@@ -1,4 +1,5 @@
 const FROM_EMAIL = 'Jon at Urban Bourbon <hello@urbanbourbon.co.uk>'
+const UNSUBSCRIBE_EMAIL = 'mailto:hello@urbanbourbon.co.uk?subject=unsubscribe'
 
 function welcomeHtml() {
   return `<!DOCTYPE html>
@@ -43,8 +44,11 @@ function welcomeHtml() {
             <p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.25);letter-spacing:2px;text-transform:uppercase;">
               — Jon, Urban Bourbon · South Wales
             </p>
-            <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.15);">
+            <p style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.15);">
               You're receiving this because you signed up at urbanbourbon.co.uk.
+            </p>
+            <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.15);">
+              <a href="${UNSUBSCRIBE_EMAIL}" style="color:rgba(255,255,255,0.25);text-decoration:underline;">Unsubscribe</a>
             </p>
           </td>
         </tr>
@@ -54,6 +58,20 @@ function welcomeHtml() {
   </table>
 </body>
 </html>`
+}
+
+function welcomeText() {
+  return `YOU'RE IN.
+
+Welcome to the crew. You'll hear from us when there's a new drop, a limited batch, or the occasional bit of nonsense. Nothing else.
+
+While you're here — Blend #43 is out now. Ethiopian origin, small batch. Bright and fruity. £6.99 for 125g.
+
+Shop: https://urbanbourbon.co.uk/coffee
+
+— Jon, Urban Bourbon · South Wales
+You're receiving this because you signed up at urbanbourbon.co.uk.
+To unsubscribe, reply with "unsubscribe" or email hello@urbanbourbon.co.uk`
 }
 
 export async function handler(event) {
@@ -87,8 +105,13 @@ export async function handler(event) {
       body: JSON.stringify({
         from: FROM_EMAIL,
         to: [email],
-        subject: 'Welcome to Urban Bourbon ☕',
+        subject: 'Welcome to Urban Bourbon',
         html: welcomeHtml(),
+        text: welcomeText(),
+        headers: {
+          'List-Unsubscribe': `<${UNSUBSCRIBE_EMAIL}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
       }),
     })
 
