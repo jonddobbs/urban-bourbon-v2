@@ -43,6 +43,9 @@ export default function OurStory() {
 
           <div className="flex flex-col gap-8 order-2 md:order-1">
             <p className="text-white/55 font-['Inter'] font-light text-lg leading-relaxed">
+              We love drinking coffee — and get just as much out of the rest of it. Pulling the blends together, the labels, the brand, the whole feel of it.
+            </p>
+            <p className="text-white/55 font-['Inter'] font-light text-lg leading-relaxed">
               A slower morning with strong coffee before the world wakes up. Late nights chasing ideas. Music in the background. Clean design. Timeless clothes. Good conversation. Family. Ambition. Creativity. Freedom.
             </p>
             <p className="text-white/55 font-['Inter'] font-light text-lg leading-relaxed">
@@ -98,6 +101,24 @@ export default function OurStory() {
           <div className="w-8 h-px bg-[#39FF14]" />
           <p className="text-white/55 font-['Inter'] font-light text-lg leading-relaxed">
             This is for the builders. The thinkers. The late-night planners. The early risers. The people creating a life on their own terms.
+          </p>
+          <h2
+            className="font-['Bebas_Neue'] text-[#39FF14] leading-none"
+            style={{
+              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+              textShadow: '0 0 40px rgba(57,255,20,0.2)',
+            }}
+          >
+            WHERE IT'S HEADING
+          </h2>
+          <p className="text-white/55 font-['Inter'] font-light text-lg leading-relaxed">
+            Right now, our beans are roasted by hands we trust. But the dream pulling us forward is our own — a roastery in Wales, where every bag starts and finishes at home.
+          </p>
+          <p className="text-white/55 font-['Inter'] font-light text-lg leading-relaxed">
+            Not there yet. But everything we're building points that way.
+          </p>
+          <p className="text-white/55 font-['Inter'] font-light text-lg leading-relaxed">
+            That's the whole idea. Start with something real. Grow it slowly. Bring it home.
           </p>
           <h2
             className="font-['Bebas_Neue'] text-[#39FF14] leading-none"
