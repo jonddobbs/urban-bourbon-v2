@@ -198,7 +198,7 @@ function ProductSection({ product }) {
   }
 
   return (
-    <section className="border-t border-white/[0.06]">
+    <section id={product.sku} className="border-t border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 grid md:grid-cols-2 gap-10 lg:gap-20 items-center">
 
         {/* Product image */}

@@ -266,6 +266,23 @@ h1, h2, h3, h4, h5, h6 {
   .origins-connector-svg { display: block; }
 }
 
+/* Blend selector bar — desktop only */
+@media (max-width: 767px) {
+  .origins-blend-selector { display: none !important; }
+}
+
+/* Blend → pin connector line — desktop only */
+.origins-blend-line { display: block; }
+@media (max-width: 767px) {
+  .origins-blend-line { display: none !important; }
+}
+
+/* Find-your-blend quiz widget — wide desktop only */
+.origins-blend-quiz { display: flex; }
+@media (max-width: 1023px) {
+  .origins-blend-quiz { display: none !important; }
+}
+
 /* Country name label — hidden everywhere (kept in DOM for accessibility, not shown) */
 .pin-label {
   font-size: 0;
