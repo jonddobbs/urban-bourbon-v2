@@ -688,7 +688,7 @@ function NightShiftTile() {
       <div className="flex-1 min-h-0 flex items-center justify-center px-8 pt-6 pb-2">
         <img
           src="/images/night-shift.png"
-          alt="Night Shift 3D — Urban Bourbon, coming soon"
+          alt="Night Shift — Urban Bourbon, coming soon"
           className="h-full w-full object-contain drop-shadow-[0_4px_24px_rgba(57,255,20,0.18)]"
         />
       </div>
@@ -700,7 +700,7 @@ function NightShiftTile() {
         </span>
         <p className="font-['Bebas_Neue'] text-white tracking-[2px] leading-none mb-0.5"
           style={{ fontSize: 'clamp(1rem, 2.6vw, 1.45rem)' }}>
-          NIGHT SHIFT 3D
+          NIGHT SHIFT
         </p>
         <p className="font-['Barlow_Condensed'] text-white/35 text-[0.68rem] tracking-[2px] uppercase mb-3">
           Brazil · Cocoa, Nutty, Smooth
