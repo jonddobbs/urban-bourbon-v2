@@ -640,7 +640,6 @@ const igTiles = [
   { src: '/images/urban-43-promo.png',     pos: 'object-center', alt: 'Urban Bourbon #43 promo' },
   { src: '/images/jack-lab-coat-nobg.png', pos: 'object-top',    alt: 'Jack the mascot in lab coat' },
   { src: '/images/bear.png',               pos: 'object-top',    alt: 'Urban Bourbon Bear mascot' },
-  { src: '/images/free-30g-promo.png',     pos: 'object-center', alt: 'Free 30g promo' },
   { src: '/images/banner-mobile.png',      pos: 'object-center', alt: 'Urban Bourbon banner' },
 ]
 
@@ -651,6 +650,97 @@ const igHoverOverlay = (
     </svg>
   </div>
 )
+
+/* ─── Night Shift 3D — coming soon tile ──────────────────── */
+function NightShiftTile() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('idle') // 'idle' | 'loading' | 'done' | 'error'
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!email.trim()) return
+    setStatus('loading')
+    try {
+      const res = await fetch('/.netlify/functions/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      supabase.from('signups').insert({ email: email.trim(), source: 'nightshift' })
+        .then(({ error }) => { if (error) console.error('[NightShift] signups insert:', error) })
+      setStatus('done')
+    } catch (err) {
+      console.error('[NightShift] notify error:', err)
+      setStatus('error')
+    }
+  }
+
+  return (
+    <div className="relative aspect-square overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a] flex flex-col">
+
+      {/* Subtle neon atmosphere */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 70% 55% at 50% 40%, rgba(57,255,20,0.07) 0%, transparent 70%)',
+      }} />
+
+      {/* Bag image — transparent PNG, floats on dark bg with breathing room */}
+      <div className="flex-1 min-h-0 flex items-center justify-center px-8 pt-6 pb-2">
+        <img
+          src="/images/night-shift.png"
+          alt="Night Shift 3D — Urban Bourbon, coming soon"
+          className="h-full w-full object-contain drop-shadow-[0_4px_24px_rgba(57,255,20,0.18)]"
+        />
+      </div>
+
+      {/* Content + form */}
+      <div className="flex-none px-4 pb-4 pt-1 relative z-10">
+        <span className="font-['Bebas_Neue'] text-[#39FF14] text-[10px] tracking-[3.5px] uppercase block mb-1">
+          COMING SOON
+        </span>
+        <p className="font-['Bebas_Neue'] text-white tracking-[2px] leading-none mb-0.5"
+          style={{ fontSize: 'clamp(1rem, 2.6vw, 1.45rem)' }}>
+          NIGHT SHIFT 3D
+        </p>
+        <p className="font-['Barlow_Condensed'] text-white/35 text-[0.68rem] tracking-[2px] uppercase mb-3">
+          Brazil · Cocoa, Nutty, Smooth
+        </p>
+
+        {status === 'done' ? (
+          <p className="font-['Bebas_Neue'] text-[#39FF14] text-sm tracking-wider border border-[#39FF14]/40 px-3 py-2 inline-block">
+            YOU'RE ON THE LIST.
+          </p>
+        ) : (
+          <>
+            {status === 'error' && (
+              <p className="font-['Barlow_Condensed'] text-red-400 text-[10px] tracking-[2px] uppercase mb-1.5">
+                Something went wrong — try again.
+              </p>
+            )}
+            <form onSubmit={handleSubmit} className="flex gap-1.5">
+              <input
+                type="email"
+                value={email}
+                onChange={e => { setEmail(e.target.value); if (status !== 'idle') setStatus('idle') }}
+                placeholder="Your email"
+                required
+                disabled={status === 'loading'}
+                className="flex-1 min-w-0 bg-white/5 border border-white/10 focus:border-[#39FF14] outline-none px-2.5 py-2 text-white placeholder-white/20 font-['Inter'] text-[11px] transition-colors duration-200 disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="flex-none bg-[#39FF14] text-black font-['Bebas_Neue'] text-[11px] tracking-[2px] px-3 py-2 hover:bg-[#2ce010] transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+              >
+                {status === 'loading' ? '…' : 'NOTIFY ME'}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
 
 function InstagramSection() {
   return (
@@ -674,6 +764,8 @@ function InstagramSection() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
+          {/* Night Shift 3D — coming soon tile (replaces free-30g-promo) */}
+          <NightShiftTile />
           {igTiles.map((tile, i) => (
             <a
               key={i}
