@@ -37,7 +37,7 @@ export const BLEND_ORIGINS = {
     name: 'Colombia',
     flag: '🇨🇴',
     coords: [-74.0, 4.5],
-    dx: 20, dy: -25,
+    dx: 58, dy: 22,
     flavour: 'Orange, Brown Sugar, Cedar',
 
     // Dossier
@@ -64,7 +64,7 @@ export const BLEND_ORIGINS = {
     name: 'Nicaragua',
     flag: '🇳🇮',
     coords: [-85.2, 13.1],
-    dx: 28, dy: -18,
+    dx: 50, dy: -28,
     flavour: 'Caramel, Chocolate, Pear',
 
     // Dossier

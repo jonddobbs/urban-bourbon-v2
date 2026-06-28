@@ -25,7 +25,7 @@ const INFO_REGIONS = {
     name: 'Guatemala',
     flag: '🇬🇹',
     coords: [-90.2, 15.5],
-    dx: -20, dy: -25,
+    dx: -55, dy: -40,
     flavour: 'Rich, Cocoa, Spiced',
     varietals: 'Bourbon, Caturra',
     process: 'Washed',
@@ -80,7 +80,7 @@ const INFO_REGIONS = {
     name: 'Costa Rica',
     flag: '🇨🇷',
     coords: [-84.0, 9.7],
-    dx: -30, dy: 20,
+    dx: -50, dy: 34,
     flavour: 'Honey, Stone Fruit, Clean',
     varietals: 'Caturra, Catuai',
     process: 'Honey',
@@ -106,6 +106,7 @@ const REGION_IDS = Object.keys(REGIONS).map(Number)
 
 export default function Origins() {
   const [selectedId, setSelectedId]       = useState(null)
+  const [hoveredId, setHoveredId]         = useState(null)
   const [connectorLine, setConnectorLine] = useState(null)  // mobile card→pin line
   const [animKey, setAnimKey]             = useState(0)
   const [blendLine, setBlendLine]         = useState(null)  // desktop blend-selector→pin line
@@ -323,39 +324,52 @@ export default function Origins() {
                 const blendFocused = selectedId !== null && BLEND_GEO_IDS.includes(selectedId)
                 const isSelected   = id === selectedId
                 const isDimmed     = blendFocused && !isSelected
+                const showFull     = hoveredId === id || isSelected
 
                 return (
-                  <g key={id} className="map-pin-group" onClick={() => handleSelect(id, 'map')}>
+                  <g
+                    key={id}
+                    className="map-pin-group"
+                    onClick={() => handleSelect(id, 'map')}
+                    onMouseEnter={() => setHoveredId(id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                  >
                     <g className="map-annotation" style={{ opacity: isDimmed ? 0.2 : 1, transition: 'opacity 300ms' }}>
                       <Annotation
                         subject={r.coords}
                         dx={r.dx}
                         dy={r.dy}
                         connectorProps={{
-                          stroke: isSelected ? 'rgba(57,255,20,0.6)' : 'rgba(57,255,20,0.3)',
+                          stroke: isSelected
+                            ? 'rgba(57,255,20,0.6)'
+                            : showFull
+                            ? 'rgba(57,255,20,0.45)'
+                            : 'rgba(57,255,20,0.2)',
                           strokeWidth: 0.6,
                           strokeLinecap: 'round',
                         }}
                       >
                         <text
                           fontFamily="'Bebas Neue', sans-serif"
-                          fontSize={13}
-                          fill={isSelected ? '#39FF14' : '#E8D5A3'}
+                          fontSize={11}
+                          fill={isSelected ? '#39FF14' : showFull ? '#E8D5A3' : 'rgba(232,213,163,0.65)'}
                           letterSpacing={2}
                           textAnchor={anchor}
                         >
                           {r.name.toUpperCase()}
                         </text>
-                        <text
-                          y={14}
-                          fontSize={9}
-                          fill={isSelected ? 'rgba(57,255,20,0.75)' : 'rgba(255,255,255,0.75)'}
-                          textAnchor={anchor}
-                          fontFamily="'Inter', sans-serif"
-                          letterSpacing={0.5}
-                        >
-                          {r.flavour}
-                        </text>
+                        {showFull && (
+                          <text
+                            y={13}
+                            fontSize={9}
+                            fill={isSelected ? 'rgba(57,255,20,0.75)' : 'rgba(255,255,255,0.7)'}
+                            textAnchor={anchor}
+                            fontFamily="'Inter', sans-serif"
+                            letterSpacing={0.5}
+                          >
+                            {r.flavour}
+                          </text>
+                        )}
                       </Annotation>
                     </g>
 
