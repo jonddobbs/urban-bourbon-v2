@@ -10,7 +10,7 @@ const PRODUCTS = [
     number: '43',
     subtitle: 'Blend #43',
     origin: 'Ethiopian Origin · Bright & Fruity',
-    description: "Our debut blend. A small batch Ethiopian whole bean coffee — bright, fruity, and unlike anything you've tasted. The first of many.",
+    description: "Our debut blend. A small batch Ethiopian coffee — bright, fruity, and unlike anything you've tasted. The first of many.",
     taste: null,
     altitude: null,
     process: null,
@@ -18,7 +18,7 @@ const PRODUCTS = [
     harvest: null,
     scaScore: null,
     perfectFor: null,
-    tags: ['Whole Bean', 'Small Batch'],
+    tags: ['Small Batch'],
     profile: { Body: 8, Acidity: 3, Sweetness: 5, Bitterness: 7, Finish: 7 },
     image: '/images/fam-43.png',
     imageAlt: 'Blend #43 — Urban Bourbon',
@@ -28,7 +28,6 @@ const PRODUCTS = [
       { label: '125g', price: '£6.99', priceNum: 6.99 },
       { label: '1kg',  price: '£30',   priceNum: 30   },
     ],
-    formats: null,
     brewGuide: {
       method: 'AeroPress',
       specs: {
@@ -37,7 +36,7 @@ const PRODUCTS = [
         ratio: '1:15 (15g / 225ml)',
         time:  '2–3 min',
       },
-      jackNote: "Whole beans only — which means you're grinding fresh. AeroPress is the move: it keeps the brown sugar sweetness intact and controls the bitterness without a paper filter flattening everything out. Don't use boiling water. Ninety degrees. I'll know if you don't.",
+      jackNote: "Grind fresh if you can — it makes a difference with this one. AeroPress is the move: it keeps the brown sugar sweetness intact and controls the bitterness without a paper filter flattening everything out. Don't use boiling water. Ninety degrees. I'll know if you don't.",
     },
   },
   {
@@ -63,7 +62,6 @@ const PRODUCTS = [
       { label: '125g', price: '£7.49', priceNum: 7.49 },
       { label: '1kg',  price: '£34',   priceNum: 34   },
     ],
-    formats: ['Whole Beans', 'Ground Medium'],
     brewGuide: {
       method: 'Pour Over',
       specs: {
@@ -98,7 +96,6 @@ const PRODUCTS = [
       { label: '125g', price: '£8.49', priceNum: 8.49 },
       { label: '1kg',  price: '£36',   priceNum: 36   },
     ],
-    formats: ['Whole Beans'],
     brewGuide: {
       method: 'Espresso',
       specs: {
@@ -174,22 +171,20 @@ function BrewGuide({ guide, productName }) {
 
 // ── ProductSection ─────────────────────────────────────────────────────────────
 
+const GRIND_OPTIONS = ['Whole Beans', 'Fine', 'Medium', 'Coarse']
+
 function ProductSection({ product }) {
   const [size, setSize] = useState(product.sizes[0].label)
-  const [format, setFormat] = useState(product.formats?.[0] ?? null)
+  const [grind, setGrind] = useState('Whole Beans')
   const [added, setAdded] = useState(false)
   const { addToCart } = useCart()
-  const multiFormat = product.formats && product.formats.length > 1
 
   function handleAddToCart() {
     const chosen = product.sizes.find(s => s.label === size)
-    const cartId = multiFormat
-      ? `${product.sku}-${size}-${format.toLowerCase().replace(/\s+/g, '-')}`
-      : `${product.sku}-${size}`
     addToCart({
-      id: cartId,
+      id: `${product.sku}-${size}-${grind.toLowerCase().replace(/\s+/g, '-')}`,
       name: product.cartName,
-      size: multiFormat ? `${size} · ${format}` : size,
+      size: `${size} · ${grind}`,
       price: chosen.priceNum,
       currency: 'GBP',
     })
@@ -307,26 +302,24 @@ function ProductSection({ product }) {
           <RadarChart values={product.profile} />
 
           <div className="border-t border-white/[0.08] pt-6 flex flex-col gap-5">
-            {multiFormat && (
-              <div>
-                <p className="font-['Barlow_Condensed'] text-white/30 text-xs tracking-[3px] uppercase mb-3">Grind</p>
-                <div className="flex gap-2 flex-wrap">
-                  {product.formats.map(f => (
-                    <button
-                      key={f}
-                      onClick={() => { setFormat(f); setAdded(false) }}
-                      className={`font-['Barlow_Condensed'] font-bold text-sm tracking-[2px] px-5 py-2 border transition-all duration-150 ${
-                        format === f
-                          ? 'bg-[#39FF14] border-[#39FF14] text-black'
-                          : 'border-white/20 text-white/50 hover:border-white/40 hover:text-white/70'
-                      }`}
-                    >
-                      {f.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
+            <div>
+              <p className="font-['Barlow_Condensed'] text-white/30 text-xs tracking-[3px] uppercase mb-3">Grind</p>
+              <div className="flex gap-2 flex-wrap">
+                {GRIND_OPTIONS.map(option => (
+                  <button
+                    key={option}
+                    onClick={() => { setGrind(option); setAdded(false) }}
+                    className={`font-['Barlow_Condensed'] font-bold text-sm tracking-[2px] px-5 py-2 border transition-all duration-150 ${
+                      grind === option
+                        ? 'bg-[#39FF14] border-[#39FF14] text-black'
+                        : 'border-white/20 text-white/50 hover:border-white/40 hover:text-white/70'
+                    }`}
+                  >
+                    {option.toUpperCase()}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
             <div>
               <p className="font-['Barlow_Condensed'] text-white/30 text-xs tracking-[3px] uppercase mb-3">Size</p>
