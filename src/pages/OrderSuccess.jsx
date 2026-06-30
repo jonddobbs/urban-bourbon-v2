@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
@@ -6,16 +6,86 @@ export default function OrderSuccess() {
   const [searchParams] = useSearchParams()
   const sessionId = searchParams.get('session_id')
   const { clearCart } = useCart()
+  const [status, setStatus] = useState('loading') // 'loading' | 'paid' | 'failed'
 
   useEffect(() => {
-    clearCart()
+    if (!sessionId || !sessionId.startsWith('cs_')) {
+      setStatus('failed')
+      return
+    }
+    fetch(`/.netlify/functions/verify-session?session_id=${encodeURIComponent(sessionId)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.paid) {
+          clearCart()
+          setStatus('paid')
+        } else {
+          setStatus('failed')
+        }
+      })
+      .catch(() => setStatus('failed'))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (status === 'loading') {
+    return (
+      <main className="bg-[#0d0d0d] min-h-screen pt-16 flex items-center justify-center px-5">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-[#39FF14] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="font-['Barlow_Condensed'] text-white/40 text-sm tracking-widest uppercase">
+            Confirming payment…
+          </p>
+        </div>
+      </main>
+    )
+  }
+
+  if (status === 'failed') {
+    return (
+      <main className="bg-[#0d0d0d] min-h-screen pt-16 flex items-center justify-center px-5">
+        <div className="max-w-lg w-full text-center py-20">
+
+          <div className="w-20 h-20 rounded-full border-2 border-white/20 flex items-center justify-center mx-auto mb-8">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path
+                d="M8 8l16 16M24 8L8 24"
+                stroke="rgba(255,255,255,0.3)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+
+          <p className="font-['Barlow_Condensed'] text-white/40 text-sm tracking-[0.35em] uppercase mb-3">
+            Payment Not Completed
+          </p>
+
+          <h1
+            className="font-['Bebas_Neue'] text-white leading-none tracking-tight mb-5"
+            style={{ fontSize: 'clamp(3rem, 8vw, 5rem)' }}
+          >
+            SOMETHING<br />WENT WRONG
+          </h1>
+
+          <p className="font-['Inter'] text-white/50 text-base leading-relaxed mb-8">
+            Your payment wasn't completed and you haven't been charged.
+            Please try again — your bag is still saved.
+          </p>
+
+          <Link
+            to="/coffee"
+            className="bg-[#39FF14] text-[#0d0d0d] font-['Bebas_Neue'] text-lg tracking-[0.12em] px-10 py-4 rounded hover:bg-[#2ee010] transition-colors"
+          >
+            RETURN TO SHOP
+          </Link>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="bg-[#0d0d0d] min-h-screen pt-16 flex items-center justify-center px-5">
       <div className="max-w-lg w-full text-center py-20">
 
-        {/* Icon */}
         <div className="w-20 h-20 rounded-full border-2 border-[#39FF14] flex items-center justify-center mx-auto mb-8">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <path

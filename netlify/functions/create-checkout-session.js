@@ -83,6 +83,7 @@ export async function handler(event) {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
+      payment_intent_data: { capture_method: 'automatic' },
       allow_promotion_codes: true,
       customer_email: customerEmail || undefined,
       shipping_address_collection: { allowed_countries: ['GB'] },
