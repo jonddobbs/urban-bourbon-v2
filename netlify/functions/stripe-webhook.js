@@ -360,8 +360,8 @@ export async function handler(event) {
     items,
     total,
     stripe_session_id: session.id,
-    status:           'paid',
-    shipping_address: shippingAddress,
+    status:            session.payment_status,
+    shipping_address:  shippingAddress,
   })
 
   if (insertError) {
