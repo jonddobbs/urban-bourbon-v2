@@ -270,6 +270,14 @@ export async function handler(event) {
 
   const stripe = new Stripe(stripeKey)
 
+  // Confirm which Stripe account this key belongs to — critical for env-var auditing
+  try {
+    const acct = await stripe.accounts.retrieve()
+    console.log(`stripe-webhook: Stripe account ${acct.id} (${acct.email ?? 'no email'})`)
+  } catch (acctErr) {
+    console.error('stripe-webhook: could not retrieve Stripe account —', acctErr.message)
+  }
+
   // Netlify may base64-encode the body; Stripe signature verification needs the raw bytes
   const rawBody = event.isBase64Encoded
     ? Buffer.from(event.body, 'base64').toString('utf8')
@@ -283,15 +291,19 @@ export async function handler(event) {
     return { statusCode: 400, body: `Webhook Error: ${err.message}` }
   }
 
+  console.log(`stripe-webhook: received event ${stripeEvent.type} — ${stripeEvent.id}`)
+
   // Acknowledge every event type immediately; only fulfil on completed checkout
   if (stripeEvent.type !== 'checkout.session.completed') {
     return { statusCode: 200, body: JSON.stringify({ received: true }) }
   }
 
   const session = stripeEvent.data.object
+  console.log(`stripe-webhook: checkout session ${session.id} payment_status=${session.payment_status}`)
 
   // Guard against async payment methods (e.g. BACS) that complete later
   if (session.payment_status !== 'paid') {
+    console.log(`stripe-webhook: skipping ${session.id} — payment not yet paid`)
     return { statusCode: 200, body: JSON.stringify({ received: true, skipped: 'payment_pending' }) }
   }
 

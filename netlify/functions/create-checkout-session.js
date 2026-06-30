@@ -27,6 +27,14 @@ export async function handler(event) {
 
   const stripe = new Stripe(secretKey)
 
+  // Confirm which Stripe account this key belongs to — critical for env-var auditing
+  try {
+    const acct = await stripe.accounts.retrieve()
+    console.log(`create-checkout-session: Stripe account ${acct.id} (${acct.email ?? 'no email'})`)
+  } catch (acctErr) {
+    console.error('create-checkout-session: could not retrieve Stripe account —', acctErr.message)
+  }
+
   // Derive origin: prefer Netlify's deploy URL env var, fall back to the request header
   const origin =
     process.env.URL ||
@@ -91,6 +99,8 @@ export async function handler(event) {
       success_url: `${origin}/order-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/`,
     })
+
+    console.log(`create-checkout-session: session created — ${session.id} subtotal=${subtotalPence}p shipping=${shippingOption.shipping_rate_data.fixed_amount.amount}p`)
 
     return {
       statusCode: 200,

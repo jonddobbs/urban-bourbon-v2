@@ -22,8 +22,19 @@ export async function handler(event) {
 
   const stripe = new Stripe(stripeKey)
 
+  // Confirm which Stripe account this key belongs to — critical for env-var auditing
+  try {
+    const acct = await stripe.accounts.retrieve()
+    console.log(`verify-session: Stripe account ${acct.id} (${acct.email ?? 'no email'})`)
+  } catch (acctErr) {
+    console.error('verify-session: could not retrieve Stripe account —', acctErr.message)
+  }
+
+  const idSuffix = sessionId.slice(-12).toUpperCase()
+
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId)
+    console.log(`verify-session: ${idSuffix} — status=${session.status} payment_status=${session.payment_status}`)
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -36,6 +47,7 @@ export async function handler(event) {
     }
   } catch (err) {
     // Stripe throws on unknown/malformed session IDs
+    console.error(`verify-session: Stripe error for ${idSuffix} —`, err.message)
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
