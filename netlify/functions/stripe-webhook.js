@@ -347,7 +347,13 @@ export async function handler(event) {
   const total = (fullSession.amount_total ?? 0) / 100
 
   // shipping_details shape: { name, address: { line1, line2, city, state, postal_code, country } }
-  const shippingAddress = fullSession.shipping_details ?? null
+  // Prefer the retrieved fullSession; fall back to the event payload's session copy since
+  // the expand call can occasionally omit shipping_details even when it's present on the event.
+  const shippingAddress = fullSession.shipping_details ?? session.shipping_details ?? null
+
+  if (!shippingAddress) {
+    console.warn('stripe-webhook: shipping_details missing on both fullSession and event session for', session.id)
+  }
 
   const { error: insertError } = await supabase.from('orders').insert({
     user_id:          null,   // guest checkout — no Supabase auth user linked at payment time
