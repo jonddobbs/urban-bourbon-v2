@@ -62,7 +62,7 @@ export default function Nav() {
           <Link
             to="/"
             onClick={() => setOpen(false)}
-            className="flex items-start gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity duration-200"
+            className="flex items-center gap-3 sm:gap-5 hover:opacity-80 transition-opacity duration-200"
           >
             <span
               className="font-['Bebas_Neue'] leading-none"
@@ -74,7 +74,7 @@ export default function Nav() {
               src="/images/ub-circle-logo.jpg"
               alt=""
               aria-hidden="true"
-              className="w-8 h-8 sm:w-11 sm:h-11 rounded-full object-cover shrink-0"
+              className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover shrink-0"
             />
           </Link>
 
