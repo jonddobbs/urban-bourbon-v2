@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 const benefits = [
@@ -31,6 +32,7 @@ const benefits = [
     ),
     title: 'ORDER HISTORY',
     copy: 'View your past orders, sizes and notes. Track everything in one place and reorder your favourites with ease.',
+    link: '/lounge/orders',
   },
   {
     icon: (
@@ -179,43 +181,48 @@ export default function Lounge() {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {benefits.map(({ icon, title, copy }) => (
-              <div
-                key={title}
-                className="flex flex-col gap-5 p-7 transition-all duration-300 group"
-                style={{
-                  background: '#0a0a0a',
-                  border: '1px solid rgba(201,168,76,0.15)',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
-                  e.currentTarget.style.background = '#0d0a04'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.15)'
-                  e.currentTarget.style.background = '#0a0a0a'
-                }}
-              >
-                {/* Icon */}
-                <div style={{ color: '#c9a84c' }}>{icon}</div>
-
-                {/* Title */}
-                <h3
-                  className="font-['Bebas_Neue'] tracking-[0.1em]"
-                  style={{ color: '#c9a84c', fontSize: '1.35rem' }}
+            {benefits.map(({ icon, title, copy, link }) => {
+              const Wrapper = link ? Link : 'div'
+              return (
+                <Wrapper
+                  key={title}
+                  {...(link ? { to: link } : {})}
+                  className="flex flex-col gap-5 p-7 transition-all duration-300 group"
+                  style={{
+                    background: '#0a0a0a',
+                    border: '1px solid rgba(201,168,76,0.15)',
+                    cursor: link ? 'pointer' : 'default',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
+                    e.currentTarget.style.background = '#0d0a04'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'rgba(201,168,76,0.15)'
+                    e.currentTarget.style.background = '#0a0a0a'
+                  }}
                 >
-                  {title}
-                </h3>
+                  {/* Icon */}
+                  <div style={{ color: '#c9a84c' }}>{icon}</div>
 
-                {/* Copy */}
-                <p
-                  className="font-['Inter'] font-light leading-relaxed text-sm"
-                  style={{ color: 'rgba(255,255,255,0.45)' }}
-                >
-                  {copy}
-                </p>
-              </div>
-            ))}
+                  {/* Title */}
+                  <h3
+                    className="font-['Bebas_Neue'] tracking-[0.1em]"
+                    style={{ color: '#c9a84c', fontSize: '1.35rem' }}
+                  >
+                    {title}
+                  </h3>
+
+                  {/* Copy */}
+                  <p
+                    className="font-['Inter'] font-light leading-relaxed text-sm"
+                    style={{ color: 'rgba(255,255,255,0.45)' }}
+                  >
+                    {copy}
+                  </p>
+                </Wrapper>
+              )
+            })}
           </div>
         </div>
       </section>
