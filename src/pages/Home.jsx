@@ -637,7 +637,6 @@ function SubscriptionsSection() {
 
 const igTiles = [
   { src: '/images/hero-product.jpg',       pos: 'object-center', alt: '#43 coffee bags and whisky glass' },
-  { src: '/images/urban-43-promo.png',     pos: 'object-center', alt: 'Urban Bourbon #43 promo' },
   { src: '/images/jack-lab-coat-nobg.png', pos: 'object-top',    alt: 'Jack the mascot in lab coat' },
   { src: '/images/bear.png',               pos: 'object-top',    alt: 'Urban Bourbon Bear mascot' },
   { src: '/images/banner-mobile.png',      pos: 'object-center', alt: 'Urban Bourbon banner' },
@@ -742,6 +741,40 @@ function NightShiftTile() {
   )
 }
 
+/* ─── Better Days Tee — coming soon tile ─────────────────── */
+function BetterDaysTeeTile() {
+  return (
+    <div className="relative aspect-square overflow-hidden bg-[#0d0d0d] border border-[#1a1a1a] flex flex-col">
+
+      {/* Image */}
+      <div className="flex-1 min-h-0 relative">
+        <img
+          src="/images/better-days-tee.png"
+          alt="Better Days Tee — Urban Bourbon, coming soon"
+          className="absolute inset-0 w-full h-full object-cover object-top"
+        />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to top, rgba(13,13,13,0.9) 0%, rgba(13,13,13,0) 35%)',
+        }} />
+      </div>
+
+      {/* Content */}
+      <div className="flex-none px-4 pb-4 pt-1 relative z-10">
+        <span className="font-['Bebas_Neue'] text-[#39FF14] text-[10px] tracking-[3.5px] uppercase block mb-1">
+          COMING SOON
+        </span>
+        <p className="font-['Bebas_Neue'] text-white tracking-[2px] leading-none mb-0.5"
+          style={{ fontSize: 'clamp(1rem, 2.6vw, 1.45rem)' }}>
+          BETTER DAYS TEE
+        </p>
+        <p className="font-['Barlow_Condensed'] text-white/35 text-[0.68rem] tracking-[2px] uppercase">
+          Cardiff Skyline · Heavyweight Cotton
+        </p>
+      </div>
+    </div>
+  )
+}
+
 function InstagramSection() {
   return (
     <section className="noise bg-[#0a0a0a] py-20 px-5 sm:px-8">
@@ -766,6 +799,8 @@ function InstagramSection() {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
           {/* Night Shift 3D — coming soon tile (replaces free-30g-promo) */}
           <NightShiftTile />
+          {/* Better Days Tee — coming soon tile (replaces urban-43-promo) */}
+          <BetterDaysTeeTile />
           {igTiles.map((tile, i) => (
             <a
               key={i}
