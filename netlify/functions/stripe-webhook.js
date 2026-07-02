@@ -369,6 +369,7 @@ export async function handler(event) {
 
   const { error: insertError } = await supabase.from('orders').insert({
     user_id:          null,   // guest checkout — no Supabase auth user linked at payment time
+    email:             fullSession.customer_details?.email ?? null,   // NEW — links order to Members Lounge account by email
     items,
     total,
     stripe_session_id: session.id,
