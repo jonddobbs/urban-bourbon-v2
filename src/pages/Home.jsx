@@ -796,7 +796,7 @@ function InstagramSection() {
           </a>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-1">
           {/* Night Shift 3D — coming soon tile (replaces free-30g-promo) */}
           <NightShiftTile />
           {/* Better Days Tee — coming soon tile (replaces urban-43-promo) */}
