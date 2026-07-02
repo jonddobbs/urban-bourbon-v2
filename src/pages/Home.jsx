@@ -686,9 +686,9 @@ function NightShiftTile() {
       {/* Bag image — transparent PNG, floats on dark bg with breathing room */}
       <div className="flex-1 min-h-0 relative">
         <img
-          src="/images/night-shift.png?v=2"
+          src="/images/night-shift.png?v=3"
           alt="Night Shift — Urban Bourbon, coming soon"
-          className="absolute inset-0 w-full h-full object-contain p-6 pb-2 drop-shadow-[0_4px_24px_rgba(57,255,20,0.18)]"
+          className="absolute inset-0 w-full h-full object-contain p-3 drop-shadow-[0_4px_24px_rgba(57,255,20,0.18)]"
         />
       </div>
 

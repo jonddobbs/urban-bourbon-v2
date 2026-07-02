@@ -62,10 +62,20 @@ export default function Nav() {
           <Link
             to="/"
             onClick={() => setOpen(false)}
-            className="font-['Bebas_Neue'] leading-none hover:opacity-80 transition-opacity duration-200"
-            style={{ color: pathname === '/lounge' ? '#c9a84c' : '#39FF14', fontSize: '28px', lineHeight: 1.05 }}
+            className="flex items-start gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity duration-200"
           >
-            URBAN<br />BOURBON
+            <span
+              className="font-['Bebas_Neue'] leading-none"
+              style={{ color: pathname === '/lounge' ? '#c9a84c' : '#39FF14', fontSize: '28px', lineHeight: 1.05 }}
+            >
+              URBAN<br />BOURBON
+            </span>
+            <img
+              src="/images/ub-circle-logo.jpg"
+              alt=""
+              aria-hidden="true"
+              className="w-8 h-8 sm:w-11 sm:h-11 rounded-full object-cover shrink-0"
+            />
           </Link>
 
           <div className="flex items-center gap-3">
